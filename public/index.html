@@ -178,9 +178,14 @@
     .sc-quote{font-family:'Shippori Mincho',serif;font-size:1.05rem;color:var(--txt);line-height:1.95;letter-spacing:.04em;margin-bottom:24px;min-height:80px}
     .sc-author{font-size:.78rem;color:var(--amber2);letter-spacing:.1em;margin-bottom:32px}
     .sc-brand{font-family:'Shippori Mincho',serif;font-size:.95rem;color:rgba(245,158,11,.4);letter-spacing:.4em}
-    .share-hint{font-size:.78rem;color:var(--muted);letter-spacing:.1em;margin-top:16px;line-height:1.8;text-align:center}
-    .share-close{margin-top:20px;background:none;border:1px solid var(--border);border-radius:50px;color:var(--muted);font-family:'Zen Kaku Gothic New',sans-serif;font-size:.82rem;padding:10px 28px;cursor:pointer;transition:all .2s}
-    .share-close:hover{border-color:var(--flame);color:var(--flame)}
+    .share-hint{font-size:.74rem;color:var(--muted);letter-spacing:.06em;margin-top:14px;line-height:1.8;text-align:center;max-width:320px}
+    .share-actions{display:flex;flex-direction:column;gap:10px;margin-top:18px;width:100%;max-width:320px}
+    .share-btn-main{padding:15px;border-radius:14px;border:none;background:linear-gradient(135deg,#F97316,#FBBF24);color:#0D1117;font-family:'Zen Kaku Gothic New',sans-serif;font-size:.92rem;font-weight:700;cursor:pointer;letter-spacing:.06em;transition:opacity .2s;box-shadow:0 4px 20px rgba(249,115,22,.35)}
+    .share-btn-main:hover{opacity:.9}
+    .share-btn-sub{padding:13px;border-radius:14px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Zen Kaku Gothic New',sans-serif;font-size:.84rem;cursor:pointer;transition:all .2s}
+    .share-btn-sub:hover{border-color:var(--flame);color:var(--flame)}
+    .share-close{margin-top:6px;background:none;border:none;color:var(--muted);font-family:'Zen Kaku Gothic New',sans-serif;font-size:.8rem;padding:8px 24px;cursor:pointer;letter-spacing:.08em;transition:color .2s}
+    .share-close:hover{color:var(--amber)}
 
     /* ══ PANEL ══ */
     #panel{display:none;min-height:100vh;position:relative;z-index:1}
@@ -286,16 +291,36 @@
 
     <!-- Quick emotion chips -->
     <div class="quick-chips reveal" id="quick-chips">
-      <button class="qchip" onclick="toggleQchip('疲れた',this)">疲れた</button>
-      <button class="qchip" onclick="toggleQchip('眠れない',this)">眠れない</button>
-      <button class="qchip" onclick="toggleQchip('なんか苦しい',this)">なんか苦しい</button>
-      <button class="qchip" onclick="toggleQchip('悲しい',this)">悲しい</button>
-      <button class="qchip" onclick="toggleQchip('孤独',this)">孤独</button>
-      <button class="qchip" onclick="toggleQchip('頑張れない',this)">頑張れない</button>
       <button class="qchip" onclick="toggleQchip('不安',this)">不安</button>
-      <button class="qchip" onclick="toggleQchip('虚しい',this)">虚しい</button>
-      <button class="qchip" onclick="toggleQchip('何もしたくない',this)">何もしたくない</button>
+      <button class="qchip" onclick="toggleQchip('焦り',this)">焦り</button>
+      <button class="qchip" onclick="toggleQchip('怒り',this)">怒り</button>
+      <button class="qchip" onclick="toggleQchip('悲しい',this)">悲しい</button>
+      <button class="qchip" onclick="toggleQchip('泣きたい',this)">泣きたい</button>
+      <button class="qchip" onclick="toggleQchip('孤独',this)">孤独</button>
+      <button class="qchip" onclick="toggleQchip('寂しい',this)">寂しい</button>
       <button class="qchip" onclick="toggleQchip('傷ついた',this)">傷ついた</button>
+      <button class="qchip" onclick="toggleQchip('空虚',this)">空虚</button>
+      <button class="qchip" onclick="toggleQchip('心が重い',this)">心が重い</button>
+      <button class="qchip" onclick="toggleQchip('眠れない',this)">眠れない</button>
+      <button class="qchip" onclick="toggleQchip('頑張れない',this)">頑張れない</button>
+      <button class="qchip" onclick="toggleQchip('疲れた',this)">疲れた</button>
+      <button class="qchip" onclick="toggleQchip('虚しい',this)">虚しい</button>
+      <button class="qchip" onclick="toggleQchip('憂鬱',this)">憂鬱</button>
+      <button class="qchip" onclick="toggleQchip('懐かしい',this)">懐かしい</button>
+      <button class="qchip" onclick="toggleQchip('後悔',this)">後悔</button>
+      <button class="qchip" onclick="toggleQchip('嫉妬',this)">嫉妬</button>
+      <button class="qchip" onclick="toggleQchip('恥ずかしい',this)">恥ずかしい</button>
+      <button class="qchip" onclick="toggleQchip('申し訳ない',this)">申し訳ない</button>
+      <button class="qchip" onclick="toggleQchip('嬉しい',this)">嬉しい</button>
+      <button class="qchip" onclick="toggleQchip('ワクワク',this)">ワクワク</button>
+      <button class="qchip" onclick="toggleQchip('感謝',this)">感謝</button>
+      <button class="qchip" onclick="toggleQchip('穏やか',this)">穏やか</button>
+      <button class="qchip" onclick="toggleQchip('すっきり',this)">すっきり</button>
+      <button class="qchip" onclick="toggleQchip('やる気',this)">やる気</button>
+      <button class="qchip" onclick="toggleQchip('希望',this)">希望</button>
+      <button class="qchip" onclick="toggleQchip('ときめき',this)">ときめき</button>
+      <button class="qchip" onclick="toggleQchip('達成感',this)">達成感</button>
+      <button class="qchip" onclick="toggleQchip('愛おしい',this)">愛おしい</button>
     </div>
 
     <!-- Textarea -->
@@ -382,7 +407,7 @@
 
 <!-- ══════════ SHARE OVERLAY ══════════ -->
 <div id="share-overlay">
-  <div class="share-card">
+  <div class="share-card" id="share-preview-card">
     <div class="sc-flame">🕯️</div>
     <div class="sc-label">あなたへの言葉</div>
     <div class="sc-date" id="sc-date"></div>
@@ -390,7 +415,18 @@
     <div class="sc-author" id="sc-author"></div>
     <div class="sc-brand">灯　Tomoshibi</div>
   </div>
-  <div class="share-hint">スクリーンショットで保存・シェアできます</div>
+  <div class="share-actions">
+    <button class="share-btn-main" id="share-native-btn" onclick="doNativeShare()">
+      📤　インスタ・X・LINEなどに共有
+    </button>
+    <button class="share-btn-sub" onclick="doDownload()">
+      💾　画像として保存
+    </button>
+    <button class="share-btn-sub" onclick="doCopyText()">
+      📋　テキストをコピー
+    </button>
+  </div>
+  <div class="share-hint" id="share-hint-text">スマートフォンから共有するとSNSアプリを直接選べます</div>
   <button class="share-close" onclick="closeShare()">閉じる</button>
 </div>
 
@@ -882,17 +918,169 @@
   }
 
   // ── Share overlay ─────────────────────────────────────
+  let _shareQuote = null;
+
   function openShare(cardId) {
     const card = document.getElementById(cardId);
     const q = card._quoteData;
     const ts = card._timestamp || fmtTimestamp();
+    _shareQuote = { q, ts };
     document.getElementById('sc-date').textContent = ts;
     document.getElementById('sc-quote').textContent = q.original;
     document.getElementById('sc-author').textContent = '— ' + (q.authorJp || q.author);
+    // Hide native share button if not supported
+    const btn = document.getElementById('share-native-btn');
+    btn.style.display = (navigator.share) ? '' : 'none';
     document.getElementById('share-overlay').classList.add('visible');
   }
   function closeShare() {
     document.getElementById('share-overlay').classList.remove('visible');
+  }
+
+  // ── Canvas image generation ───────────────────────────
+  async function buildShareCanvas() {
+    if (!_shareQuote) return null;
+    const { q, ts } = _shareQuote;
+    await document.fonts.ready;
+
+    const W = 1080, H = 1920;
+    const canvas = document.createElement('canvas');
+    canvas.width = W; canvas.height = H;
+    const ctx = canvas.getContext('2d');
+
+    // Background
+    const bg = ctx.createLinearGradient(0, 0, 0, H);
+    bg.addColorStop(0,   '#0D1A2A');
+    bg.addColorStop(0.6, '#06090F');
+    bg.addColorStop(1,   '#0A1A14');
+    ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+
+    // Amber glow
+    const glow = ctx.createRadialGradient(W/2, H*0.72, 0, W/2, H*0.72, 560);
+    glow.addColorStop(0, 'rgba(249,115,22,0.11)');
+    glow.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = glow; ctx.fillRect(0, 0, W, H);
+
+    // Top thin line
+    ctx.strokeStyle = 'rgba(249,115,22,0.22)';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(120, 530); ctx.lineTo(960, 530); ctx.stroke();
+
+    // Label
+    ctx.fillStyle = 'rgba(245,158,11,0.52)';
+    ctx.font = '300 32px "Zen Kaku Gothic New", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.letterSpacing = '6px';
+    ctx.fillText('あなたへの言葉', W/2, 592);
+
+    // Timestamp
+    ctx.fillStyle = 'rgba(100,116,139,0.65)';
+    ctx.font = '300 28px "Zen Kaku Gothic New", sans-serif';
+    ctx.fillText(ts, W/2, 640);
+
+    // Quote text (Japanese line-wrap by character)
+    ctx.fillStyle = '#F1F5F9';
+    ctx.font = '500 54px "Shippori Mincho", serif';
+    ctx.letterSpacing = '2px';
+    const maxW = 820;
+    const lines = wrapJP(ctx, q.original, maxW);
+    const lineH = 88;
+    let qY = (H - lines.length * lineH) / 2 - 60;
+    lines.forEach(line => { ctx.fillText(line, W/2, qY); qY += lineH; });
+
+    // Author
+    ctx.fillStyle = '#FCD34D';
+    ctx.font = '400 38px "Shippori Mincho", serif';
+    ctx.fillText('— ' + (q.authorJp || q.author), W/2, qY + 52);
+
+    // Bottom line
+    ctx.strokeStyle = 'rgba(249,115,22,0.18)';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(120, H - 220); ctx.lineTo(960, H - 220); ctx.stroke();
+
+    // Brand
+    ctx.fillStyle = 'rgba(245,158,11,0.3)';
+    ctx.font = '400 46px "Shippori Mincho", serif';
+    ctx.letterSpacing = '16px';
+    ctx.fillText('灯　Tomoshibi', W/2, H - 148);
+
+    return canvas;
+  }
+
+  function wrapJP(ctx, text, maxW) {
+    const lines = [];
+    let cur = '';
+    for (const ch of text) {
+      const test = cur + ch;
+      if (ctx.measureText(test).width > maxW && cur) { lines.push(cur); cur = ch; }
+      else { cur = test; }
+    }
+    if (cur) lines.push(cur);
+    return lines;
+  }
+
+  // ── Native share (Instagram / X / LINE) ──────────────
+  async function doNativeShare() {
+    if (!_shareQuote) return;
+    const { q, ts } = _shareQuote;
+    const hint = document.getElementById('share-hint-text');
+
+    try {
+      const canvas = await buildShareCanvas();
+      if (canvas) {
+        canvas.toBlob(async (blob) => {
+          const file = new File([blob], 'tomoshibi.png', { type: 'image/png' });
+          const shareData = {
+            title: '灯 Tomoshibi',
+            text: `「${q.original}」\n— ${q.authorJp || q.author}\n\nhttps://meigen-app.onrender.com`,
+            files: [file],
+          };
+          try {
+            if (navigator.canShare && navigator.canShare(shareData)) {
+              await navigator.share(shareData);
+            } else {
+              // Share without image
+              await navigator.share({ title:'灯 Tomoshibi', text: shareData.text });
+            }
+          } catch(e) {
+            if (e.name !== 'AbortError') hint.textContent = '共有に失敗しました。下の「画像として保存」をお試しください。';
+          }
+        }, 'image/png', 0.95);
+      } else {
+        await navigator.share({
+          title: '灯 Tomoshibi',
+          text: `「${q.original}」\n— ${q.authorJp || q.author}\n\nhttps://meigen-app.onrender.com`,
+        });
+      }
+    } catch(e) {
+      if (e.name !== 'AbortError') hint.textContent = '共有に失敗しました。スクリーンショットでシェアしてください。';
+    }
+  }
+
+  // ── Download image ────────────────────────────────────
+  async function doDownload() {
+    const hint = document.getElementById('share-hint-text');
+    hint.textContent = '画像を生成中…';
+    try {
+      const canvas = await buildShareCanvas();
+      if (!canvas) return;
+      const link = document.createElement('a');
+      link.download = 'tomoshibi.png';
+      link.href = canvas.toDataURL('image/png', 0.95);
+      link.click();
+      hint.textContent = '保存しました！インスタ・Xなどに投稿できます';
+    } catch(e) { hint.textContent = '生成に失敗しました。スクリーンショットをお試しください。'; }
+  }
+
+  // ── Copy text ─────────────────────────────────────────
+  async function doCopyText() {
+    if (!_shareQuote) return;
+    const { q } = _shareQuote;
+    const text = `「${q.original}」\n— ${q.authorJp || q.author}\n\n灯 Tomoshibi\nhttps://meigen-app.onrender.com`;
+    try {
+      await navigator.clipboard.writeText(text);
+      document.getElementById('share-hint-text').textContent = 'コピーしました！どこにでも貼り付けられます';
+    } catch(e) { document.getElementById('share-hint-text').textContent = 'コピーに失敗しました'; }
   }
 
   // ── Favorites ─────────────────────────────────────────
