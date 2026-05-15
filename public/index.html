@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>灯 Tomoshibi</title>
   <link rel="manifest" href="/manifest.json" />
-  <meta name="theme-color" content="#0F172A" />
+  <meta name="theme-color" content="#0D1117" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -15,19 +15,21 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #0F172A;
-      --bg2: #111827;
-      --bg3: #1E293B;
-      --amber: #F59E0B;
-      --amber2: #FFD89B;
-      --amber3: #FFE8C2;
-      --amber-glow: rgba(245,158,11,0.15);
-      --amber-glow2: rgba(245,158,11,0.08);
-      --txt: #F1F5F9;
-      --txt2: #CBD5E1;
-      --muted: #64748B;
-      --faint: #334155;
-      --border: rgba(245,158,11,0.12);
+      --bg:    #0D1117;
+      --bg2:   #111820;
+      --bg3:   #1A2332;
+      --flame:  #F97316;
+      --amber:  #F59E0B;
+      --amber2: #FCD34D;
+      --amber3: #FEF3C7;
+      --ember:  #EF4444;
+      --glow:   rgba(249,115,22,0.18);
+      --glow2:  rgba(245,158,11,0.10);
+      --txt:    #F1F5F9;
+      --txt2:   #CBD5E1;
+      --muted:  #64748B;
+      --faint:  #2D3F55;
+      --border: rgba(249,115,22,0.14);
       --r: 20px;
     }
 
@@ -41,93 +43,181 @@
       overflow-x: hidden;
     }
 
-    /* ── Breathing orb ── */
-    .orb {
-      position: fixed;
-      top: -120px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 340px;
-      height: 340px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(245,158,11,0.18) 0%, rgba(245,158,11,0.06) 45%, transparent 70%);
-      filter: blur(40px);
-      animation: breathe 5s ease-in-out infinite;
-      pointer-events: none;
-      z-index: 0;
-    }
-    @keyframes breathe {
-      0%, 100% { opacity: 0.6; transform: translateX(-50%) scale(1); }
-      50% { opacity: 1; transform: translateX(-50%) scale(1.12); }
-    }
-
-    /* ── Home screen ── */
-    #home {
+    /* ══════════════ HERO ══════════════ */
+    #hero {
+      position: relative;
+      height: 100vh;
       display: flex;
       flex-direction: column;
-      min-height: 100vh;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* Background flame gradient */
+    #hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 50% 70%, rgba(249,115,22,0.13) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 50% 80%, rgba(245,158,11,0.10) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    /* Ember particles */
+    .embers {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .ember {
+      position: absolute;
+      bottom: 30%;
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: var(--amber2);
+      opacity: 0;
+      animation: rise var(--d, 4s) var(--delay, 0s) ease-in infinite;
+    }
+    @keyframes rise {
+      0%   { opacity: 0; transform: translateY(0) translateX(0) scale(1); }
+      15%  { opacity: 0.8; }
+      70%  { opacity: 0.4; }
+      100% { opacity: 0; transform: translateY(-280px) translateX(var(--dx, 20px)) scale(0.2); }
+    }
+
+    /* The 灯 character */
+    .hero-kanji {
+      font-family: 'Shippori Mincho', serif;
+      font-size: clamp(7rem, 25vw, 11rem);
+      font-weight: 700;
+      color: var(--amber2);
+      line-height: 1;
+      animation: flicker 4s ease-in-out infinite;
       position: relative;
       z-index: 1;
+      cursor: default;
+      user-select: none;
+    }
+    @keyframes flicker {
+      0%   { text-shadow: 0 0 24px rgba(249,115,22,0.9), 0 0 60px rgba(245,158,11,0.5), 0 0 120px rgba(249,115,22,0.2); transform: scale(1) rotate(-0.4deg); }
+      20%  { text-shadow: 0 0 40px rgba(249,115,22,1),   0 0 90px rgba(245,158,11,0.7), 0 0 160px rgba(249,115,22,0.25); transform: scale(1.025) rotate(0.4deg); }
+      40%  { text-shadow: 0 0 28px rgba(245,158,11,0.85),0 0 70px rgba(249,115,22,0.5), 0 0 130px rgba(239,68,68,0.15);  transform: scale(1.01) rotate(-0.2deg); }
+      60%  { text-shadow: 0 0 36px rgba(239,68,68,0.7),  0 0 80px rgba(249,115,22,0.6), 0 0 140px rgba(245,158,11,0.2); transform: scale(1.02) rotate(0.3deg); }
+      80%  { text-shadow: 0 0 20px rgba(249,115,22,0.8), 0 0 55px rgba(245,158,11,0.4), 0 0 100px rgba(249,115,22,0.15); transform: scale(1.005) rotate(-0.3deg); }
+      100% { text-shadow: 0 0 24px rgba(249,115,22,0.9), 0 0 60px rgba(245,158,11,0.5), 0 0 120px rgba(249,115,22,0.2); transform: scale(1) rotate(-0.4deg); }
     }
 
-    .home-header {
-      text-align: center;
-      padding: 64px 24px 0;
-    }
-    .home-title {
-      font-family: 'Shippori Mincho', serif;
-      font-size: 2.8rem;
-      font-weight: 600;
-      color: var(--amber2);
-      letter-spacing: 0.15em;
-      line-height: 1.2;
-    }
-    .home-title small {
-      display: block;
+    .hero-roman {
       font-family: 'Zen Kaku Gothic New', sans-serif;
-      font-size: 0.75rem;
+      font-size: 0.85rem;
       font-weight: 300;
+      letter-spacing: 0.5em;
       color: var(--muted);
-      letter-spacing: 0.3em;
-      margin-top: 8px;
+      margin-top: 14px;
+      text-transform: uppercase;
+      position: relative;
+      z-index: 1;
+      animation: fadeIn 2s ease 0.5s both;
     }
-    .home-sub {
-      margin-top: 16px;
-      font-size: 0.82rem;
-      color: var(--muted);
-      letter-spacing: 0.08em;
-      line-height: 1.7;
+    .hero-sub {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 0.95rem;
+      color: rgba(203,213,225,0.5);
+      margin-top: 18px;
+      letter-spacing: 0.12em;
+      position: relative;
+      z-index: 1;
+      animation: fadeIn 2s ease 1s both;
     }
 
-    /* ── Feature grid ── */
-    .feature-grid {
-      padding: 48px 20px 100px;
-      max-width: 520px;
-      margin: 0 auto;
-      width: 100%;
+    /* Scroll hint */
+    .scroll-hint {
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      z-index: 1;
+      animation: fadeIn 2s ease 1.5s both;
+      cursor: pointer;
     }
-    .grid-label {
+    .scroll-hint span {
       font-size: 0.68rem;
       letter-spacing: 0.25em;
       color: var(--muted);
       text-transform: uppercase;
-      margin-bottom: 16px;
-      padding-left: 4px;
     }
+    .scroll-arrow {
+      width: 28px;
+      height: 28px;
+      border: 1px solid rgba(249,115,22,0.25);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--flame);
+      font-size: 0.8rem;
+      animation: bounce 2.5s ease-in-out infinite;
+    }
+    @keyframes bounce {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(6px); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    /* ══════════════ HOME (grid section) ══════════════ */
+    #home { position: relative; z-index: 1; }
+
+    .grid-section {
+      padding: 56px 20px 100px;
+      max-width: 540px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .section-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.28em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      padding-left: 2px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
     .grid-3 {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 10px;
+      gap: 12px;
+      margin-bottom: 12px;
     }
+
     .feat-card {
       background: var(--bg3);
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 18px 10px 16px;
+      border-radius: 18px;
+      padding: 22px 12px 18px;
       cursor: pointer;
       text-align: center;
-      transition: background 0.3s, border-color 0.3s, transform 0.2s;
+      transition: border-color 0.3s, transform 0.18s, box-shadow 0.3s;
       user-select: none;
       position: relative;
       overflow: hidden;
@@ -136,39 +226,45 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: radial-gradient(circle at 50% 0%, rgba(245,158,11,0.1) 0%, transparent 60%);
+      background: radial-gradient(ellipse at 50% 0%, rgba(249,115,22,0.12) 0%, transparent 65%);
       opacity: 0;
       transition: opacity 0.3s;
     }
-    .feat-card:active { transform: scale(0.96); }
-    .feat-card:hover { border-color: rgba(245,158,11,0.3); }
+    .feat-card:active  { transform: scale(0.95); }
+    .feat-card:hover   { border-color: rgba(249,115,22,0.35); box-shadow: 0 4px 24px rgba(249,115,22,0.08); }
     .feat-card:hover::before { opacity: 1; }
-    .feat-icon { font-size: 1.5rem; margin-bottom: 8px; display: block; }
-    .feat-name {
-      font-size: 0.72rem;
+
+    .feat-icon  { font-size: 1.8rem; margin-bottom: 10px; display: block; }
+    .feat-name  {
+      font-size: 0.8rem;
       font-weight: 500;
       color: var(--txt2);
       letter-spacing: 0.04em;
-      line-height: 1.4;
+      line-height: 1.5;
     }
+
+    /* Primary (言葉を探す) card */
     .feat-card.primary {
-      border-color: rgba(245,158,11,0.25);
-      background: linear-gradient(160deg, #1E293B 0%, #162032 100%);
+      background: linear-gradient(160deg, rgba(249,115,22,0.12) 0%, var(--bg3) 100%);
+      border-color: rgba(249,115,22,0.3);
+      box-shadow: 0 0 30px rgba(249,115,22,0.06) inset;
     }
-    .feat-card.primary .feat-name { color: var(--amber2); }
+    .feat-card.primary .feat-name  { color: var(--amber2); font-size: 0.85rem; }
+    .feat-card.primary .feat-icon  { animation: icon-pulse 3s ease-in-out infinite; }
+    @keyframes icon-pulse {
+      0%,100% { filter: drop-shadow(0 0 4px rgba(249,115,22,0.5)); }
+      50%      { filter: drop-shadow(0 0 10px rgba(249,115,22,0.9)); }
+    }
 
     /* ── Scroll reveal ── */
     .reveal {
       opacity: 0;
-      transform: translateY(24px);
-      transition: opacity 0.8s ease, transform 0.8s ease;
+      transform: translateY(28px);
+      transition: opacity 0.75s ease, transform 0.75s ease;
     }
-    .reveal.visible {
-      opacity: 1;
-      transform: none;
-    }
+    .reveal.visible { opacity: 1; transform: none; }
 
-    /* ── Panel section ── */
+    /* ══════════════ PANEL ══════════════ */
     #panel {
       display: none;
       min-height: 100vh;
@@ -178,31 +274,29 @@
     .panel-header {
       display: flex;
       align-items: center;
-      padding: 56px 20px 24px;
-      gap: 12px;
+      padding: 52px 20px 22px;
+      gap: 14px;
       max-width: 560px;
       margin: 0 auto;
       width: 100%;
     }
     .back-btn {
-      width: 36px;
-      height: 36px;
+      width: 38px; height: 38px;
       border-radius: 50%;
       border: 1px solid var(--border);
       background: var(--bg3);
       color: var(--muted);
-      font-size: 1rem;
+      font-size: 1.05rem;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       flex-shrink: 0;
       transition: border-color 0.2s, color 0.2s;
     }
-    .back-btn:hover { border-color: var(--amber); color: var(--amber); }
+    .back-btn:hover { border-color: var(--flame); color: var(--flame); }
+
     .panel-title {
       font-family: 'Shippori Mincho', serif;
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       font-weight: 500;
       color: var(--txt2);
       letter-spacing: 0.08em;
@@ -216,16 +310,16 @@
       padding: 0 20px 100px;
     }
 
-    /* ── Cards in panels ── */
+    /* ── Cards ── */
     .tomo-card {
       background: var(--bg3);
       border: 1px solid var(--border);
       border-radius: var(--r);
-      padding: 24px;
-      margin-bottom: 14px;
+      padding: 22px 20px;
+      margin-bottom: 12px;
     }
     .tomo-card-label {
-      font-size: 0.65rem;
+      font-size: 0.67rem;
       letter-spacing: 0.22em;
       color: var(--muted);
       text-transform: uppercase;
@@ -235,37 +329,29 @@
     /* ── Wizard ── */
     .wizard-step { display: none; }
     .wizard-step.active { display: block; }
-
     .wizard-progress {
       display: flex;
       gap: 6px;
-      margin-bottom: 28px;
-      padding: 0 2px;
+      margin-bottom: 24px;
     }
     .wp-dot {
-      height: 2px;
-      flex: 1;
-      border-radius: 2px;
+      height: 3px; flex: 1; border-radius: 2px;
       background: var(--faint);
       transition: background 0.4s;
     }
-    .wp-dot.done { background: var(--amber); }
+    .wp-dot.done   { background: var(--flame); }
     .wp-dot.active { background: var(--amber2); }
 
-    /* ── Genre buttons ── */
-    .genre-row {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 20px;
-    }
+    /* ── Genre ── */
+    .genre-row { display: flex; gap: 8px; margin-bottom: 0; }
     .genre-btn {
       flex: 1;
-      padding: 14px 8px;
+      padding: 16px 8px;
       border-radius: 14px;
       border: 1px solid var(--border);
       background: var(--bg2);
       font-family: 'Zen Kaku Gothic New', sans-serif;
-      font-size: 0.78rem;
+      font-size: 0.82rem;
       font-weight: 500;
       color: var(--muted);
       cursor: pointer;
@@ -273,10 +359,10 @@
       text-align: center;
       line-height: 1.6;
     }
-    .genre-btn .gi { font-size: 1.3rem; display: block; margin-bottom: 4px; }
+    .genre-btn .gi { font-size: 1.4rem; display: block; margin-bottom: 5px; }
     .genre-btn.active {
-      background: var(--amber-glow);
-      border-color: var(--amber);
+      background: rgba(249,115,22,0.1);
+      border-color: var(--flame);
       color: var(--amber2);
     }
 
@@ -287,83 +373,53 @@
       overflow: hidden;
       border: 1px solid var(--border);
       background: var(--bg2);
-      margin-bottom: 0;
     }
     .mode-btn {
-      flex: 1;
-      padding: 10px 6px;
-      border: none;
-      background: transparent;
+      flex: 1; padding: 11px 4px;
+      border: none; background: transparent;
       font-family: 'Zen Kaku Gothic New', sans-serif;
-      font-size: 0.76rem;
-      font-weight: 500;
-      color: var(--muted);
-      cursor: pointer;
-      transition: all 0.25s;
-      white-space: nowrap;
+      font-size: 0.78rem; font-weight: 500;
+      color: var(--muted); cursor: pointer;
+      transition: all 0.25s; white-space: nowrap;
     }
-    .mode-btn.active {
-      background: var(--amber-glow);
-      color: var(--amber2);
-    }
+    .mode-btn.active { background: rgba(249,115,22,0.12); color: var(--amber2); }
 
     /* ── Emotions ── */
-    .emotions-wrap {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 7px;
-    }
+    .emotions-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
     .emo-btn {
       border: 1px solid var(--border);
       background: var(--bg2);
       border-radius: 50px;
-      padding: 7px 16px;
-      font-size: 0.8rem;
+      padding: 8px 18px;
+      font-size: 0.85rem;
       cursor: pointer;
       transition: all 0.2s;
       font-family: 'Zen Kaku Gothic New', sans-serif;
       color: var(--txt2);
     }
     .emo-btn.active {
-      background: var(--amber-glow);
-      border-color: var(--amber);
+      background: rgba(249,115,22,0.12);
+      border-color: var(--flame);
       color: var(--amber2);
     }
 
     /* ── Sliders ── */
-    .slider-block {
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-    }
+    .slider-block { display: flex; flex-direction: column; gap: 20px; }
     .slider-row label {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.82rem;
-      font-weight: 500;
-      color: var(--txt2);
-      margin-bottom: 8px;
+      display: flex; justify-content: space-between;
+      font-size: 0.88rem; font-weight: 500; color: var(--txt2); margin-bottom: 9px;
     }
-    .slider-row label span {
-      color: var(--amber);
-      font-weight: 600;
-    }
+    .slider-row label span { color: var(--amber); font-weight: 700; }
     input[type=range] {
-      -webkit-appearance: none;
-      width: 100%;
-      height: 4px;
-      border-radius: 2px;
-      background: var(--faint);
-      outline: none;
-      cursor: pointer;
+      -webkit-appearance: none; width: 100%; height: 4px;
+      border-radius: 2px; background: var(--faint);
+      outline: none; cursor: pointer;
     }
     input[type=range]::-webkit-slider-thumb {
       -webkit-appearance: none;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: var(--amber);
-      box-shadow: 0 0 8px rgba(245,158,11,0.5);
+      width: 20px; height: 20px; border-radius: 50%;
+      background: var(--flame);
+      box-shadow: 0 0 10px rgba(249,115,22,0.55);
       cursor: pointer;
     }
 
@@ -373,112 +429,103 @@
       width: 100%;
       border: 1px solid var(--border);
       border-radius: 14px;
-      padding: 14px 50px 14px 16px;
-      font-size: 0.9rem;
+      padding: 14px 52px 14px 16px;
+      font-size: 0.95rem;
       font-family: 'Zen Kaku Gothic New', sans-serif;
-      resize: none;
-      outline: none;
+      resize: none; outline: none;
       background: var(--bg2);
       color: var(--txt);
       transition: border-color 0.25s;
-      line-height: 1.7;
+      line-height: 1.75;
     }
     textarea::placeholder { color: var(--muted); }
-    textarea:focus { border-color: rgba(245,158,11,0.4); }
+    textarea:focus { border-color: rgba(249,115,22,0.4); }
     .mic-btn {
-      position: absolute;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      border: none;
-      background: var(--amber-glow);
-      color: var(--amber);
-      font-size: 1rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+      width: 36px; height: 36px; border-radius: 50%; border: none;
+      background: rgba(249,115,22,0.12); color: var(--flame);
+      font-size: 1rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
       transition: all 0.2s;
     }
-    .mic-btn.recording { background: rgba(239,68,68,0.2); color: #EF4444; animation: pulse-mic 1s infinite; }
+    .mic-btn.recording { background: rgba(239,68,68,0.18); color: #EF4444; animation: pulse-mic 1s infinite; }
     @keyframes pulse-mic { 0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,.3)}50%{box-shadow:0 0 0 8px rgba(239,68,68,0)} }
-    .mic-status { font-size: 0.72rem; color: var(--amber); margin-top: 6px; min-height: 16px; }
+    .mic-status { font-size: 0.74rem; color: var(--flame); margin-top: 6px; min-height: 16px; }
     .mic-status.rec { color: #EF4444; }
 
     /* ── Buttons ── */
     .btn-primary {
-      width: 100%;
-      padding: 15px;
-      border-radius: 14px;
-      border: none;
-      background: linear-gradient(135deg, #F59E0B 0%, #FBBF24 100%);
-      color: #0F172A;
+      width: 100%; padding: 16px;
+      border-radius: 14px; border: none;
+      background: linear-gradient(135deg, #F97316 0%, #FBBF24 100%);
+      color: #0D1117;
       font-family: 'Zen Kaku Gothic New', sans-serif;
-      font-size: 0.9rem;
-      font-weight: 700;
-      cursor: pointer;
-      letter-spacing: 0.06em;
+      font-size: 0.95rem; font-weight: 700;
+      cursor: pointer; letter-spacing: 0.07em;
       transition: opacity 0.2s, transform 0.15s;
-      box-shadow: 0 4px 20px rgba(245,158,11,0.3);
+      box-shadow: 0 4px 22px rgba(249,115,22,0.35);
     }
-    .btn-primary:hover { opacity: 0.9; }
+    .btn-primary:hover  { opacity: 0.9; }
     .btn-primary:active { transform: scale(0.98); }
     .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+
     .btn-ghost {
-      width: 100%;
-      padding: 13px;
+      width: 100%; padding: 14px;
       border-radius: 14px;
       border: 1px solid var(--border);
       background: transparent;
       color: var(--muted);
       font-family: 'Zen Kaku Gothic New', sans-serif;
-      font-size: 0.85rem;
-      cursor: pointer;
-      transition: all 0.2s;
+      font-size: 0.88rem;
+      cursor: pointer; transition: all 0.2s;
     }
-    .btn-ghost:hover { border-color: var(--amber); color: var(--amber); }
+    .btn-ghost:hover { border-color: var(--flame); color: var(--flame); }
+
     .btn-row { display: flex; gap: 10px; margin-top: 14px; }
-    .btn-row .btn-ghost { flex: 1; }
+    .btn-row .btn-ghost  { flex: 1; }
     .btn-row .btn-primary { flex: 2; }
 
-    /* ── Loading state ── */
-    .loading-state {
-      display: none;
-      text-align: center;
-      padding: 48px 24px;
-    }
+    /* ── Loading ── */
+    .loading-state { display: none; text-align: center; padding: 48px 24px; }
     .loading-state.visible { display: block; }
     .loading-flame {
-      font-size: 2rem;
-      animation: flame-flicker 2s ease-in-out infinite;
-      margin-bottom: 16px;
+      font-size: 2.4rem;
+      animation: flame-float 2.5s ease-in-out infinite;
+      margin-bottom: 18px;
     }
-    @keyframes flame-flicker {
-      0%,100%{opacity:0.7;transform:scale(1) rotate(-2deg)}
-      33%{opacity:1;transform:scale(1.08) rotate(1deg)}
-      66%{opacity:0.85;transform:scale(1.04) rotate(-1deg)}
+    @keyframes flame-float {
+      0%,100%{opacity:0.7;transform:scale(1) rotate(-3deg)}
+      33%{opacity:1;transform:scale(1.1) rotate(2deg)}
+      66%{opacity:0.85;transform:scale(1.05) rotate(-1deg)}
     }
     .loading-text {
       font-family: 'Shippori Mincho', serif;
-      font-size: 0.88rem;
+      font-size: 0.95rem;
       color: var(--muted);
       letter-spacing: 0.12em;
-      line-height: 2;
+      line-height: 2.1;
     }
 
-    /* ── Quote scroll feed ── */
-    #quotes-feed {
-      display: none;
+    /* ── Quote feed ── */
+    .another-btn {
+      width: 100%; padding: 15px;
+      border-radius: 14px;
+      border: 1px solid rgba(249,115,22,0.25);
+      background: rgba(249,115,22,0.06);
+      color: var(--amber2);
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+      font-size: 0.88rem; font-weight: 500;
+      cursor: pointer; letter-spacing: 0.08em;
+      transition: all 0.2s;
+      margin-top: 8px; margin-bottom: 28px;
     }
-    #quotes-feed.visible { display: block; }
+    .another-btn:hover { background: rgba(249,115,22,0.12); border-color: var(--flame); }
+
     .quote-card {
       background: var(--bg2);
       border: 1px solid var(--border);
       border-radius: 24px;
-      padding: 36px 28px 28px;
+      padding: 38px 28px 28px;
       margin-bottom: 16px;
       position: relative;
       overflow: hidden;
@@ -490,442 +537,207 @@
     .quote-card::before {
       content: '';
       position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(245,158,11,0.3), transparent);
+      top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(249,115,22,0.4), transparent);
     }
+
     .quote-card-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 0.62rem;
-      letter-spacing: 0.2em;
-      color: var(--amber);
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 0.65rem; letter-spacing: 0.2em; color: var(--flame);
       text-transform: uppercase;
-      background: var(--amber-glow2);
-      border: 1px solid rgba(245,158,11,0.15);
-      border-radius: 50px;
-      padding: 4px 12px;
-      margin-bottom: 20px;
+      background: rgba(249,115,22,0.08);
+      border: 1px solid rgba(249,115,22,0.18);
+      border-radius: 50px; padding: 5px 13px;
+      margin-bottom: 22px;
     }
     .quote-original {
       font-family: 'Shippori Mincho', serif;
-      font-size: 1.15rem;
-      font-weight: 500;
+      font-size: 1.2rem; font-weight: 500;
       color: var(--txt);
-      line-height: 1.85;
-      letter-spacing: 0.04em;
+      line-height: 1.9; letter-spacing: 0.04em;
       margin-bottom: 16px;
     }
     .quote-translation {
       font-family: 'Shippori Mincho', serif;
-      font-size: 0.88rem;
-      color: var(--txt2);
-      line-height: 1.85;
-      letter-spacing: 0.03em;
-      margin-bottom: 20px;
+      font-size: 0.92rem; color: var(--txt2);
+      line-height: 1.9; letter-spacing: 0.03em;
+      margin-bottom: 22px;
       padding-left: 14px;
-      border-left: 2px solid rgba(245,158,11,0.25);
+      border-left: 2px solid rgba(249,115,22,0.3);
     }
     .quote-author-line {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 8px;
+      display: flex; align-items: center; justify-content: flex-end; gap: 10px;
     }
-    .quote-author-dot {
-      width: 20px;
-      height: 1px;
-      background: rgba(245,158,11,0.4);
-    }
-    .quote-author-name {
-      font-size: 0.78rem;
-      color: var(--amber2);
-      letter-spacing: 0.08em;
-    }
+    .quote-author-dot { width: 22px; height: 1px; background: rgba(249,115,22,0.45); }
+    .quote-author-name { font-size: 0.82rem; color: var(--amber2); letter-spacing: 0.08em; }
     .quote-reason {
-      margin-top: 20px;
-      padding-top: 20px;
+      margin-top: 22px; padding-top: 20px;
       border-top: 1px solid var(--border);
-      font-size: 0.8rem;
-      color: var(--muted);
-      line-height: 1.8;
-      letter-spacing: 0.03em;
+      font-size: 0.84rem; color: var(--muted);
+      line-height: 1.85; letter-spacing: 0.03em;
     }
 
-    /* Prescription card */
+    /* Prescription */
     .rx-card {
-      margin-top: 14px;
-      background: linear-gradient(160deg, rgba(245,158,11,0.07) 0%, var(--bg2) 100%);
-      border: 1px solid rgba(245,158,11,0.2);
-      border-radius: 16px;
-      padding: 18px;
+      margin-top: 16px;
+      background: linear-gradient(160deg, rgba(249,115,22,0.07) 0%, var(--bg2) 100%);
+      border: 1px solid rgba(249,115,22,0.2);
+      border-radius: 16px; padding: 18px;
     }
-    .rx-title {
-      font-size: 0.62rem;
-      letter-spacing: 0.25em;
-      color: var(--amber);
-      text-transform: uppercase;
-      margin-bottom: 12px;
-    }
-    .rx-row {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 8px;
-      font-size: 0.8rem;
-    }
+    .rx-title { font-size: 0.63rem; letter-spacing: 0.25em; color: var(--flame); text-transform: uppercase; margin-bottom: 12px; }
+    .rx-row { display: flex; gap: 8px; margin-bottom: 8px; font-size: 0.82rem; }
     .rx-label { color: var(--muted); flex-shrink: 0; width: 44px; }
     .rx-val { color: var(--txt2); }
 
-    /* ── Another button ── */
-    .another-btn {
-      width: 100%;
-      padding: 14px;
-      border-radius: 14px;
-      border: 1px solid rgba(245,158,11,0.25);
-      background: var(--amber-glow2);
-      color: var(--amber2);
-      font-family: 'Zen Kaku Gothic New', sans-serif;
-      font-size: 0.85rem;
-      font-weight: 500;
-      cursor: pointer;
-      letter-spacing: 0.08em;
+    /* Save fav */
+    .save-fav-btn {
+      position: absolute; top: 16px; right: 16px;
+      width: 34px; height: 34px; border-radius: 50%;
+      border: 1px solid var(--border); background: transparent;
+      color: var(--muted); font-size: 0.95rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
       transition: all 0.2s;
-      margin-top: 8px;
-      margin-bottom: 30px;
     }
-    .another-btn:hover { background: var(--amber-glow); border-color: var(--amber); }
+    .save-fav-btn:hover, .save-fav-btn.saved {
+      border-color: var(--flame); color: var(--amber);
+      background: rgba(249,115,22,0.1);
+    }
 
-    /* ── Generic panel content ── */
-    .simple-input-area {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .result-block {
-      display: none;
-      margin-top: 16px;
-    }
+    /* ── Result cards ── */
+    .result-block { display: none; margin-top: 16px; }
     .result-block.visible { display: block; }
     .result-card {
       background: var(--bg2);
       border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 28px 24px;
+      border-radius: 22px; padding: 28px 24px;
       margin-bottom: 12px;
     }
     .result-title {
-      font-size: 0.65rem;
-      letter-spacing: 0.22em;
-      color: var(--amber);
-      text-transform: uppercase;
-      margin-bottom: 14px;
+      font-size: 0.67rem; letter-spacing: 0.22em;
+      color: var(--flame); text-transform: uppercase; margin-bottom: 14px;
     }
     .result-body {
       font-family: 'Shippori Mincho', serif;
-      font-size: 0.96rem;
-      color: var(--txt);
-      line-height: 1.9;
-      letter-spacing: 0.04em;
+      font-size: 1rem; color: var(--txt);
+      line-height: 1.95; letter-spacing: 0.04em;
     }
-    .result-sub {
-      font-size: 0.78rem;
-      color: var(--muted);
-      line-height: 1.8;
-      margin-top: 12px;
-    }
+    .result-sub { font-size: 0.82rem; color: var(--muted); line-height: 1.8; margin-top: 12px; }
 
-    /* ── Silence panel ── */
-    .silence-choices { display: flex; flex-direction: column; gap: 10px; }
-    .silence-choice {
-      padding: 18px 20px;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      background: var(--bg2);
-      cursor: pointer;
-      font-size: 0.88rem;
-      color: var(--txt2);
-      letter-spacing: 0.04em;
-      transition: all 0.25s;
-      line-height: 1.6;
-    }
-    .silence-choice:hover { border-color: rgba(245,158,11,0.3); color: var(--amber2); }
-
-    /* ── Favorites ── */
-    .fav-list { display: flex; flex-direction: column; gap: 12px; }
-    .fav-item {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 20px;
-    }
-    .fav-quote {
-      font-family: 'Shippori Mincho', serif;
-      font-size: 0.92rem;
-      color: var(--txt);
-      line-height: 1.8;
-      margin-bottom: 10px;
-    }
-    .fav-meta {
-      font-size: 0.72rem;
-      color: var(--muted);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .fav-del {
-      background: none;
-      border: none;
-      color: var(--muted);
-      cursor: pointer;
-      font-size: 0.85rem;
-      transition: color 0.2s;
-      padding: 4px;
-    }
-    .fav-del:hover { color: #EF4444; }
-    .fav-empty {
-      text-align: center;
-      padding: 48px 24px;
-      color: var(--muted);
-      font-size: 0.85rem;
-      line-height: 2;
-    }
-    .fav-empty .fav-icon { font-size: 2rem; margin-bottom: 12px; opacity: 0.4; }
-
-    /* ── Save to fav btn on quote cards ── */
-    .save-fav-btn {
-      position: absolute;
-      top: 16px;
-      right: 16px;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      border: 1px solid var(--border);
-      background: transparent;
-      color: var(--muted);
-      font-size: 0.9rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s;
-    }
-    .save-fav-btn:hover, .save-fav-btn.saved {
-      border-color: var(--amber);
-      color: var(--amber);
-      background: var(--amber-glow2);
-    }
-
-    /* ── Error state ── */
+    /* Error */
     .error-msg {
       display: none;
       background: rgba(239,68,68,0.08);
       border: 1px solid rgba(239,68,68,0.2);
-      border-radius: 12px;
-      padding: 14px 16px;
-      font-size: 0.82rem;
-      color: #FCA5A5;
-      line-height: 1.7;
-      margin-top: 12px;
+      border-radius: 12px; padding: 14px 16px;
+      font-size: 0.84rem; color: #FCA5A5; line-height: 1.7; margin-top: 12px;
     }
     .error-msg.visible { display: block; }
 
-    /* ── Book / lyric / temp / universe / diary panels ── */
-    .uni-stars {
-      position: relative;
-      width: 100%;
-      height: 200px;
-      background: var(--bg);
-      border-radius: 16px;
-      margin-bottom: 14px;
-      overflow: hidden;
-    }
-    .star-dot {
-      position: absolute;
-      border-radius: 50%;
-      animation: twinkle 3s ease-in-out infinite;
-    }
-    @keyframes twinkle { 0%,100%{opacity:.3}50%{opacity:1} }
-
-    /* ── Narrative card ── */
-    .narr-chapter {
+    /* ── Silence ── */
+    .silence-choices { display: flex; flex-direction: column; gap: 10px; }
+    .silence-choice {
+      padding: 20px 22px;
+      border: 1px solid var(--border);
+      border-radius: 16px; background: var(--bg2);
+      cursor: pointer;
       font-family: 'Shippori Mincho', serif;
-      font-size: 0.72rem;
-      letter-spacing: 0.2em;
-      color: var(--amber);
-      text-transform: uppercase;
-      margin-bottom: 10px;
+      font-size: 0.92rem; color: var(--txt2);
+      letter-spacing: 0.06em; transition: all 0.25s; line-height: 1.6;
     }
-    .narr-text {
-      font-family: 'Shippori Mincho', serif;
-      font-size: 0.96rem;
-      color: var(--txt);
-      line-height: 1.95;
-      letter-spacing: 0.04em;
-    }
-    .narr-next {
-      font-size: 0.78rem;
-      color: var(--muted);
-      margin-top: 14px;
-      padding-top: 14px;
-      border-top: 1px solid var(--border);
-    }
+    .silence-choice:hover { border-color: rgba(249,115,22,0.35); color: var(--amber2); }
 
-    /* ── Smooth fade for result reveals ── */
-    @keyframes fadeUp {
-      from { opacity:0; transform:translateY(18px); }
-      to   { opacity:1; transform:none; }
-    }
-    .fade-in { animation: fadeUp 1s ease forwards; }
+    /* ── Favorites ── */
+    .fav-list { display: flex; flex-direction: column; gap: 12px; }
+    .fav-item { background: var(--bg2); border: 1px solid var(--border); border-radius: 18px; padding: 22px; }
+    .fav-quote { font-family: 'Shippori Mincho', serif; font-size: 0.96rem; color: var(--txt); line-height: 1.85; margin-bottom: 12px; }
+    .fav-meta { font-size: 0.75rem; color: var(--muted); display: flex; justify-content: space-between; align-items: center; }
+    .fav-del { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 0.9rem; transition: color 0.2s; padding: 4px; }
+    .fav-del:hover { color: #EF4444; }
+    .fav-empty { text-align: center; padding: 48px 24px; color: var(--muted); font-size: 0.88rem; line-height: 2; }
+    .fav-empty .fav-icon { font-size: 2.2rem; margin-bottom: 14px; opacity: 0.4; display: block; }
 
     /* ── Divider ── */
-    .divider {
-      height: 1px;
-      background: var(--border);
-      margin: 20px 0;
-    }
+    .divider { height: 1px; background: var(--border); margin: 20px 0; }
 
-    /* ── Inline small quote in results ── */
-    .inline-quote {
-      margin-top: 16px;
-      padding: 16px;
-      border-left: 2px solid rgba(245,158,11,0.3);
-      background: var(--bg);
-      border-radius: 0 12px 12px 0;
-    }
-    .inline-quote p { font-family:'Shippori Mincho',serif; font-size:0.88rem; color:var(--txt2); line-height:1.8; }
-    .inline-quote small { font-size:0.72rem; color:var(--amber2); margin-top:6px; display:block; }
+    /* ── Inline quote ── */
+    .inline-quote { margin-top: 18px; padding: 16px; border-left: 2px solid rgba(249,115,22,0.35); background: var(--bg); border-radius: 0 12px 12px 0; }
+    .inline-quote p { font-family:'Shippori Mincho',serif; font-size:0.9rem; color:var(--txt2); line-height:1.85; }
+    .inline-quote small { font-size:0.74rem; color:var(--amber2); margin-top:6px; display:block; }
 
-    /* ── Temperature table ── */
-    .temp-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 14px;
-    }
-    .temp-cell {
-      background: var(--bg);
-      border-radius: 12px;
-      padding: 12px 14px;
-    }
-    .temp-key { font-size:0.65rem; letter-spacing:0.15em; color:var(--muted); text-transform:uppercase; margin-bottom:4px; }
-    .temp-val { font-size:1rem; color:var(--amber2); font-weight:600; }
+    /* ── Simple input area ── */
+    .simple-input-area { display: flex; flex-direction: column; gap: 12px; }
 
-    /* ── Lyrics card ── */
-    .lyrics-text {
-      font-family: 'Shippori Mincho', serif;
-      font-size: 0.9rem;
-      color: var(--txt);
-      line-height: 2.1;
-      letter-spacing: 0.06em;
-      white-space: pre-line;
-    }
-    .lyrics-meta {
-      font-size: 0.72rem;
-      color: var(--muted);
-      margin-top: 14px;
-      padding-top: 14px;
-      border-top: 1px solid var(--border);
-    }
+    /* ── Weather ── */
+    .weather-bg { border-radius: 20px; padding: 30px 26px; margin-bottom: 14px; }
+    .weather-icon { font-size: 3.2rem; margin-bottom: 10px; }
+    .weather-name { font-family:'Shippori Mincho',serif; font-size:1.5rem; color:#fff; margin-bottom:8px; }
+    .weather-desc { font-size:0.86rem; color:rgba(255,255,255,0.72); line-height:1.75; }
+    .weather-forecast { margin-top:14px; font-size:0.8rem; color:rgba(255,255,255,0.55); line-height:1.75; }
 
-    /* ── Weather gradient card ── */
-    .weather-bg {
-      border-radius: 18px;
-      padding: 28px 24px;
-      margin-bottom: 12px;
-    }
-    .weather-icon { font-size: 3rem; margin-bottom: 8px; }
-    .weather-name { font-family:'Shippori Mincho',serif; font-size:1.4rem; color:#fff; margin-bottom:6px; }
-    .weather-desc { font-size:0.82rem; color:rgba(255,255,255,0.7); line-height:1.7; }
-    .weather-forecast { margin-top:14px; font-size:0.78rem; color:rgba(255,255,255,0.6); line-height:1.7; }
-
-    /* ── Future self ── */
-    .future-letter {
-      font-family:'Shippori Mincho',serif;
-      font-size:0.92rem;
-      color:var(--txt);
-      line-height:2;
-      white-space:pre-line;
-    }
-    .future-from {
-      font-size:0.78rem;
-      color:var(--amber2);
-      text-align:right;
-      margin-top:16px;
-    }
+    /* ── Future ── */
+    .future-letter { font-family:'Shippori Mincho',serif; font-size:0.96rem; color:var(--txt); line-height:2.05; white-space:pre-line; }
+    .future-from { font-size:0.8rem; color:var(--amber2); text-align:right; margin-top:16px; }
 
     /* ── Letter ── */
-    .letter-to {
-      font-size:0.72rem;
-      letter-spacing:0.2em;
-      color:var(--amber);
-      text-transform:uppercase;
-      margin-bottom:14px;
-    }
-    .letter-body {
-      font-family:'Shippori Mincho',serif;
-      font-size:0.92rem;
-      color:var(--txt);
-      line-height:2;
-    }
-    .letter-ps {
-      margin-top:16px;
-      padding-top:14px;
-      border-top:1px dashed var(--border);
-      font-size:0.8rem;
-      color:var(--muted);
-      line-height:1.8;
-    }
-    .letter-from {
-      font-size:0.78rem;
-      color:var(--amber2);
-      text-align:right;
-      margin-top:12px;
-    }
+    .letter-to { font-size:0.74rem; letter-spacing:0.2em; color:var(--flame); text-transform:uppercase; margin-bottom:14px; }
+    .letter-body { font-family:'Shippori Mincho',serif; font-size:0.96rem; color:var(--txt); line-height:2.05; }
+    .letter-ps { margin-top:16px; padding-top:14px; border-top:1px dashed var(--border); font-size:0.82rem; color:var(--muted); line-height:1.8; }
+    .letter-from { font-size:0.8rem; color:var(--amber2); text-align:right; margin-top:12px; }
 
     /* ── Emotion translate ── */
-    .emo-core-badge {
-      display:inline-block;
-      background:var(--amber-glow);
-      border:1px solid rgba(245,158,11,0.3);
-      color:var(--amber2);
-      border-radius:50px;
-      padding:4px 14px;
-      font-size:0.75rem;
-      margin-bottom:14px;
+    .emo-core-badge { display:inline-block; background:rgba(249,115,22,0.1); border:1px solid rgba(249,115,22,0.3); color:var(--amber2); border-radius:50px; padding:5px 16px; font-size:0.78rem; margin-bottom:14px; }
+    .emo-translation { font-family:'Shippori Mincho',serif; font-size:0.96rem; color:var(--txt); line-height:2; }
+    .emo-gentle { font-size:0.84rem; color:var(--txt2); line-height:1.85; margin-top:14px; padding:16px; background:var(--bg); border-radius:12px; }
+
+    /* ── Narration ── */
+    .narr-chapter { font-family:'Shippori Mincho',serif; font-size:0.74rem; letter-spacing:0.2em; color:var(--flame); text-transform:uppercase; margin-bottom:12px; }
+    .narr-text { font-family:'Shippori Mincho',serif; font-size:1rem; color:var(--txt); line-height:2; letter-spacing:0.04em; }
+    .narr-next { font-size:0.8rem; color:var(--muted); margin-top:14px; padding-top:14px; border-top:1px solid var(--border); }
+
+    /* ── Temperature ── */
+    .temp-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+    .temp-cell { background:var(--bg); border-radius:12px; padding:13px 15px; }
+    .temp-key { font-size:0.66rem; letter-spacing:0.15em; color:var(--muted); text-transform:uppercase; margin-bottom:4px; }
+    .temp-val { font-size:1.05rem; color:var(--amber2); font-weight:600; }
+
+    /* ── Lyrics ── */
+    .lyrics-text { font-family:'Shippori Mincho',serif; font-size:0.94rem; color:var(--txt); line-height:2.15; letter-spacing:0.06em; white-space:pre-line; }
+    .lyrics-meta { font-size:0.74rem; color:var(--muted); margin-top:14px; padding-top:14px; border-top:1px solid var(--border); }
+
+    /* ── Universe ── */
+    .uni-stars { position:relative; width:100%; height:220px; background:var(--bg); border-radius:16px; margin-bottom:16px; overflow:hidden; }
+    .star-dot { position:absolute; border-radius:50%; animation:twinkle 3s ease-in-out infinite; }
+    @keyframes twinkle { 0%,100%{opacity:.25}50%{opacity:1} }
+
+    /* ── Fade-up ── */
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(16px); }
+      to   { opacity:1; transform:none; }
     }
-    .emo-translation {
-      font-family:'Shippori Mincho',serif;
-      font-size:0.92rem;
-      color:var(--txt);
-      line-height:1.95;
-    }
-    .emo-gentle {
-      font-size:0.82rem;
-      color:var(--txt2);
-      line-height:1.8;
-      margin-top:14px;
-      padding:14px;
-      background:var(--bg);
-      border-radius:12px;
-    }
+    .fade-in { animation: fadeUp 0.9s ease forwards; }
   </style>
 </head>
 <body>
-  <div class="orb"></div>
+
+  <!-- ══════════════════════════════════════ HERO ══════════════ -->
+  <div id="hero">
+    <!-- Ember particles -->
+    <div class="embers" id="embers"></div>
+
+    <div class="hero-kanji">灯</div>
+    <div class="hero-roman">Tomoshibi</div>
+    <div class="hero-sub">静かに、あなたに寄り添う言葉</div>
+
+    <div class="scroll-hint" onclick="document.getElementById('home').scrollIntoView({behavior:'smooth'})">
+      <span>スクロール</span>
+      <div class="scroll-arrow">↓</div>
+    </div>
+  </div>
 
   <!-- ══════════════════════════════════════ HOME ══════════════ -->
   <div id="home">
-    <div class="home-header">
-      <div class="home-title">
-        灯
-        <small>TOMOSHIBI</small>
-      </div>
-      <p class="home-sub">静かに、あなたに寄り添う言葉</p>
-    </div>
-
-    <div class="feature-grid">
-      <div class="grid-label">何をお探しですか</div>
+    <div class="grid-section">
+      <div class="section-label reveal">何をお探しですか</div>
 
       <div class="grid-3 reveal">
         <div class="feat-card primary" onclick="openTab('quote')">
@@ -1006,18 +818,18 @@
           <div class="wp-dot" id="wp-3"></div>
         </div>
 
-        <!-- Step 1: Genre + Mode -->
+        <!-- Step 1 -->
         <div class="wizard-step active" id="ws-1">
           <div class="tomo-card">
             <div class="tomo-card-label">ジャンル</div>
             <div class="genre-row">
-              <button class="genre-btn active" data-genre="mix" onclick="setGenre('mix',this)">
+              <button class="genre-btn active" onclick="setGenre('mix',this)">
                 <span class="gi">✨</span>おまかせ
               </button>
-              <button class="genre-btn" data-genre="great" onclick="setGenre('great',this)">
+              <button class="genre-btn" onclick="setGenre('great',this)">
                 <span class="gi">🌍</span>偉人
               </button>
-              <button class="genre-btn" data-genre="anime" onclick="setGenre('anime',this)">
+              <button class="genre-btn" onclick="setGenre('anime',this)">
                 <span class="gi">⚔️</span>アニメ
               </button>
             </div>
@@ -1025,37 +837,35 @@
           <div class="tomo-card">
             <div class="tomo-card-label">言葉のモード</div>
             <div class="mode-row">
-              <button class="mode-btn active" data-mode="normal" onclick="setMode('normal',this)">通常</button>
-              <button class="mode-btn" data-mode="night" onclick="setMode('night',this)">深夜モード</button>
-              <button class="mode-btn" data-mode="prescription" onclick="setMode('prescription',this)">処方箋</button>
-              <button class="mode-btn" data-mode="original" onclick="setMode('original',this)">AIオリジナル</button>
+              <button class="mode-btn active" onclick="setMode('normal',this)">通常</button>
+              <button class="mode-btn" onclick="setMode('night',this)">深夜</button>
+              <button class="mode-btn" onclick="setMode('prescription',this)">処方箋</button>
+              <button class="mode-btn" onclick="setMode('original',this)">AIオリジナル</button>
             </div>
           </div>
           <button class="btn-primary" style="margin-top:14px" onclick="wizardNext()">次へ →</button>
         </div>
 
-        <!-- Step 2: Emotions + Sliders -->
+        <!-- Step 2 -->
         <div class="wizard-step" id="ws-2">
           <div class="tomo-card">
             <div class="tomo-card-label">今の感情タグ（複数可）</div>
-            <div class="emotions-wrap" id="emotions-wrap">
-              <!-- populated by JS -->
-            </div>
+            <div class="emotions-wrap" id="emotions-wrap"></div>
           </div>
           <div class="tomo-card">
             <div class="tomo-card-label">今の状態</div>
             <div class="slider-block">
               <div class="slider-row">
                 <label>元気度 <span id="v-energy">5</span></label>
-                <input type="range" min="1" max="10" value="5" id="sl-energy" oninput="document.getElementById('v-energy').textContent=this.value" />
+                <input type="range" min="1" max="10" value="5" id="sl-energy" oninput="document.getElementById('v-energy').textContent=this.value">
               </div>
               <div class="slider-row">
                 <label>ストレス度 <span id="v-stress">5</span></label>
-                <input type="range" min="1" max="10" value="5" id="sl-stress" oninput="document.getElementById('v-stress').textContent=this.value" />
+                <input type="range" min="1" max="10" value="5" id="sl-stress" oninput="document.getElementById('v-stress').textContent=this.value">
               </div>
               <div class="slider-row">
                 <label>やる気度 <span id="v-motiv">5</span></label>
-                <input type="range" min="1" max="10" value="5" id="sl-motiv" oninput="document.getElementById('v-motiv').textContent=this.value" />
+                <input type="range" min="1" max="10" value="5" id="sl-motiv" oninput="document.getElementById('v-motiv').textContent=this.value">
               </div>
             </div>
           </div>
@@ -1065,7 +875,7 @@
           </div>
         </div>
 
-        <!-- Step 3: Mood text + Generate -->
+        <!-- Step 3 -->
         <div class="wizard-step" id="ws-3">
           <div class="tomo-card">
             <div class="tomo-card-label">今日の状況を一言で（任意）</div>
@@ -1075,33 +885,32 @@
             </div>
             <div class="mic-status" id="mic-status"></div>
           </div>
-
           <div class="loading-state" id="quote-loading">
             <div class="loading-flame">🕯️</div>
             <div class="loading-text">あなたの言葉を、<br>静かに読んでいます…</div>
           </div>
           <div class="error-msg" id="quote-error"></div>
-
           <div class="btn-row" id="ws3-btns">
             <button class="btn-ghost" onclick="wizardPrev()">← 戻る</button>
             <button class="btn-primary" onclick="generateQuote()">言葉を灯す</button>
           </div>
         </div>
 
-        <!-- Quotes feed -->
-        <div id="quotes-feed">
-          <button class="another-btn" onclick="generateQuote()">+ もう一つ、言葉を灯す</button>
+        <!-- Feed -->
+        <div id="quotes-feed" style="display:none">
+          <button class="another-btn" onclick="generateQuote()">＋ もう一つ、言葉を灯す</button>
           <div id="quotes-list"></div>
         </div>
       </div>
 
       <!-- ── FUTURE SELF ── -->
       <div class="tab-panel" id="tab-future">
-        <div class="simple-input-area">
+        <div class="simple-input-area" id="future-input-area">
           <div class="tomo-card">
             <div class="tomo-card-label">あなたの年齢（任意）</div>
             <input type="number" id="future-age" placeholder="例：24" min="10" max="99"
-              style="width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-family:inherit;font-size:0.9rem;color:var(--txt);outline:none;">
+              style="width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:13px 16px;font-family:inherit;font-size:0.95rem;color:var(--txt);outline:none;transition:border-color .25s"
+              onfocus="this.style.borderColor='rgba(249,115,22,0.4)'" onblur="this.style.borderColor=''">
           </div>
           <div class="tomo-card">
             <div class="tomo-card-label">今の悩み</div>
@@ -1155,8 +964,7 @@
             <div class="emo-translation" id="er-translation"></div>
             <div class="emo-gentle" id="er-gentle"></div>
             <div class="inline-quote" id="er-quote-wrap" style="display:none">
-              <p id="er-quote-text"></p>
-              <small id="er-quote-author"></small>
+              <p id="er-quote-text"></p><small id="er-quote-author"></small>
             </div>
           </div>
           <button class="btn-ghost" style="margin-top:8px" onclick="resetPanel('emotion')">もう一度</button>
@@ -1185,8 +993,7 @@
             <div class="weather-forecast" id="wr-forecast"></div>
           </div>
           <div class="inline-quote" id="wr-quote-wrap" style="display:none">
-            <p id="wr-quote-text"></p>
-            <small id="wr-quote-author"></small>
+            <p id="wr-quote-text"></p><small id="wr-quote-author"></small>
           </div>
           <button class="btn-ghost" style="margin-top:12px" onclick="resetPanel('weather')">もう一度</button>
         </div>
@@ -1287,8 +1094,8 @@
         <div class="result-block" id="lyrics-result">
           <div class="result-card fade-in">
             <div class="result-title" id="lyr-genre"></div>
-            <div style="font-family:'Shippori Mincho',serif;font-size:1.3rem;color:var(--amber2);margin-bottom:6px" id="lyr-title"></div>
-            <div style="font-size:0.75rem;color:var(--muted);margin-bottom:20px" id="lyr-artist"></div>
+            <div style="font-family:'Shippori Mincho',serif;font-size:1.4rem;color:var(--amber2);margin-bottom:6px" id="lyr-title"></div>
+            <div style="font-size:0.78rem;color:var(--muted);margin-bottom:22px" id="lyr-artist"></div>
             <div class="lyrics-text" id="lyr-lyrics"></div>
             <div class="lyrics-meta" id="lyr-concept"></div>
           </div>
@@ -1322,7 +1129,7 @@
             <div class="result-sub" id="tr-condition"></div>
             <div class="result-sub" id="tr-wind" style="margin-top:6px"></div>
             <div class="divider"></div>
-            <div class="result-body" style="font-size:0.85rem" id="tr-obs"></div>
+            <div class="result-body" style="font-size:0.88rem" id="tr-obs"></div>
             <div class="result-sub" style="margin-top:10px;color:var(--amber2)" id="tr-forecast"></div>
           </div>
           <button class="btn-ghost" style="margin-top:8px" onclick="resetPanel('temperature')">再観測</button>
@@ -1346,10 +1153,10 @@
         <div class="result-block" id="universe-result">
           <div class="result-card fade-in">
             <div class="result-title">あなたの星座</div>
-            <div style="font-family:'Shippori Mincho',serif;font-size:1.2rem;color:var(--amber2);margin-bottom:14px" id="ur-name"></div>
+            <div style="font-family:'Shippori Mincho',serif;font-size:1.25rem;color:var(--amber2);margin-bottom:16px" id="ur-name"></div>
             <div class="uni-stars" id="ur-stars"></div>
-            <div class="result-body" style="font-size:0.88rem" id="ur-story"></div>
-            <div style="margin-top:14px;padding:14px;background:var(--bg);border-radius:12px;font-size:0.82rem;color:var(--txt2);line-height:1.8" id="ur-msg"></div>
+            <div class="result-body" style="font-size:0.9rem" id="ur-story"></div>
+            <div style="margin-top:14px;padding:16px;background:var(--bg);border-radius:12px;font-size:0.84rem;color:var(--txt2);line-height:1.85" id="ur-msg"></div>
           </div>
           <button class="btn-ghost" style="margin-top:8px" onclick="resetPanel('universe')">別の星座</button>
         </div>
@@ -1357,7 +1164,7 @@
 
       <!-- ── SILENCE ── -->
       <div class="tab-panel" id="tab-silence">
-        <div style="margin-bottom:20px;font-family:'Shippori Mincho',serif;font-size:0.88rem;color:var(--muted);line-height:2;letter-spacing:0.06em">
+        <div style="margin-bottom:24px;font-family:'Shippori Mincho',serif;font-size:1rem;color:var(--muted);line-height:2.1;letter-spacing:0.08em">
           言葉にしなくていい。<br>今、どんな感じですか？
         </div>
         <div class="silence-choices" id="silence-choices">
@@ -1371,12 +1178,12 @@
         </div>
         <div class="result-block" id="silence-result">
           <div class="result-card fade-in">
-            <div class="result-body" style="font-size:1rem;line-height:2.1" id="sr-message"></div>
+            <div class="result-body" style="font-size:1.05rem;line-height:2.1" id="sr-message"></div>
             <div class="divider"></div>
-            <div style="font-family:'Shippori Mincho',serif;font-size:1.4rem;color:var(--amber2);text-align:center;padding:12px 0" id="sr-breath"></div>
+            <div style="font-family:'Shippori Mincho',serif;font-size:1.5rem;color:var(--amber2);text-align:center;padding:14px 0" id="sr-breath"></div>
             <div class="result-sub" style="text-align:center" id="sr-presence"></div>
           </div>
-          <button class="btn-ghost" style="margin-top:8px" onclick="resetPanel('silence')">もう一度</button>
+          <button class="btn-ghost" style="margin-top:8px" onclick="resetSilence()">もう一度</button>
         </div>
       </div>
 
@@ -1389,27 +1196,19 @@
   </div><!-- /panel -->
 
   <script>
-    // ── State ──────────────────────────────────────────────────
-    let selectedGenre = 'mix';
-    let selectedMode = 'normal';
+    // ── State ────────────────────────────────────────────────
+    let selectedGenre   = 'mix';
+    let selectedMode    = 'normal';
     let selectedEmotions = [];
-    let wizardStep = 1;
-    let recentQuotes = [];
-    let favorites = JSON.parse(localStorage.getItem('tomoshibi-favs') || '[]');
+    let wizardStep      = 1;
+    let recentQuotes    = [];
+    let favorites       = JSON.parse(localStorage.getItem('tomoshibi-favs') || '[]');
 
     const PANEL_TITLES = {
-      quote:       '言葉を探す',
-      future:      '未来の自分から',
-      emotion:     '感情を翻訳する',
-      weather:     '心の天気',
-      diary:       '誰かの日記',
-      narration:   '人生ナレーション',
-      letter:      '言えなかった言葉',
-      lyrics:      '感情の歌詞',
-      temperature: '感情気象',
-      universe:    '感情の星座',
-      silence:     '何も言えない夜に',
-      fav:         '保存した言葉',
+      quote:'言葉を探す', future:'未来の自分から', emotion:'感情を翻訳する',
+      weather:'心の天気', diary:'誰かの日記', narration:'人生ナレーション',
+      letter:'言えなかった言葉', lyrics:'感情の歌詞', temperature:'感情気象',
+      universe:'感情の星座', silence:'何も言えない夜に', fav:'保存した言葉',
     };
 
     const EMOTIONS = [
@@ -1420,8 +1219,8 @@
       'ときめき','達成感','愛おしい'
     ];
 
-    // Populate emotions
-    (function() {
+    // ── Build emotion buttons ─────────────────────────────
+    (function(){
       const wrap = document.getElementById('emotions-wrap');
       EMOTIONS.forEach(e => {
         const b = document.createElement('button');
@@ -1429,33 +1228,54 @@
         b.textContent = e;
         b.onclick = () => {
           b.classList.toggle('active');
-          if (b.classList.contains('active')) selectedEmotions.push(e);
-          else selectedEmotions = selectedEmotions.filter(x => x !== e);
+          selectedEmotions = b.classList.contains('active')
+            ? [...selectedEmotions, e]
+            : selectedEmotions.filter(x => x !== e);
         };
         wrap.appendChild(b);
       });
     })();
 
-    // ── Navigation ────────────────────────────────────────────
+    // ── Ember particles ──────────────────────────────────
+    (function(){
+      const container = document.getElementById('embers');
+      for (let i = 0; i < 18; i++) {
+        const e = document.createElement('div');
+        e.className = 'ember';
+        const left = 35 + Math.random() * 30;
+        const dur  = 3.5 + Math.random() * 3;
+        const delay = Math.random() * 5;
+        const dx   = (Math.random() - 0.5) * 80;
+        const size = 2 + Math.random() * 3;
+        e.style.cssText = `left:${left}%;--d:${dur}s;--delay:${delay}s;--dx:${dx}px;
+          width:${size}px;height:${size}px;
+          background:${Math.random()>.5?'#FCD34D':'#F97316'};`;
+        container.appendChild(e);
+      }
+    })();
+
+    // ── Navigation ───────────────────────────────────────
     function openTab(tab) {
       document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
       document.getElementById('tab-' + tab).classList.add('active');
       document.getElementById('panel-title').textContent = PANEL_TITLES[tab] || '';
-      document.getElementById('home').style.display = 'none';
+      document.getElementById('hero').style.display  = 'none';
+      document.getElementById('home').style.display  = 'none';
       document.getElementById('panel').style.display = 'block';
       window.scrollTo({ top: 0, behavior: 'instant' });
       if (tab === 'quote') { wizardStep = 1; wizardGoTo(1); }
-      if (tab === 'fav') renderFavs();
+      if (tab === 'fav')   renderFavs();
     }
 
     function goHome() {
       document.getElementById('panel').style.display = 'none';
-      document.getElementById('home').style.display = 'block';
+      document.getElementById('hero').style.display  = 'block';
+      document.getElementById('home').style.display  = 'block';
       window.scrollTo({ top: 0, behavior: 'instant' });
       triggerReveal();
     }
 
-    // ── Wizard ────────────────────────────────────────────────
+    // ── Wizard ──────────────────────────────────────────
     function wizardGoTo(n) {
       wizardStep = n;
       document.querySelectorAll('.wizard-step').forEach((s, i) => {
@@ -1463,9 +1283,9 @@
       });
       for (let i = 1; i <= 3; i++) {
         const d = document.getElementById('wp-' + i);
-        if (i < n) { d.classList.add('done'); d.classList.remove('active'); }
-        else if (i === n) { d.classList.add('active'); d.classList.remove('done'); }
-        else { d.classList.remove('done', 'active'); }
+        if (i < n)      { d.classList.add('done');   d.classList.remove('active'); }
+        else if (i===n) { d.classList.add('active'); d.classList.remove('done');   }
+        else            { d.classList.remove('done','active'); }
       }
     }
     function wizardNext() { if (wizardStep < 3) wizardGoTo(wizardStep + 1); }
@@ -1482,14 +1302,12 @@
       btn.classList.add('active');
     }
 
-    // ── API helper ────────────────────────────────────────────
+    // ── API helper ───────────────────────────────────────
     async function apiPost(url, body) {
       let res;
       try {
-        res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-      } catch(e) {
-        throw new Error('ネットワークエラーが発生しました。接続を確認してください。');
-      }
+        res = await fetch(url, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
+      } catch(e) { throw new Error('ネットワークエラーが発生しました。接続を確認してください。'); }
       let data;
       try { data = await res.json(); } catch(e) {
         if (res.status >= 500) throw new Error('サーバーが起動中です。無料プランのため初回起動に50秒ほどかかります。少し待ってからもう一度お試しください 🙏');
@@ -1499,44 +1317,40 @@
       return data;
     }
 
-    // ── Quote generation ──────────────────────────────────────
+    // ── Quote ────────────────────────────────────────────
     async function generateQuote() {
-      const loadEl = document.getElementById('quote-loading');
-      const errEl = document.getElementById('quote-error');
+      const loadEl  = document.getElementById('quote-loading');
+      const errEl   = document.getElementById('quote-error');
       const ws3btns = document.getElementById('ws3-btns');
-      const feedEl = document.getElementById('quotes-feed');
+      const feedEl  = document.getElementById('quotes-feed');
 
       loadEl.classList.add('visible');
       errEl.classList.remove('visible');
       ws3btns.style.display = 'none';
-      feedEl.classList.remove('visible');
+      feedEl.style.display  = 'none';
 
       try {
         const data = await apiPost('/api/quote', {
-          mood: document.getElementById('mood-text').value,
-          energy: document.getElementById('sl-energy').value,
-          stress: document.getElementById('sl-stress').value,
-          motivation: document.getElementById('sl-motiv').value,
-          emotions: selectedEmotions,
+          mood:          document.getElementById('mood-text').value,
+          energy:        document.getElementById('sl-energy').value,
+          stress:        document.getElementById('sl-stress').value,
+          motivation:    document.getElementById('sl-motiv').value,
+          emotions:      selectedEmotions,
           recentQuotes,
-          genre: selectedMode === 'original' ? 'mix' : selectedGenre,
-          isNightMode: selectedMode === 'night',
+          genre:         selectedMode === 'original' ? 'mix' : selectedGenre,
+          isNightMode:   selectedMode === 'night',
           prescriptionMode: selectedMode === 'prescription',
-          originalMode: selectedMode === 'original',
+          originalMode:  selectedMode === 'original',
         });
 
         loadEl.classList.remove('visible');
-        feedEl.classList.add('visible');
-        document.getElementById('quotes-feed').style.display = 'block';
-
-        // Move wizard steps off screen (not needed anymore)
+        feedEl.style.display = 'block';
         document.querySelectorAll('.wizard-step').forEach(s => s.classList.remove('active'));
         document.getElementById('wiz-progress').style.display = 'none';
 
         const q = data.quote;
         if (q.original) recentQuotes.push(q.original.slice(0, 60));
         if (recentQuotes.length > 8) recentQuotes.shift();
-
         appendQuoteCard(q);
       } catch(e) {
         loadEl.classList.remove('visible');
@@ -1548,14 +1362,10 @@
 
     function appendQuoteCard(q) {
       const list = document.getElementById('quotes-list');
-      const id = 'qc-' + Date.now();
+      const id   = 'qc-' + Date.now();
       const isSaved = favorites.some(f => f.original === q.original);
-
-      const card = document.createElement('div');
-      card.className = 'quote-card';
-      card.id = id;
-
-      const badge = q.sourceType === 'anime' ? '⚔️ アニメ' : q.sourceType === 'original' ? '✨ AIオリジナル' : '🌍 偉人';
+      const badge = q.sourceType==='anime' ? '⚔️ アニメ'
+                  : q.sourceType==='original' ? '✨ AIオリジナル' : '🌍 偉人';
 
       let rxHtml = '';
       if (q.prescription) {
@@ -1568,6 +1378,9 @@
         </div>`;
       }
 
+      const card = document.createElement('div');
+      card.className = 'quote-card';
+      card.id = id;
       card.innerHTML = `
         <button class="save-fav-btn${isSaved?' saved':''}" onclick="toggleFav('${id}',this)" title="保存">🔖</button>
         <div class="quote-card-badge">${badge}</div>
@@ -1580,66 +1393,62 @@
         ${q.reason ? `<div class="quote-reason">${q.reason}</div>` : ''}
         ${rxHtml}
       `;
-
       card._quoteData = q;
       list.appendChild(card);
-
-      // Animate in
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => { card.classList.add('in'); });
-      });
-
-      // Scroll to it
-      setTimeout(() => {
-        card.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 100);
+      requestAnimationFrame(() => requestAnimationFrame(() => card.classList.add('in')));
+      setTimeout(() => card.scrollIntoView({ behavior:'smooth', block:'start' }), 100);
     }
 
     function toggleFav(cardId, btn) {
       const card = document.getElementById(cardId);
-      const q = card._quoteData;
-      const existing = favorites.findIndex(f => f.original === q.original);
-      if (existing >= 0) {
-        favorites.splice(existing, 1);
+      const q    = card._quoteData;
+      const idx  = favorites.findIndex(f => f.original === q.original);
+      if (idx >= 0) {
+        favorites.splice(idx, 1);
         btn.classList.remove('saved');
       } else {
-        favorites.push({ original: q.original, translation: q.translation, authorJp: q.authorJp || q.author, savedAt: new Date().toISOString() });
+        favorites.push({ original:q.original, translation:q.translation, authorJp:q.authorJp||q.author, savedAt:new Date().toISOString() });
         btn.classList.add('saved');
       }
       localStorage.setItem('tomoshibi-favs', JSON.stringify(favorites));
     }
 
-    // ── Generic panel helpers ─────────────────────────────────
+    // ── Panel helpers ────────────────────────────────────
     function showLoading(key, show) {
-      document.getElementById(key + '-loading').classList.toggle('visible', show);
+      document.getElementById(key+'-loading').classList.toggle('visible', show);
     }
     function showError(key, msg) {
-      const el = document.getElementById(key + '-error');
+      const el = document.getElementById(key+'-error');
       el.textContent = msg;
       el.classList.toggle('visible', !!msg);
     }
     function showResult(key, show) {
-      document.getElementById(key + '-result').classList.toggle('visible', show);
+      document.getElementById(key+'-result').classList.toggle('visible', show);
       if (show) {
-        const inputArea = document.getElementById(key + '-input-area');
-        if (inputArea) inputArea.style.display = 'none';
+        const a = document.getElementById(key+'-input-area');
+        if (a) a.style.display = 'none';
       }
     }
     function resetPanel(key) {
-      document.getElementById(key + '-result').classList.remove('visible');
-      const inputArea = document.getElementById(key + '-input-area');
-      if (inputArea) inputArea.style.display = '';
+      const r = document.getElementById(key+'-result');
+      if (r) r.classList.remove('visible');
+      const a = document.getElementById(key+'-input-area');
+      if (a) a.style.display = '';
       showError(key, '');
     }
+    function resetSilence() {
+      document.getElementById('silence-result').classList.remove('visible');
+      document.getElementById('silence-choices').style.display = '';
+    }
 
-    // ── Future self ──────────────────────────────────────────
+    // ── Future ──────────────────────────────────────────
     async function genFuture() {
-      showLoading('future', true); showError('future', ''); showResult('future', false);
+      showLoading('future',true); showError('future',''); showResult('future',false);
       try {
         const d = await apiPost('/api/future-self', {
-          age: document.getElementById('future-age').value,
-          worries: document.getElementById('future-worries').value,
-          goals: document.getElementById('future-goals').value,
+          age:    document.getElementById('future-age').value,
+          worries:document.getElementById('future-worries').value,
+          goals:  document.getElementById('future-goals').value,
         });
         const r = d.result;
         document.getElementById('fr-from').textContent = r.from || '3年後のあなたより';
@@ -1651,34 +1460,33 @@
           document.getElementById('fr-quote-author').textContent = '座右の銘';
           document.getElementById('fr-quote-wrap').style.display = '';
         }
-        showLoading('future', false); showResult('future', true);
-      } catch(e) { showLoading('future', false); showError('future', e.message); }
+        showLoading('future',false); showResult('future',true);
+      } catch(e) { showLoading('future',false); showError('future',e.message); }
     }
 
-    // ── Emotion translate ────────────────────────────────────
+    // ── Emotion ─────────────────────────────────────────
     async function genEmotion() {
-      showLoading('emotion', true); showError('emotion', ''); showResult('emotion', false);
+      showLoading('emotion',true); showError('emotion',''); showResult('emotion',false);
       try {
-        const d = await apiPost('/api/translate-emotion', { emotion: document.getElementById('emotion-text').value });
+        const d = await apiPost('/api/translate-emotion', { emotion:document.getElementById('emotion-text').value });
         const r = d.result;
         document.getElementById('er-core').textContent = r.core;
         document.getElementById('er-translation').textContent = r.translation;
         document.getElementById('er-gentle').textContent = r.gentle;
         if (r.quote) {
-          const txt = r.quote.translation ? `${r.quote.original}　—　${r.quote.translation}` : r.quote.original;
-          document.getElementById('er-quote-text').textContent = txt;
+          document.getElementById('er-quote-text').textContent = r.quote.translation ? `${r.quote.original}　—　${r.quote.translation}` : r.quote.original;
           document.getElementById('er-quote-author').textContent = r.quote.authorJp || r.quote.author;
           document.getElementById('er-quote-wrap').style.display = '';
         }
-        showLoading('emotion', false); showResult('emotion', true);
-      } catch(e) { showLoading('emotion', false); showError('emotion', e.message); }
+        showLoading('emotion',false); showResult('emotion',true);
+      } catch(e) { showLoading('emotion',false); showError('emotion',e.message); }
     }
 
-    // ── Weather ──────────────────────────────────────────────
+    // ── Weather ─────────────────────────────────────────
     async function genWeather() {
-      showLoading('weather', true); showError('weather', ''); showResult('weather', false);
+      showLoading('weather',true); showError('weather',''); showResult('weather',false);
       try {
-        const d = await apiPost('/api/weather-emotion', { emotion: document.getElementById('weather-text').value });
+        const d = await apiPost('/api/weather-emotion', { emotion:document.getElementById('weather-text').value });
         const r = d.result;
         const bg = document.getElementById('wr-bg');
         bg.style.background = `linear-gradient(160deg, ${r.gradient})`;
@@ -1687,103 +1495,100 @@
         document.getElementById('wr-desc').textContent = r.description;
         document.getElementById('wr-forecast').textContent = r.forecast;
         if (r.quote) {
-          const txt = r.quote.translation ? `${r.quote.original}　—　${r.quote.translation}` : r.quote.original;
-          document.getElementById('wr-quote-text').textContent = txt;
+          document.getElementById('wr-quote-text').textContent = r.quote.translation ? `${r.quote.original}　—　${r.quote.translation}` : r.quote.original;
           document.getElementById('wr-quote-author').textContent = r.quote.authorJp || r.quote.author;
           document.getElementById('wr-quote-wrap').style.display = '';
         }
-        showLoading('weather', false); showResult('weather', true);
-      } catch(e) { showLoading('weather', false); showError('weather', e.message); }
+        showLoading('weather',false); showResult('weather',true);
+      } catch(e) { showLoading('weather',false); showError('weather',e.message); }
     }
 
-    // ── Diary ────────────────────────────────────────────────
+    // ── Diary ────────────────────────────────────────────
     async function genDiary() {
-      showLoading('diary', true); showError('diary', ''); showResult('diary', false);
+      showLoading('diary',true); showError('diary',''); showResult('diary',false);
       try {
-        const d = await apiPost('/api/diary', { emotion: document.getElementById('diary-text').value });
+        const d = await apiPost('/api/diary', { emotion:document.getElementById('diary-text').value });
         const r = d.result;
         document.getElementById('dr-header').textContent = `${r.date}　${r.weather}　${r.city}`;
         document.getElementById('dr-entry').textContent = r.entry;
         document.getElementById('dr-closing').textContent = r.closing;
-        showLoading('diary', false); showResult('diary', true);
-      } catch(e) { showLoading('diary', false); showError('diary', e.message); }
+        showLoading('diary',false); showResult('diary',true);
+      } catch(e) { showLoading('diary',false); showError('diary',e.message); }
     }
 
-    // ── Narration ────────────────────────────────────────────
+    // ── Narration ────────────────────────────────────────
     async function genNarration() {
-      showLoading('narration', true); showError('narration', ''); showResult('narration', false);
+      showLoading('narration',true); showError('narration',''); showResult('narration',false);
       try {
         const d = await apiPost('/api/narration', {
-          event: document.getElementById('narr-event').value,
+          event:   document.getElementById('narr-event').value,
           emotion: document.getElementById('narr-emotion').value,
         });
         const r = d.result;
         document.getElementById('nr-chapter').textContent = r.chapter;
         document.getElementById('nr-narration').textContent = r.narration;
-        document.getElementById('nr-next').textContent = '次章への予告：' + r.next;
+        document.getElementById('nr-next').textContent = '次章：' + r.next;
         document.getElementById('nr-theme').textContent = 'テーマ：' + r.theme;
-        showLoading('narration', false); showResult('narration', true);
-      } catch(e) { showLoading('narration', false); showError('narration', e.message); }
+        showLoading('narration',false); showResult('narration',true);
+      } catch(e) { showLoading('narration',false); showError('narration',e.message); }
     }
 
-    // ── Letter ───────────────────────────────────────────────
+    // ── Letter ───────────────────────────────────────────
     async function genLetter() {
-      showLoading('letter', true); showError('letter', ''); showResult('letter', false);
+      showLoading('letter',true); showError('letter',''); showResult('letter',false);
       try {
-        const d = await apiPost('/api/letter', { emotion: document.getElementById('letter-text').value });
+        const d = await apiPost('/api/letter', { emotion:document.getElementById('letter-text').value });
         const r = d.result;
-        document.getElementById('lr-to').textContent = r.to;
+        document.getElementById('lr-to').textContent   = r.to;
         document.getElementById('lr-body').textContent = r.letter;
-        document.getElementById('lr-ps').textContent = '追伸：' + r.ps;
+        document.getElementById('lr-ps').textContent   = '追伸：' + r.ps;
         document.getElementById('lr-from').textContent = r.from;
-        showLoading('letter', false); showResult('letter', true);
-      } catch(e) { showLoading('letter', false); showError('letter', e.message); }
+        showLoading('letter',false); showResult('letter',true);
+      } catch(e) { showLoading('letter',false); showError('letter',e.message); }
     }
 
-    // ── Lyrics ───────────────────────────────────────────────
+    // ── Lyrics ───────────────────────────────────────────
     async function genLyrics() {
-      showLoading('lyrics', true); showError('lyrics', ''); showResult('lyrics', false);
+      showLoading('lyrics',true); showError('lyrics',''); showResult('lyrics',false);
       try {
-        const d = await apiPost('/api/lyrics', { emotion: document.getElementById('lyrics-text').value });
+        const d = await apiPost('/api/lyrics', { emotion:document.getElementById('lyrics-text').value });
         const r = d.result;
-        document.getElementById('lyr-genre').textContent = r.genre + '　' + r.tempo;
-        document.getElementById('lyr-title').textContent = r.title;
+        document.getElementById('lyr-genre').textContent  = r.genre + '　' + r.tempo;
+        document.getElementById('lyr-title').textContent  = r.title;
         document.getElementById('lyr-artist').textContent = r.artist;
         document.getElementById('lyr-lyrics').textContent = r.lyrics;
-        document.getElementById('lyr-concept').textContent = r.concept;
-        showLoading('lyrics', false); showResult('lyrics', true);
-      } catch(e) { showLoading('lyrics', false); showError('lyrics', e.message); }
+        document.getElementById('lyr-concept').textContent= r.concept;
+        showLoading('lyrics',false); showResult('lyrics',true);
+      } catch(e) { showLoading('lyrics',false); showError('lyrics',e.message); }
     }
 
-    // ── Temperature ──────────────────────────────────────────
+    // ── Temperature ──────────────────────────────────────
     async function genTemp() {
-      showLoading('temperature', true); showError('temperature', ''); showResult('temperature', false);
+      showLoading('temperature',true); showError('temperature',''); showResult('temperature',false);
       try {
-        const d = await apiPost('/api/temperature', { emotion: document.getElementById('temp-text').value });
+        const d = await apiPost('/api/temperature', { emotion:document.getElementById('temp-text').value });
         const r = d.result;
-        document.getElementById('tr-temp').textContent = r.temperature;
-        document.getElementById('tr-feels').textContent = r.feelsLike;
+        document.getElementById('tr-temp').textContent     = r.temperature;
+        document.getElementById('tr-feels').textContent    = r.feelsLike;
         document.getElementById('tr-humidity').textContent = r.humidity;
         document.getElementById('tr-pressure').textContent = r.pressure;
-        document.getElementById('tr-condition').textContent = r.condition;
-        document.getElementById('tr-wind').textContent = '風：' + r.wind + '　視界：' + r.visibility;
-        document.getElementById('tr-obs').textContent = r.observation;
+        document.getElementById('tr-condition').textContent= r.condition;
+        document.getElementById('tr-wind').textContent     = '風：' + r.wind + '　視界：' + r.visibility;
+        document.getElementById('tr-obs').textContent      = r.observation;
         document.getElementById('tr-forecast').textContent = '明日：' + r.forecast;
-        showLoading('temperature', false); showResult('temperature', true);
-      } catch(e) { showLoading('temperature', false); showError('temperature', e.message); }
+        showLoading('temperature',false); showResult('temperature',true);
+      } catch(e) { showLoading('temperature',false); showError('temperature',e.message); }
     }
 
-    // ── Universe ─────────────────────────────────────────────
+    // ── Universe ─────────────────────────────────────────
     async function genUniverse() {
-      showLoading('universe', true); showError('universe', ''); showResult('universe', false);
+      showLoading('universe',true); showError('universe',''); showResult('universe',false);
       try {
-        const d = await apiPost('/api/universe', { emotion: document.getElementById('uni-text').value });
+        const d = await apiPost('/api/universe', { emotion:document.getElementById('uni-text').value });
         const r = d.result;
-        document.getElementById('ur-name').textContent = r.constellation;
+        document.getElementById('ur-name').textContent  = r.constellation;
         document.getElementById('ur-story').textContent = r.story;
-        document.getElementById('ur-msg').textContent = r.message;
-
-        // Draw stars
+        document.getElementById('ur-msg').textContent   = r.message;
         const canvas = document.getElementById('ur-stars');
         canvas.innerHTML = '';
         if (r.bgColor) canvas.style.background = r.bgColor;
@@ -1791,29 +1596,29 @@
           const dot = document.createElement('div');
           dot.className = 'star-dot';
           const sz = (s.size || 2) * 3;
-          dot.style.cssText = `width:${sz}px;height:${sz}px;background:${s.color||'#FFD89B'};
+          dot.style.cssText = `width:${sz}px;height:${sz}px;background:${s.color||'#FCD34D'};
             left:${Math.random()*85+5}%;top:${Math.random()*75+5}%;
-            animation-delay:${Math.random()*2}s;box-shadow:0 0 ${sz*2}px ${s.color||'#FFD89B'}`;
+            animation-delay:${Math.random()*2}s;
+            box-shadow:0 0 ${sz*2}px ${s.color||'#FCD34D'}`;
           const label = document.createElement('span');
-          label.style.cssText = 'position:absolute;top:100%;left:50%;transform:translateX(-50%);font-size:9px;color:rgba(255,255,255,0.5);white-space:nowrap;margin-top:2px;';
+          label.style.cssText = 'position:absolute;top:110%;left:50%;transform:translateX(-50%);font-size:9px;color:rgba(255,255,255,0.45);white-space:nowrap;';
           label.textContent = s.name;
           dot.appendChild(label);
           canvas.appendChild(dot);
         });
-
-        showLoading('universe', false); showResult('universe', true);
-      } catch(e) { showLoading('universe', false); showError('universe', e.message); }
+        showLoading('universe',false); showResult('universe',true);
+      } catch(e) { showLoading('universe',false); showError('universe',e.message); }
     }
 
-    // ── Silence ──────────────────────────────────────────────
+    // ── Silence ──────────────────────────────────────────
     async function genSilence(pattern) {
       document.getElementById('silence-choices').style.display = 'none';
       showLoading('silence', true);
       try {
         const d = await apiPost('/api/silence', { pattern });
         const r = d.result;
-        document.getElementById('sr-message').textContent = r.message;
-        document.getElementById('sr-breath').textContent = r.breath;
+        document.getElementById('sr-message').textContent  = r.message;
+        document.getElementById('sr-breath').textContent   = r.breath;
         document.getElementById('sr-presence').textContent = r.presence;
         showLoading('silence', false);
         document.getElementById('silence-result').classList.add('visible');
@@ -1823,28 +1628,16 @@
       }
     }
 
-    function resetPanel(key) {
-      const resEl = document.getElementById(key + '-result');
-      if (resEl) resEl.classList.remove('visible');
-      const inputArea = document.getElementById(key + '-input-area');
-      if (inputArea) inputArea.style.display = '';
-      if (key === 'silence') {
-        document.getElementById('silence-choices').style.display = '';
-        document.getElementById('silence-result').classList.remove('visible');
-      }
-      showError(key, '');
-    }
-
-    // ── Favorites ────────────────────────────────────────────
+    // ── Favorites ────────────────────────────────────────
     function renderFavs() {
       const wrap = document.getElementById('fav-list-wrap');
       if (!favorites.length) {
-        wrap.innerHTML = `<div class="fav-empty"><div class="fav-icon">🔖</div>保存した言葉はありません。<br>名言カードの 🔖 から保存できます。</div>`;
+        wrap.innerHTML = `<div class="fav-empty"><span class="fav-icon">🔖</span>保存した言葉はありません。<br>名言カードの 🔖 から保存できます。</div>`;
         return;
       }
-      wrap.innerHTML = `<div class="fav-list">${favorites.map((f, i) => `
+      wrap.innerHTML = `<div class="fav-list">${favorites.map((f,i) => `
         <div class="fav-item">
-          <div class="fav-quote">${f.original}${f.translation ? '<br><span style="font-size:0.82rem;color:var(--muted)">'+f.translation+'</span>' : ''}</div>
+          <div class="fav-quote">${f.original}${f.translation?'<br><span style="font-size:.82rem;color:var(--muted)">'+f.translation+'</span>':''}</div>
           <div class="fav-meta">
             <span style="color:var(--amber2)">${f.authorJp}</span>
             <button class="fav-del" onclick="delFav(${i})">×</button>
@@ -1858,19 +1651,16 @@
       renderFavs();
     }
 
-    // ── Microphone ───────────────────────────────────────────
+    // ── Mic ──────────────────────────────────────────────
     let recognition, isRecording = false;
     function toggleMic() {
       if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
         document.getElementById('mic-status').textContent = '音声認識はこのブラウザ非対応です';
         return;
       }
-      if (isRecording) {
-        recognition && recognition.stop();
-        return;
-      }
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      recognition = new SpeechRecognition();
+      if (isRecording) { recognition && recognition.stop(); return; }
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      recognition = new SR();
       recognition.lang = 'ja-JP';
       recognition.interimResults = true;
       recognition.onstart = () => {
@@ -1893,24 +1683,24 @@
       recognition.start();
     }
 
-    // ── Scroll reveal on home ─────────────────────────────────
+    // ── Scroll reveal ────────────────────────────────────
     function triggerReveal() {
       const items = document.querySelectorAll('#home .reveal');
-      items.forEach(el => { el.classList.remove('visible'); });
+      items.forEach(el => el.classList.remove('visible'));
       setTimeout(() => {
         const obs = new IntersectionObserver((entries) => {
           entries.forEach((entry, idx) => {
             if (entry.isIntersecting) {
-              setTimeout(() => { entry.target.classList.add('visible'); }, idx * 120);
+              setTimeout(() => entry.target.classList.add('visible'), idx * 130);
               obs.unobserve(entry.target);
             }
           });
         }, { threshold: 0.05 });
         items.forEach(el => obs.observe(el));
-      }, 50);
+      }, 60);
     }
 
-    // ── Init ─────────────────────────────────────────────────
+    // ── Init ─────────────────────────────────────────────
     triggerReveal();
   </script>
 </body>
