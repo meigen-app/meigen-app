@@ -1,0 +1,21 @@
+{
+  "appId": "app.tomoshibi.meigen",
+  "appName": "燈 Tomoshibi",
+  "webDir": "public",
+  "server": {
+    "androidScheme": "https"
+  },
+  "ios": {
+    "contentInset": "always",
+    "backgroundColor": "#0D1117",
+    "scrollEnabled": false,
+    "limitsNavigationsToAppBoundDomains": true
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 1500,
+      "backgroundColor": "#0D1117",
+      "showSpinner": false
+    }
+  }
+}

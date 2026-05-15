@@ -877,7 +877,13 @@
   }
 
   // ── API helper ────────────────────────────────────────
-  async function apiPost(url, body) {
+  // Capacitorネイティブ環境では絶対URLを使用
+  const API_BASE = (window.Capacitor?.isNativePlatform?.())
+    ? 'https://meigen-app.onrender.com'
+    : '';
+
+  async function apiPost(path, body) {
+    const url = API_BASE + path;
     let res;
     try { res = await fetch(url, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}); }
     catch(e) { throw new Error('ネットワークエラーが発生しました。接続を確認してください。'); }
