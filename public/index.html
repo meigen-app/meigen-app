@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>灯 Tomoshibi</title>
+  <title>燈 Tomoshibi</title>
   <link rel="manifest" href="/manifest.json" />
   <meta name="theme-color" content="#0D1117" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -325,7 +325,7 @@
 <!-- ══════════ HERO ══════════ -->
 <div id="hero">
   <div class="embers" id="embers"></div>
-  <div class="hero-kanji">灯</div>
+  <div class="hero-kanji">燈</div>
   <div class="hero-roman">Tomoshibi</div>
   <div class="hero-sub">静かに、あなたに寄り添う言葉</div>
   <div class="scroll-hint" onclick="document.getElementById('home').scrollIntoView({behavior:'smooth'})">
@@ -419,21 +419,21 @@
     <div class="error-msg" id="home-error"></div>
 
     <!-- Generate -->
-    <button class="btn-primary reveal" id="home-gen-btn" onclick="homeGenerate()" style="margin-top:6px">言葉を灯す</button>
+    <button class="btn-primary reveal" id="home-gen-btn" onclick="homeGenerate()" style="margin-top:6px">言葉を燈す</button>
 
     <!-- Results -->
     <div class="home-results" id="home-results">
       <div id="home-quotes-list"></div>
-      <button class="another-btn" onclick="homeGenerate()">＋ もう一つ、言葉を灯す</button>
+      <button class="another-btn" onclick="homeGenerate()">＋ もう一つ、言葉を燈す</button>
 
       <!-- Ko-fi support — 名言が届いた後にそっと表示 -->
       <!-- ★ Ko-fiアカウント作成後、YOUR_KOFI_IDを自分のIDに変更してください -->
       <div class="kofi-prompt" id="kofi-prompt">
         <span class="kofi-candle">🕯️</span>
-        <p class="kofi-text">「ありがとう」の代わりに、<br>コーヒー一杯分の灯を届けてください</p>
-        <p class="kofi-sub">この灯を、消さないために</p>
+        <p class="kofi-text">「ありがとう」の代わりに、<br>コーヒー一杯分の燈を届けてください</p>
+        <p class="kofi-sub">この燈を、消さないために</p>
         <a class="kofi-btn" href="https://ko-fi.com/YOUR_KOFI_ID" target="_blank" rel="noopener noreferrer">
-          ☕　灯を続ける
+          ☕　燈を続ける
         </a>
       </div>
     </div>
@@ -480,7 +480,7 @@
     <div class="sc-date" id="sc-date"></div>
     <div class="sc-quote" id="sc-quote"></div>
     <div class="sc-author" id="sc-author"></div>
-    <div class="sc-brand">灯　Tomoshibi</div>
+    <div class="sc-brand">燈　Tomoshibi</div>
   </div>
   <div class="share-actions">
     <button class="share-btn-main" id="share-native-btn" onclick="doNativeShare()">
@@ -496,7 +496,7 @@
   <div class="share-hint" id="share-hint-text">スマートフォンから共有するとSNSアプリを直接選べます</div>
   <button class="share-close" onclick="closeShare()">閉じる</button>
   <a class="kofi-share-link" href="https://ko-fi.com/YOUR_KOFI_ID" target="_blank" rel="noopener noreferrer">
-    ☕ この灯を続けるために
+    ☕ この燈を続けるために
   </a>
 </div>
 
@@ -796,7 +796,7 @@
     if (isNight) {
       greet.textContent = '眠れない夜ですね。ここにいますよ。';
       greet.style.display = '';
-      if (prompt) prompt.innerHTML = 'この夜に、<br>言葉を灯してみませんか';
+      if (prompt) prompt.innerHTML = 'この夜に、<br>言葉を燈してみませんか';
       if (loadingText) loadingText.innerHTML = 'あなたの夜を、<br>静かに読んでいます…';
     } else {
       greet.style.display = 'none';
@@ -1082,7 +1082,7 @@
     ctx.fillStyle = 'rgba(245,158,11,0.3)';
     ctx.font = '400 46px "Shippori Mincho", serif';
     ctx.letterSpacing = '16px';
-    ctx.fillText('灯　Tomoshibi', W/2, H - 148);
+    ctx.fillText('燈　Tomoshibi', W/2, H - 148);
 
     return canvas;
   }
@@ -1111,7 +1111,7 @@
         canvas.toBlob(async (blob) => {
           const file = new File([blob], 'tomoshibi.png', { type: 'image/png' });
           const shareData = {
-            title: '灯 Tomoshibi',
+            title: '燈 Tomoshibi',
             text: `「${q.original}」\n— ${q.authorJp || q.author}\n\nhttps://meigen-app.onrender.com`,
             files: [file],
           };
@@ -1120,7 +1120,7 @@
               await navigator.share(shareData);
             } else {
               // Share without image
-              await navigator.share({ title:'灯 Tomoshibi', text: shareData.text });
+              await navigator.share({ title:'燈 Tomoshibi', text: shareData.text });
             }
           } catch(e) {
             if (e.name !== 'AbortError') hint.textContent = '共有に失敗しました。下の「画像として保存」をお試しください。';
@@ -1128,7 +1128,7 @@
         }, 'image/png', 0.95);
       } else {
         await navigator.share({
-          title: '灯 Tomoshibi',
+          title: '燈 Tomoshibi',
           text: `「${q.original}」\n— ${q.authorJp || q.author}\n\nhttps://meigen-app.onrender.com`,
         });
       }
@@ -1156,7 +1156,7 @@
   async function doCopyText() {
     if (!_shareQuote) return;
     const { q } = _shareQuote;
-    const text = `「${q.original}」\n— ${q.authorJp || q.author}\n\n灯 Tomoshibi\nhttps://meigen-app.onrender.com`;
+    const text = `「${q.original}」\n— ${q.authorJp || q.author}\n\n燈 Tomoshibi\nhttps://meigen-app.onrender.com`;
     try {
       await navigator.clipboard.writeText(text);
       document.getElementById('share-hint-text').textContent = 'コピーしました！どこにでも貼り付けられます';
@@ -1198,7 +1198,7 @@
   }
   function renderLog() {
     const wrap = document.getElementById('log-list-wrap');
-    if (!emotionLog.length) { wrap.innerHTML = `<div class="log-empty">まだ記録がありません。<br>言葉を灯すたびに自動で記録されます。</div>`; return; }
+    if (!emotionLog.length) { wrap.innerHTML = `<div class="log-empty">まだ記録がありません。<br>言葉を燈すたびに自動で記録されます。</div>`; return; }
     const fmt = iso => { const d = new Date(iso); return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`; };
     wrap.innerHTML = `<div class="log-list">${emotionLog.map(e => `
       <div class="log-item">
