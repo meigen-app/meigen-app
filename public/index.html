@@ -452,12 +452,12 @@
   <div class="wizard-header" id="wizard-header">
     <div class="wizard-track"><div class="wizard-fill" id="wizard-fill"></div></div>
     <div class="wizard-meta">
-      <span id="wizard-step-name">今日のジャンル</span>
-      <span id="wizard-step-num">1 / 5</span>
+      <span id="wizard-step-name">ジャンル・モード</span>
+      <span id="wizard-step-num">1 / 3</span>
     </div>
   </div>
 
-  <!-- Step 1: ジャンル -->
+  <!-- Step 1: ジャンル + 言葉のモード -->
   <div class="wizard-step active" id="wstep-1">
     <div class="container">
       <div class="card">
@@ -468,15 +468,6 @@
           <button class="genre-btn" data-genre="anime" onclick="setGenre('anime',this)"><span class="gi">🎌</span>アニメ</button>
         </div>
       </div>
-    </div>
-    <div class="wizard-nav">
-      <button class="btn-next-step" onclick="wizardNext()">次へ →</button>
-    </div>
-  </div>
-
-  <!-- Step 2: 言葉のモード -->
-  <div class="wizard-step" id="wstep-2">
-    <div class="container">
       <div class="card">
         <h2>言葉のモード</h2>
         <div class="mode-toggle">
@@ -487,13 +478,12 @@
       </div>
     </div>
     <div class="wizard-nav">
-      <button class="btn-back-step" onclick="wizardPrev()">← 戻る</button>
       <button class="btn-next-step" onclick="wizardNext()">次へ →</button>
     </div>
   </div>
 
-  <!-- Step 3: 感情タグ -->
-  <div class="wizard-step" id="wstep-3">
+  <!-- Step 2: 感情タグ + スライダー -->
+  <div class="wizard-step" id="wstep-2">
     <div class="container">
       <div class="card">
         <h2>今日の感情タグ</h2>
@@ -511,16 +501,6 @@
         </div>
         <p style="margin-top:10px;font-size:.75rem;color:var(--faint)">複数選択OK。なくてもスキップできます。</p>
       </div>
-    </div>
-    <div class="wizard-nav">
-      <button class="btn-back-step" onclick="wizardPrev()">← 戻る</button>
-      <button class="btn-next-step" onclick="wizardNext()">次へ →</button>
-    </div>
-  </div>
-
-  <!-- Step 4: スライダー -->
-  <div class="wizard-step" id="wstep-4">
-    <div class="container">
       <div class="card">
         <h2>今日の状態を数値で</h2>
         <div class="sliders">
@@ -536,8 +516,8 @@
     </div>
   </div>
 
-  <!-- Step 5: 状況を一言で + Generate -->
-  <div class="wizard-step" id="wstep-5">
+  <!-- Step 3: 状況を一言で + Generate + Results -->
+  <div class="wizard-step" id="wstep-3">
     <div class="container">
       <div class="card">
         <h2>今日の状況を一言で（任意）</h2>
@@ -1248,8 +1228,8 @@ function switchTab(tab, btn) { openTab(tab); }
 //  Quote Wizard
 // ══════════════════════════════════════════
 let wizardCurrentStep = 1;
-const WIZARD_TOTAL = 5;
-const WIZARD_NAMES = ['今日のジャンル','言葉のモード','今日の感情タグ','今日の状態を数値で','今日の状況を一言で'];
+const WIZARD_TOTAL = 3;
+const WIZARD_NAMES = ['ジャンル・モード','感情タグ・状態','状況を一言で'];
 
 function wizardGoTo(n) {
   document.querySelectorAll('.wizard-step').forEach(s => s.classList.remove('active'));
@@ -1259,6 +1239,7 @@ function wizardGoTo(n) {
   document.getElementById('wizard-fill').style.width = pct + '%';
   document.getElementById('wizard-step-num').textContent = n + ' / ' + WIZARD_TOTAL;
   document.getElementById('wizard-step-name').textContent = WIZARD_NAMES[n - 1];
+  document.getElementById('panel-section').scrollTo({ top: 0, behavior: 'smooth' });
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
