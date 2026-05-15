@@ -361,159 +361,267 @@
     .silence-message{font-family:'Noto Serif JP',serif;font-size:1rem;line-height:2;color:var(--txt);background:var(--card);backdrop-filter:blur(12px);border-radius:var(--r);padding:22px;border:1px solid var(--card-b);border-left:3px solid var(--ac)}
     .silence-big{font-family:'Playfair Display','Noto Serif JP',serif;font-size:2.1rem;font-style:italic;color:var(--ac);text-align:center;padding:16px 0;line-height:1.4}
     .silence-presence{font-size:.85rem;color:var(--muted);text-align:center;font-style:italic}
+
+    /* ── Hero ── */
+    #hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 24px;position:relative;z-index:1}
+    .hero-badge{font-size:4rem;margin-bottom:20px;animation:hero-float 3s ease-in-out infinite;display:block}
+    @keyframes hero-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+    #hero h1{font-size:2.8rem;font-weight:700;background:linear-gradient(90deg,var(--ac),var(--ac2),#43c6ac);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:14px;line-height:1.2}
+    #hero p{font-size:1rem;color:var(--muted);margin-bottom:56px;line-height:1.7;max-width:300px}
+    .scroll-hint{display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--faint);font-size:.78rem;letter-spacing:2px;animation:scroll-bounce 2s ease infinite}
+    @keyframes scroll-bounce{0%,100%{transform:translateY(0);opacity:.6}50%{transform:translateY(10px);opacity:1}}
+
+    /* ── Home Grid ── */
+    #home-grid{padding:32px 16px 100px;max-width:660px;margin:0 auto}
+    .grid-title{font-size:.78rem;font-weight:700;letter-spacing:2.5px;color:var(--faint);text-transform:uppercase;text-align:center;margin-bottom:20px}
+    .tab-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .tg-btn{background:var(--card);border:1.5px solid var(--card-b);border-radius:20px;padding:20px 8px 18px;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;font-family:inherit;transition:all .2s;box-shadow:var(--shadow);backdrop-filter:blur(12px)}
+    .tg-btn:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(194,107,255,.2)}
+    .tg-btn:active{transform:scale(.93)}
+    .tg-emoji{font-size:2rem;line-height:1}
+    .tg-name{font-size:.75rem;font-weight:700;color:var(--txt);text-align:center;line-height:1.3}
+
+    /* ── Panel Section ── */
+    #panel-section{display:none;padding-bottom:80px}
+    .panel-header{display:flex;align-items:center;gap:14px;padding:20px 16px 0;max-width:660px;margin:0 auto}
+    .back-btn{background:var(--card);border:1.5px solid var(--card-b);border-radius:50px;padding:10px 20px;font-family:inherit;font-size:.85rem;font-weight:600;color:var(--txt);cursor:pointer;backdrop-filter:blur(12px);transition:all .2s;white-space:nowrap;flex-shrink:0}
+    .back-btn:active{transform:scale(.93)}
+    .panel-title-text{font-size:1.05rem;font-weight:700;color:var(--txt)}
+
+    /* ── Wizard ── */
+    .wizard-header{max-width:660px;margin:16px auto 0;padding:0 16px;display:flex;flex-direction:column;gap:8px}
+    .wizard-track{height:5px;background:rgba(194,107,255,.15);border-radius:3px;overflow:hidden}
+    .wizard-fill{height:100%;background:linear-gradient(90deg,var(--ac),var(--ac2));border-radius:3px;transition:width .45s ease;width:0%}
+    .wizard-meta{display:flex;justify-content:space-between;align-items:center;font-size:.75rem;color:var(--faint);font-weight:600}
+    .wizard-step{display:none}
+    .wizard-step.active{display:block;animation:fadeUp .35s ease both}
+    .wizard-nav{display:flex;gap:10px;padding:12px 16px 0;max-width:660px;margin:0 auto}
+    .btn-back-step{flex:0 0 auto;padding:14px 20px;border-radius:60px;border:2px solid rgba(194,107,255,.3);background:var(--card);font-family:inherit;font-size:.9rem;font-weight:600;color:var(--muted);cursor:pointer;transition:all .2s;backdrop-filter:blur(12px)}
+    .btn-next-step{flex:1;padding:16px;border:none;border-radius:60px;background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;font-size:1rem;font-weight:700;cursor:pointer;box-shadow:0 6px 24px rgba(194,107,255,.4);transition:all .25s;font-family:inherit}
+    .btn-next-step:hover{transform:translateY(-2px)}
+    .btn-next-step:active{transform:none}
   </style>
 </head>
 <body>
 <div class="stars" id="stars"></div>
 <div class="night-banner">🌙 深夜モード — ゆっくりしていってね</div>
 
-<header>
-  <h1 id="app-title">✨ 今日の名言</h1>
+<!-- ══════════ HERO ══════════ -->
+<section id="hero">
+  <span class="hero-badge">✨</span>
+  <h1 id="app-title">今日の名言</h1>
   <p id="app-sub">あなたの気分に寄り添う言葉を届けます</p>
-</header>
+  <div class="scroll-hint">
+    <span>スクロール</span>
+    <span>↓</span>
+  </div>
+</section>
 
-<div class="tab-nav" id="tab-nav">
-  <button class="tab-btn active" onclick="switchTab('quote',this)">🔍 名言を探す</button>
-  <button class="tab-btn" onclick="switchTab('future',this)">🔮 未来の自分</button>
-  <button class="tab-btn" onclick="switchTab('emotion',this)">💭 感情翻訳</button>
-  <button class="tab-btn" onclick="switchTab('weather',this)">🌤 天気予報</button>
-  <button class="tab-btn" onclick="switchTab('diary',this)">📔 日記</button>
-  <button class="tab-btn" onclick="switchTab('narration',this)">🎬 物語</button>
-  <button class="tab-btn" onclick="switchTab('unsentletter',this)">💌 手紙</button>
-  <button class="tab-btn" onclick="switchTab('lyrics',this)">🎵 歌詞</button>
-  <button class="tab-btn" onclick="switchTab('temperature',this)">🌡 温度</button>
-  <button class="tab-btn" onclick="switchTab('universe',this)">🌌 宇宙</button>
-  <button class="tab-btn" onclick="switchTab('book',this)">📚 本</button>
-  <button class="tab-btn" onclick="switchTab('silence',this)">🤫 沈黙</button>
-  <button class="tab-btn" id="fav-tab-btn" onclick="switchTab('fav',this)">❤️ お気に入り<span id="fav-count"></span></button>
-  <button class="tab-btn" onclick="switchTab('widget',this)">📱 ウィジェット</button>
-</div>
+<!-- ══════════ HOME GRID ══════════ -->
+<section id="home-grid">
+  <p class="grid-title">どれを試しますか？</p>
+  <div class="tab-grid">
+    <button class="tg-btn" onclick="openTab('quote')"><span class="tg-emoji">🔍</span><span class="tg-name">名言を探す</span></button>
+    <button class="tg-btn" onclick="openTab('future')"><span class="tg-emoji">🔮</span><span class="tg-name">未来の自分</span></button>
+    <button class="tg-btn" onclick="openTab('emotion')"><span class="tg-emoji">💭</span><span class="tg-name">感情翻訳</span></button>
+    <button class="tg-btn" onclick="openTab('weather')"><span class="tg-emoji">🌤</span><span class="tg-name">天気予報</span></button>
+    <button class="tg-btn" onclick="openTab('diary')"><span class="tg-emoji">📔</span><span class="tg-name">日記</span></button>
+    <button class="tg-btn" onclick="openTab('narration')"><span class="tg-emoji">🎬</span><span class="tg-name">物語</span></button>
+    <button class="tg-btn" onclick="openTab('unsentletter')"><span class="tg-emoji">💌</span><span class="tg-name">手紙</span></button>
+    <button class="tg-btn" onclick="openTab('lyrics')"><span class="tg-emoji">🎵</span><span class="tg-name">歌詞</span></button>
+    <button class="tg-btn" onclick="openTab('temperature')"><span class="tg-emoji">🌡</span><span class="tg-name">温度</span></button>
+    <button class="tg-btn" onclick="openTab('universe')"><span class="tg-emoji">🌌</span><span class="tg-name">宇宙</span></button>
+    <button class="tg-btn" onclick="openTab('book')"><span class="tg-emoji">📚</span><span class="tg-name">本</span></button>
+    <button class="tg-btn" onclick="openTab('silence')"><span class="tg-emoji">🤫</span><span class="tg-name">沈黙</span></button>
+    <button class="tg-btn" id="fav-tab-btn" onclick="openTab('fav')"><span class="tg-emoji">❤️</span><span class="tg-name">お気に入り<span id="fav-count"></span></span></button>
+    <button class="tg-btn" onclick="openTab('widget')"><span class="tg-emoji">📱</span><span class="tg-name">ウィジェット</span></button>
+  </div>
+</section>
+
+<!-- ══════════ PANEL SECTION ══════════ -->
+<section id="panel-section">
+  <div class="panel-header">
+    <button class="back-btn" onclick="goHome()">← ホーム</button>
+    <span class="panel-title-text" id="panel-title"></span>
+  </div>
 
 <!-- ══════════ TAB: 名言を探す ══════════ -->
 <div id="tab-quote" class="tab-panel active">
-  <div class="container">
 
-    <div class="card">
-      <h2>名言のジャンル</h2>
-      <div class="genre-sel">
-        <button class="genre-btn" data-genre="great" onclick="setGenre('great',this)"><span class="gi">🏛️</span>世界の偉人</button>
-        <button class="genre-btn active" data-genre="mix" onclick="setGenre('mix',this)"><span class="gi">✨</span>ミックス</button>
-        <button class="genre-btn" data-genre="anime" onclick="setGenre('anime',this)"><span class="gi">🎌</span>アニメ</button>
-      </div>
+  <!-- Wizard progress bar -->
+  <div class="wizard-header" id="wizard-header">
+    <div class="wizard-track"><div class="wizard-fill" id="wizard-fill"></div></div>
+    <div class="wizard-meta">
+      <span id="wizard-step-name">今日のジャンル</span>
+      <span id="wizard-step-num">1 / 5</span>
     </div>
+  </div>
 
-    <div class="card">
-      <h2>言葉のモード</h2>
-      <div class="mode-toggle">
-        <button class="mode-btn active" onclick="setQuoteMode('normal',this)">📖 名言を探す</button>
-        <button class="mode-btn" onclick="setQuoteMode('rx',this)">🏥 処方箋</button>
-        <button class="mode-btn" onclick="setQuoteMode('original',this)">🔮 AI創作</button>
-      </div>
-    </div>
-
-    <div class="card">
-      <h2>今日の感情タグ</h2>
-      <div class="emotions" id="emotions">
-        <button class="emotion-btn" data-val="嬉しい">😊 嬉しい</button>
-        <button class="emotion-btn" data-val="落ち込んでいる">😔 落ち込んでいる</button>
-        <button class="emotion-btn" data-val="疲れた">😩 疲れた</button>
-        <button class="emotion-btn" data-val="燃えている">🔥 燃えている</button>
-        <button class="emotion-btn" data-val="迷っている">🤔 迷っている</button>
-        <button class="emotion-btn" data-val="不安">😰 不安</button>
-        <button class="emotion-btn" data-val="穏やか">🌿 穏やか</button>
-        <button class="emotion-btn" data-val="感謝している">🙏 感謝している</button>
-        <button class="emotion-btn" data-val="愛に溢れている">💖 愛に溢れている</button>
-        <button class="emotion-btn" data-val="挑戦したい">💪 挑戦したい</button>
-      </div>
-    </div>
-
-    <div class="card">
-      <h2>今日の状態を数値で</h2>
-      <div class="sliders">
-        <div class="slider-row"><label>⚡ 元気度 <span id="ev">5</span></label><input type="range" id="energy" min="1" max="10" value="5" oninput="document.getElementById('ev').textContent=this.value"></div>
-        <div class="slider-row"><label>🌀 ストレス度 <span id="sv">5</span></label><input type="range" id="stress" min="1" max="10" value="5" oninput="document.getElementById('sv').textContent=this.value"></div>
-        <div class="slider-row"><label>🚀 やる気度 <span id="mv">5</span></label><input type="range" id="motivation" min="1" max="10" value="5" oninput="document.getElementById('mv').textContent=this.value"></div>
-      </div>
-    </div>
-
-    <div class="card">
-      <h2>今日の状況を一言で（任意）</h2>
-      <div class="ta-wrap">
-        <textarea id="mood-text" rows="3" placeholder="例：大事なプレゼンの前で緊張している…"></textarea>
-        <button class="mic-btn" id="mic-btn" onclick="toggleMic()" title="音声入力">🎤</button>
-      </div>
-      <div class="mic-status" id="mic-status"></div>
-    </div>
-
-    <button class="btn-primary" id="gen-btn" onclick="getQuote()">✨ 今日の名言を受け取る</button>
-
-    <div class="card loading" id="loading"><div class="spinner"></div><p id="load-txt">あなたの気分に最適な言葉を探しています…</p></div>
-    <div class="error-msg" id="error-msg"></div>
-
-    <!-- 通常名言カード -->
-    <div class="card quote-card" id="quote-card">
-      <div class="qc-header">
-        <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">
-          <span class="lang-badge" id="q-lang">英語</span>
-          <span class="src-badge" id="q-src" style="display:none"></span>
-        </div>
-        <div style="display:flex;align-items:center;gap:10px">
-          <span style="font-size:.75rem;color:var(--faint)" id="hist-note"></span>
-          <button class="fav-btn" id="fav-btn" onclick="toggleFav()">🤍</button>
+  <!-- Step 1: ジャンル -->
+  <div class="wizard-step active" id="wstep-1">
+    <div class="container">
+      <div class="card">
+        <h2>今日のジャンル</h2>
+        <div class="genre-sel">
+          <button class="genre-btn" data-genre="great" onclick="setGenre('great',this)"><span class="gi">🏛️</span>世界の偉人</button>
+          <button class="genre-btn active" data-genre="mix" onclick="setGenre('mix',this)"><span class="gi">✨</span>ミックス</button>
+          <button class="genre-btn" data-genre="anime" onclick="setGenre('anime',this)"><span class="gi">🎌</span>アニメ</button>
         </div>
       </div>
-      <div class="q-original" id="q-original"></div>
-      <div class="q-trans" id="q-trans"></div>
-      <div class="q-author"><div class="q-avatar" id="q-av"></div><div><div class="q-name" id="q-author"></div><div class="q-name-jp" id="q-authJp"></div></div></div>
-      <div class="q-reason" id="q-reason"></div>
-      <div class="q-actions">
-        <button class="action-btn" id="copy-btn" onclick="copyQuote()">📋 コピー</button>
-        <button class="action-btn" onclick="getQuote()">🔄 別の名言</button>
-        <div class="share-wrap">
-          <button class="action-btn" onclick="toggleShare(event)">📤 シェア ▾</button>
-          <div class="share-popup" id="share-popup">
-            <button class="share-item" onclick="shareTwitter()"><span style="font-size:1rem;width:22px;text-align:center">𝕏</span> X でシェア</button>
-            <button class="share-item" onclick="shareLine()"><span style="color:#06c755;font-size:1rem;width:22px;text-align:center">💬</span> LINE でシェア</button>
-            <button class="share-item" onclick="shareIG()"><span style="font-size:1rem;width:22px;text-align:center">📸</span> Instagram 用コピー</button>
+    </div>
+    <div class="wizard-nav">
+      <button class="btn-next-step" onclick="wizardNext()">次へ →</button>
+    </div>
+  </div>
+
+  <!-- Step 2: 言葉のモード -->
+  <div class="wizard-step" id="wstep-2">
+    <div class="container">
+      <div class="card">
+        <h2>言葉のモード</h2>
+        <div class="mode-toggle">
+          <button class="mode-btn active" onclick="setQuoteMode('normal',this)">📖 名言を探す</button>
+          <button class="mode-btn" onclick="setQuoteMode('rx',this)">🏥 処方箋</button>
+          <button class="mode-btn" onclick="setQuoteMode('original',this)">🔮 AI創作</button>
+        </div>
+      </div>
+    </div>
+    <div class="wizard-nav">
+      <button class="btn-back-step" onclick="wizardPrev()">← 戻る</button>
+      <button class="btn-next-step" onclick="wizardNext()">次へ →</button>
+    </div>
+  </div>
+
+  <!-- Step 3: 感情タグ -->
+  <div class="wizard-step" id="wstep-3">
+    <div class="container">
+      <div class="card">
+        <h2>今日の感情タグ</h2>
+        <div class="emotions" id="emotions">
+          <button class="emotion-btn" data-val="嬉しい">😊 嬉しい</button>
+          <button class="emotion-btn" data-val="落ち込んでいる">😔 落ち込んでいる</button>
+          <button class="emotion-btn" data-val="疲れた">😩 疲れた</button>
+          <button class="emotion-btn" data-val="燃えている">🔥 燃えている</button>
+          <button class="emotion-btn" data-val="迷っている">🤔 迷っている</button>
+          <button class="emotion-btn" data-val="不安">😰 不安</button>
+          <button class="emotion-btn" data-val="穏やか">🌿 穏やか</button>
+          <button class="emotion-btn" data-val="感謝している">🙏 感謝している</button>
+          <button class="emotion-btn" data-val="愛に溢れている">💖 愛に溢れている</button>
+          <button class="emotion-btn" data-val="挑戦したい">💪 挑戦したい</button>
+        </div>
+        <p style="margin-top:10px;font-size:.75rem;color:var(--faint)">複数選択OK。なくてもスキップできます。</p>
+      </div>
+    </div>
+    <div class="wizard-nav">
+      <button class="btn-back-step" onclick="wizardPrev()">← 戻る</button>
+      <button class="btn-next-step" onclick="wizardNext()">次へ →</button>
+    </div>
+  </div>
+
+  <!-- Step 4: スライダー -->
+  <div class="wizard-step" id="wstep-4">
+    <div class="container">
+      <div class="card">
+        <h2>今日の状態を数値で</h2>
+        <div class="sliders">
+          <div class="slider-row"><label>⚡ 元気度 <span id="ev">5</span></label><input type="range" id="energy" min="1" max="10" value="5" oninput="document.getElementById('ev').textContent=this.value"></div>
+          <div class="slider-row"><label>🌀 ストレス度 <span id="sv">5</span></label><input type="range" id="stress" min="1" max="10" value="5" oninput="document.getElementById('sv').textContent=this.value"></div>
+          <div class="slider-row"><label>🚀 やる気度 <span id="mv">5</span></label><input type="range" id="motivation" min="1" max="10" value="5" oninput="document.getElementById('mv').textContent=this.value"></div>
+        </div>
+      </div>
+    </div>
+    <div class="wizard-nav">
+      <button class="btn-back-step" onclick="wizardPrev()">← 戻る</button>
+      <button class="btn-next-step" onclick="wizardNext()">次へ →</button>
+    </div>
+  </div>
+
+  <!-- Step 5: 状況を一言で + Generate -->
+  <div class="wizard-step" id="wstep-5">
+    <div class="container">
+      <div class="card">
+        <h2>今日の状況を一言で（任意）</h2>
+        <div class="ta-wrap">
+          <textarea id="mood-text" rows="3" placeholder="例：大事なプレゼンの前で緊張している…"></textarea>
+          <button class="mic-btn" id="mic-btn" onclick="toggleMic()" title="音声入力">🎤</button>
+        </div>
+        <div class="mic-status" id="mic-status"></div>
+      </div>
+
+      <button class="btn-primary" id="gen-btn" onclick="getQuote()">✨ 今日の名言を受け取る</button>
+
+      <div class="card loading" id="loading"><div class="spinner"></div><p id="load-txt">あなたの気分に最適な言葉を探しています…</p></div>
+      <div class="error-msg" id="error-msg"></div>
+
+      <!-- 通常名言カード -->
+      <div class="card quote-card" id="quote-card">
+        <div class="qc-header">
+          <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">
+            <span class="lang-badge" id="q-lang">英語</span>
+            <span class="src-badge" id="q-src" style="display:none"></span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="font-size:.75rem;color:var(--faint)" id="hist-note"></span>
+            <button class="fav-btn" id="fav-btn" onclick="toggleFav()">🤍</button>
+          </div>
+        </div>
+        <div class="q-original" id="q-original"></div>
+        <div class="q-trans" id="q-trans"></div>
+        <div class="q-author"><div class="q-avatar" id="q-av"></div><div><div class="q-name" id="q-author"></div><div class="q-name-jp" id="q-authJp"></div></div></div>
+        <div class="q-reason" id="q-reason"></div>
+        <div class="q-actions">
+          <button class="action-btn" id="copy-btn" onclick="copyQuote()">📋 コピー</button>
+          <button class="action-btn" onclick="getQuote()">🔄 別の名言</button>
+          <div class="share-wrap">
+            <button class="action-btn" onclick="toggleShare(event)">📤 シェア ▾</button>
+            <div class="share-popup" id="share-popup">
+              <button class="share-item" onclick="shareTwitter()"><span style="font-size:1rem;width:22px;text-align:center">𝕏</span> X でシェア</button>
+              <button class="share-item" onclick="shareLine()"><span style="color:#06c755;font-size:1rem;width:22px;text-align:center">💬</span> LINE でシェア</button>
+              <button class="share-item" onclick="shareIG()"><span style="font-size:1rem;width:22px;text-align:center">📸</span> Instagram 用コピー</button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- 処方箋カード -->
-    <div class="rx-card" id="rx-card">
-      <div class="rx-header">
-        <div>
-          <div class="rx-rp">Rp.</div>
-          <div class="rx-title">本日の処方箋</div>
-          <div class="rx-date" id="rx-date"></div>
+      <!-- 処方箋カード -->
+      <div class="rx-card" id="rx-card">
+        <div class="rx-header">
+          <div>
+            <div class="rx-rp">Rp.</div>
+            <div class="rx-title">本日の処方箋</div>
+            <div class="rx-date" id="rx-date"></div>
+          </div>
+          <button class="rx-fav-btn" id="rx-fav-btn" onclick="toggleFavRx()">🤍</button>
         </div>
-        <button class="rx-fav-btn" id="rx-fav-btn" onclick="toggleFavRx()">🤍</button>
-      </div>
-      <div class="rx-symptom-wrap">
-        <div class="rx-label">症　状</div>
-        <div class="rx-symptom-text" id="rx-symptom"></div>
-      </div>
-      <hr class="rx-divider" />
-      <div class="rx-quote-section">
-        <div class="rx-label">処　方</div>
-        <div class="rx-quote-text" id="rx-quote-text"></div>
-        <div class="rx-quote-author" id="rx-quote-author"></div>
-      </div>
-      <hr class="rx-divider" />
-      <div class="rx-meta">
-        <span class="rx-meta-key">用　法</span><span class="rx-meta-val" id="rx-usage"></span>
-        <span class="rx-meta-key">効　能</span><span class="rx-meta-val" id="rx-effect"></span>
-        <span class="rx-meta-key">注　意</span><span class="rx-meta-val" id="rx-caution"></span>
-      </div>
-      <div class="rx-stamp">処<br>方<br>済</div>
-      <div class="q-actions" style="margin-top:4px">
-        <button class="action-btn" onclick="copyRx()">📋 コピー</button>
-        <button class="action-btn" onclick="getQuote()">🔄 別の処方</button>
+        <div class="rx-symptom-wrap">
+          <div class="rx-label">症　状</div>
+          <div class="rx-symptom-text" id="rx-symptom"></div>
+        </div>
+        <hr class="rx-divider" />
+        <div class="rx-quote-section">
+          <div class="rx-label">処　方</div>
+          <div class="rx-quote-text" id="rx-quote-text"></div>
+          <div class="rx-quote-author" id="rx-quote-author"></div>
+        </div>
+        <hr class="rx-divider" />
+        <div class="rx-meta">
+          <span class="rx-meta-key">用　法</span><span class="rx-meta-val" id="rx-usage"></span>
+          <span class="rx-meta-key">効　能</span><span class="rx-meta-val" id="rx-effect"></span>
+          <span class="rx-meta-key">注　意</span><span class="rx-meta-val" id="rx-caution"></span>
+        </div>
+        <div class="rx-stamp">処<br>方<br>済</div>
+        <div class="q-actions" style="margin-top:4px">
+          <button class="action-btn" onclick="copyRx()">📋 コピー</button>
+          <button class="action-btn" onclick="getQuote()">🔄 別の処方</button>
+        </div>
       </div>
     </div>
 
+    <div class="wizard-nav" style="margin-top:8px">
+      <button class="btn-back-step" onclick="wizardPrev()">← 戻る</button>
+    </div>
   </div>
+
 </div>
 
 <!-- ══════════ TAB: 未来の自分 ══════════ -->
@@ -926,6 +1034,8 @@
   </div>
 </div>
 
+</section>
+
 <script>
 // ══════════════════════════════════════════
 //  State
@@ -1101,17 +1211,63 @@ function copyScriptable() {
 }
 
 // ══════════════════════════════════════════
-//  Tabs
+//  Navigation
 // ══════════════════════════════════════════
-function switchTab(tab, btn) {
+const TAB_TITLES = {
+  quote:'🔍 名言を探す', future:'🔮 未来の自分', emotion:'💭 感情翻訳',
+  weather:'🌤 天気予報', diary:'📔 日記', narration:'🎬 物語',
+  unsentletter:'💌 手紙', lyrics:'🎵 歌詞', temperature:'🌡 温度',
+  universe:'🌌 宇宙', book:'📚 本', silence:'🤫 沈黙',
+  fav:'❤️ お気に入り', widget:'📱 ウィジェット'
+};
+
+function openTab(tab) {
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('tab-' + tab).classList.add('active');
-  btn.classList.add('active');
+  document.getElementById('panel-title').textContent = TAB_TITLES[tab] || '';
+  document.getElementById('home-grid').style.display = 'none';
+  document.getElementById('panel-section').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (tab === 'quote') { wizardCurrentStep = 1; wizardGoTo(1); }
   if (tab === 'fav') renderFavs();
   if (tab === 'widget') renderScriptableCode();
   if (tab === 'book') renderBook();
   if (tab === 'silence') onSilenceTabOpen();
+}
+
+function goHome() {
+  document.getElementById('panel-section').style.display = 'none';
+  document.getElementById('home-grid').style.display = 'block';
+  window.scrollTo({ top: document.getElementById('home-grid').offsetTop - 10, behavior: 'smooth' });
+}
+
+// Keep switchTab as alias for any existing inline calls
+function switchTab(tab, btn) { openTab(tab); }
+
+// ══════════════════════════════════════════
+//  Quote Wizard
+// ══════════════════════════════════════════
+let wizardCurrentStep = 1;
+const WIZARD_TOTAL = 5;
+const WIZARD_NAMES = ['今日のジャンル','言葉のモード','今日の感情タグ','今日の状態を数値で','今日の状況を一言で'];
+
+function wizardGoTo(n) {
+  document.querySelectorAll('.wizard-step').forEach(s => s.classList.remove('active'));
+  document.getElementById('wstep-' + n).classList.add('active');
+  wizardCurrentStep = n;
+  const pct = ((n - 1) / (WIZARD_TOTAL - 1)) * 100;
+  document.getElementById('wizard-fill').style.width = pct + '%';
+  document.getElementById('wizard-step-num').textContent = n + ' / ' + WIZARD_TOTAL;
+  document.getElementById('wizard-step-name').textContent = WIZARD_NAMES[n - 1];
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function wizardNext() {
+  if (wizardCurrentStep < WIZARD_TOTAL) wizardGoTo(wizardCurrentStep + 1);
+}
+
+function wizardPrev() {
+  if (wizardCurrentStep > 1) wizardGoTo(wizardCurrentStep - 1);
 }
 
 // ══════════════════════════════════════════
