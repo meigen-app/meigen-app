@@ -1217,8 +1217,10 @@ function openTab(tab) {
   document.getElementById('tab-' + tab).classList.add('active');
   document.getElementById('panel-title').textContent = TAB_TITLES[tab] || '';
   document.getElementById('home-grid').style.display = 'none';
+  // ヒーローは一度タブを選んだら非表示にしてグリッドをトップに
+  document.getElementById('hero').style.display = 'none';
   document.getElementById('panel-section').style.display = 'block';
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  window.scrollTo({ top: 0, behavior: 'instant' });
   if (tab === 'quote') { wizardCurrentStep = 1; wizardGoTo(1); }
   if (tab === 'fav') renderFavs();
   if (tab === 'widget') renderScriptableCode();
@@ -1229,7 +1231,8 @@ function openTab(tab) {
 function goHome() {
   document.getElementById('panel-section').style.display = 'none';
   document.getElementById('home-grid').style.display = 'block';
-  window.scrollTo({ top: document.getElementById('home-grid').offsetTop - 10, behavior: 'smooth' });
+  // ヒーローは非表示のままグリッドが最上部
+  window.scrollTo({ top: 0, behavior: 'instant' });
 }
 
 // Keep switchTab as alias for any existing inline calls
