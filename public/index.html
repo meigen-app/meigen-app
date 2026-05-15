@@ -167,6 +167,62 @@
     .reveal{opacity:0;transform:translateY(24px);transition:opacity .75s ease,transform .75s ease}
     .reveal.visible{opacity:1;transform:none}
 
+    /* ══ KO-FI SUPPORT ══ */
+    .kofi-prompt{
+      text-align:center;
+      padding:36px 24px 28px;
+      border-top:1px solid var(--border);
+      margin-top:4px;
+      display:none;
+    }
+    .kofi-prompt.visible{
+      display:block;
+      animation:fadeUp 1.2s ease forwards;
+    }
+    .kofi-candle{font-size:1.5rem;margin-bottom:14px;opacity:.7;display:block;animation:flame-float 3s ease-in-out infinite}
+    .kofi-text{
+      font-family:'Shippori Mincho',serif;
+      font-size:.9rem;
+      color:var(--muted);
+      line-height:2.1;
+      letter-spacing:.07em;
+      margin-bottom:6px;
+    }
+    .kofi-sub{
+      font-size:.76rem;
+      color:rgba(245,158,11,.42);
+      letter-spacing:.14em;
+      margin-bottom:22px;
+    }
+    .kofi-btn{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:13px 32px;
+      border-radius:50px;
+      border:1px solid rgba(249,115,22,.22);
+      background:rgba(249,115,22,.05);
+      color:var(--amber2);
+      font-family:'Zen Kaku Gothic New',sans-serif;
+      font-size:.85rem;
+      font-weight:500;
+      text-decoration:none;
+      transition:all .25s;
+      letter-spacing:.07em;
+    }
+    .kofi-btn:hover{background:rgba(249,115,22,.12);border-color:var(--flame)}
+    .kofi-share-link{
+      display:block;
+      text-align:center;
+      margin-top:14px;
+      font-size:.72rem;
+      color:rgba(245,158,11,.35);
+      text-decoration:none;
+      letter-spacing:.1em;
+      transition:color .2s;
+    }
+    .kofi-share-link:hover{color:var(--amber)}
+
     /* ══ SHARE OVERLAY ══ */
     #share-overlay{display:none;position:fixed;inset:0;background:rgba(6,9,15,.92);z-index:1000;align-items:center;justify-content:center;flex-direction:column;padding:24px;backdrop-filter:blur(8px)}
     #share-overlay.visible{display:flex}
@@ -369,6 +425,17 @@
     <div class="home-results" id="home-results">
       <div id="home-quotes-list"></div>
       <button class="another-btn" onclick="homeGenerate()">＋ もう一つ、言葉を灯す</button>
+
+      <!-- Ko-fi support — 名言が届いた後にそっと表示 -->
+      <!-- ★ Ko-fiアカウント作成後、YOUR_KOFI_IDを自分のIDに変更してください -->
+      <div class="kofi-prompt" id="kofi-prompt">
+        <span class="kofi-candle">🕯️</span>
+        <p class="kofi-text">「ありがとう」の代わりに、<br>コーヒー一杯分の灯を届けてください</p>
+        <p class="kofi-sub">この灯を、消さないために</p>
+        <a class="kofi-btn" href="https://ko-fi.com/YOUR_KOFI_ID" target="_blank" rel="noopener noreferrer">
+          ☕　灯を続ける
+        </a>
+      </div>
     </div>
 
     <!-- Other features -->
@@ -428,6 +495,9 @@
   </div>
   <div class="share-hint" id="share-hint-text">スマートフォンから共有するとSNSアプリを直接選べます</div>
   <button class="share-close" onclick="closeShare()">閉じる</button>
+  <a class="kofi-share-link" href="https://ko-fi.com/YOUR_KOFI_ID" target="_blank" rel="noopener noreferrer">
+    ☕ この灯を続けるために
+  </a>
 </div>
 
 <!-- ══════════ PANEL ══════════ -->
@@ -705,6 +775,7 @@
   let quickEmotions    = [];
   let recentQuotes     = [];
   let favorites        = JSON.parse(localStorage.getItem('tomoshibi-favs') || '[]');
+  let quotesGenerated  = 0; // Ko-fi prompt trigger
   let emotionLog       = JSON.parse(localStorage.getItem('tomoshibi-log') || '[]');
 
   const PANEL_TITLES = {
@@ -856,6 +927,15 @@
       saveToLog(quickEmotions, document.getElementById('home-mood').value, q);
 
       appendHomeQuote(q);
+
+      // Ko-fi prompt — 最初の名言の後、4秒後にそっと表示
+      quotesGenerated++;
+      if (quotesGenerated === 1) {
+        setTimeout(() => {
+          const el = document.getElementById('kofi-prompt');
+          if (el) el.classList.add('visible');
+        }, 4000);
+      }
     } catch(e) {
       loadEl.classList.remove('visible');
       genBtn.disabled = false;
