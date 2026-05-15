@@ -4,8 +4,8 @@
   "description": "感情と言葉の間に",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#050508",
-  "theme_color": "#000000",
+  "background_color": "#fffcf5",
+  "theme_color": "#ff6b35",
   "orientation": "portrait",
   "icons": [
     { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
