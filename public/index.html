@@ -400,6 +400,17 @@
     .btn-next-step{flex:1;padding:16px;border:none;border-radius:60px;background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;font-size:1rem;font-weight:700;cursor:pointer;box-shadow:0 6px 24px rgba(194,107,255,.4);transition:all .25s;font-family:inherit}
     .btn-next-step:hover{transform:translateY(-2px)}
     .btn-next-step:active{transform:none}
+
+    /* ── Scroll reveal ── */
+    .sr{opacity:0;transform:translateY(32px);transition:opacity .6s cubic-bezier(.22,1,.36,1),transform .6s cubic-bezier(.22,1,.36,1)}
+    .sr.visible{opacity:1;transform:translateY(0)}
+    .sr-left{opacity:0;transform:translateX(-28px);transition:opacity .6s cubic-bezier(.22,1,.36,1),transform .6s cubic-bezier(.22,1,.36,1)}
+    .sr-left.visible{opacity:1;transform:translateX(0)}
+    .sr-scale{opacity:0;transform:scale(.88);transition:opacity .5s cubic-bezier(.22,1,.36,1),transform .5s cubic-bezier(.22,1,.36,1)}
+    .sr-scale.visible{opacity:1;transform:scale(1)}
+    /* hero items animate on load */
+    .hero-anim{opacity:0;transform:translateY(24px);animation:hero-enter .7s cubic-bezier(.22,1,.36,1) forwards}
+    @keyframes hero-enter{to{opacity:1;transform:translateY(0)}}
   </style>
 </head>
 <body>
@@ -408,10 +419,10 @@
 
 <!-- ══════════ HERO ══════════ -->
 <section id="hero">
-  <span class="hero-badge">✨</span>
-  <h1 id="app-title">今日の名言</h1>
-  <p id="app-sub">あなたの気分に寄り添う言葉を届けます</p>
-  <div class="scroll-hint">
+  <span class="hero-badge hero-anim" style="animation-delay:.1s">✨</span>
+  <h1 id="app-title" class="hero-anim" style="animation-delay:.25s">今日の名言</h1>
+  <p id="app-sub" class="hero-anim" style="animation-delay:.4s">あなたの気分に寄り添う言葉を届けます</p>
+  <div class="scroll-hint hero-anim" style="animation-delay:.6s">
     <span>スクロール</span>
     <span>↓</span>
   </div>
@@ -419,22 +430,22 @@
 
 <!-- ══════════ HOME GRID ══════════ -->
 <section id="home-grid">
-  <p class="grid-title">どれを試しますか？</p>
+  <p class="grid-title sr">どれを試しますか？</p>
   <div class="tab-grid">
-    <button class="tg-btn" onclick="openTab('quote')"><span class="tg-emoji">🔍</span><span class="tg-name">名言を探す</span></button>
-    <button class="tg-btn" onclick="openTab('future')"><span class="tg-emoji">🔮</span><span class="tg-name">未来の自分</span></button>
-    <button class="tg-btn" onclick="openTab('emotion')"><span class="tg-emoji">💭</span><span class="tg-name">感情翻訳</span></button>
-    <button class="tg-btn" onclick="openTab('weather')"><span class="tg-emoji">🌤</span><span class="tg-name">天気予報</span></button>
-    <button class="tg-btn" onclick="openTab('diary')"><span class="tg-emoji">📔</span><span class="tg-name">日記</span></button>
-    <button class="tg-btn" onclick="openTab('narration')"><span class="tg-emoji">🎬</span><span class="tg-name">物語</span></button>
-    <button class="tg-btn" onclick="openTab('unsentletter')"><span class="tg-emoji">💌</span><span class="tg-name">手紙</span></button>
-    <button class="tg-btn" onclick="openTab('lyrics')"><span class="tg-emoji">🎵</span><span class="tg-name">歌詞</span></button>
-    <button class="tg-btn" onclick="openTab('temperature')"><span class="tg-emoji">🌡</span><span class="tg-name">温度</span></button>
-    <button class="tg-btn" onclick="openTab('universe')"><span class="tg-emoji">🌌</span><span class="tg-name">宇宙</span></button>
-    <button class="tg-btn" onclick="openTab('book')"><span class="tg-emoji">📚</span><span class="tg-name">本</span></button>
-    <button class="tg-btn" onclick="openTab('silence')"><span class="tg-emoji">🤫</span><span class="tg-name">沈黙</span></button>
-    <button class="tg-btn" id="fav-tab-btn" onclick="openTab('fav')"><span class="tg-emoji">❤️</span><span class="tg-name">お気に入り<span id="fav-count"></span></span></button>
-    <button class="tg-btn" onclick="openTab('widget')"><span class="tg-emoji">📱</span><span class="tg-name">ウィジェット</span></button>
+    <button class="tg-btn sr" style="transition-delay:.05s" onclick="openTab('quote')"><span class="tg-emoji">🔍</span><span class="tg-name">名言を探す</span></button>
+    <button class="tg-btn sr" style="transition-delay:.1s" onclick="openTab('future')"><span class="tg-emoji">🔮</span><span class="tg-name">未来の自分</span></button>
+    <button class="tg-btn sr" style="transition-delay:.15s" onclick="openTab('emotion')"><span class="tg-emoji">💭</span><span class="tg-name">感情翻訳</span></button>
+    <button class="tg-btn sr" style="transition-delay:.2s" onclick="openTab('weather')"><span class="tg-emoji">🌤</span><span class="tg-name">天気予報</span></button>
+    <button class="tg-btn sr" style="transition-delay:.25s" onclick="openTab('diary')"><span class="tg-emoji">📔</span><span class="tg-name">日記</span></button>
+    <button class="tg-btn sr" style="transition-delay:.3s" onclick="openTab('narration')"><span class="tg-emoji">🎬</span><span class="tg-name">物語</span></button>
+    <button class="tg-btn sr" style="transition-delay:.35s" onclick="openTab('unsentletter')"><span class="tg-emoji">💌</span><span class="tg-name">手紙</span></button>
+    <button class="tg-btn sr" style="transition-delay:.4s" onclick="openTab('lyrics')"><span class="tg-emoji">🎵</span><span class="tg-name">歌詞</span></button>
+    <button class="tg-btn sr" style="transition-delay:.45s" onclick="openTab('temperature')"><span class="tg-emoji">🌡</span><span class="tg-name">温度</span></button>
+    <button class="tg-btn sr" style="transition-delay:.5s" onclick="openTab('universe')"><span class="tg-emoji">🌌</span><span class="tg-name">宇宙</span></button>
+    <button class="tg-btn sr" style="transition-delay:.55s" onclick="openTab('book')"><span class="tg-emoji">📚</span><span class="tg-name">本</span></button>
+    <button class="tg-btn sr" style="transition-delay:.6s" onclick="openTab('silence')"><span class="tg-emoji">🤫</span><span class="tg-name">沈黙</span></button>
+    <button class="tg-btn sr" style="transition-delay:.65s" id="fav-tab-btn" onclick="openTab('fav')"><span class="tg-emoji">❤️</span><span class="tg-name">お気に入り<span id="fav-count"></span></span></button>
+    <button class="tg-btn sr" style="transition-delay:.7s" onclick="openTab('widget')"><span class="tg-emoji">📱</span><span class="tg-name">ウィジェット</span></button>
   </div>
 </section>
 
@@ -2026,6 +2037,39 @@ function flashBtn(e, on, off) {
 }
 
 // new-tab hooks are handled in the original switchTab below
+
+// ══════════════════════════════════════════
+//  Scroll reveal (IntersectionObserver)
+// ══════════════════════════════════════════
+(function() {
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08 });
+
+  function observeAll() {
+    document.querySelectorAll('.sr, .sr-left, .sr-scale').forEach(el => {
+      // reset if re-entering home
+      el.classList.remove('visible');
+      io.observe(el);
+    });
+  }
+
+  // Initial observe on load
+  observeAll();
+
+  // Re-observe when returning to home grid
+  const origGoHome = window.goHome;
+  window.goHome = function() {
+    origGoHome && origGoHome();
+    // brief delay so grid is visible before observing
+    setTimeout(observeAll, 50);
+  };
+})();
 </script>
 </body>
 </html>
