@@ -3,2076 +3,1915 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>✨ 今日の名言</title>
+  <title>灯 Tomoshibi</title>
   <link rel="manifest" href="/manifest.json" />
-  <meta name="theme-color" content="#c26bff" />
+  <meta name="theme-color" content="#0F172A" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Noto+Serif+JP:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@300;400;500;700&family=Shippori+Mincho:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --grad: linear-gradient(135deg, #f9c6ff 0%, #ffd6a0 40%, #b5f0f0 80%, #c3f4b1 100%);
-      --card: rgba(255,255,255,0.72);
-      --card-b: rgba(255,255,255,0.6);
-      --shadow: 0 8px 40px rgba(0,0,0,0.10);
-      --r: 24px;
-      --ac: #c26bff;
-      --ac2: #ff7e5f;
-      --txt: #333; --muted: #777; --faint: #aaa;
+      --bg: #0F172A;
+      --bg2: #111827;
+      --bg3: #1E293B;
+      --amber: #F59E0B;
+      --amber2: #FFD89B;
+      --amber3: #FFE8C2;
+      --amber-glow: rgba(245,158,11,0.15);
+      --amber-glow2: rgba(245,158,11,0.08);
+      --txt: #F1F5F9;
+      --txt2: #CBD5E1;
+      --muted: #64748B;
+      --faint: #334155;
+      --border: rgba(245,158,11,0.12);
+      --r: 20px;
     }
-    body.night {
-      --grad: linear-gradient(160deg,#0a0a1a 0%,#0d1020 50%,#10081a 100%);
-      --card: rgba(20,20,40,0.85); --card-b: rgba(100,80,180,0.2);
-      --shadow: 0 8px 40px rgba(0,0,0,0.5);
-      --ac: #9b6dff; --ac2: #7ecff7;
-      --txt: #e8e8f8; --muted: #9090b0; --faint: #606080;
-    }
+
+    html { scroll-behavior: smooth; }
 
     body {
-      min-height:100vh; background:var(--grad); background-attachment:fixed;
-      font-family:'Inter','Noto Serif JP',sans-serif; color:var(--txt);
-      padding:0 0 80px; transition:background 1s,color .5s;
+      min-height: 100vh;
+      background: var(--bg);
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+      color: var(--txt);
+      overflow-x: hidden;
     }
 
-    /* ── Night banner ── */
-    .night-banner{display:none;text-align:center;padding:8px;font-size:.8rem;color:var(--muted);letter-spacing:2px;background:rgba(0,0,0,.3)}
-    body.night .night-banner{display:block}
+    /* ── Breathing orb ── */
+    .orb {
+      position: fixed;
+      top: -120px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 340px;
+      height: 340px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(245,158,11,0.18) 0%, rgba(245,158,11,0.06) 45%, transparent 70%);
+      filter: blur(40px);
+      animation: breathe 5s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+    @keyframes breathe {
+      0%, 100% { opacity: 0.6; transform: translateX(-50%) scale(1); }
+      50% { opacity: 1; transform: translateX(-50%) scale(1.12); }
+    }
 
-    /* ── Header ── */
-    header{text-align:center;padding:28px 16px 0}
-    header h1{font-size:2rem;font-weight:700;background:linear-gradient(90deg,var(--ac),var(--ac2),#43c6ac);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-    header p{margin-top:6px;color:var(--muted);font-size:.9rem}
+    /* ── Home screen ── */
+    #home {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      position: relative;
+      z-index: 1;
+    }
 
-    /* ── Tab nav ── */
-    .tab-nav{display:flex;gap:6px;justify-content:flex-start;padding:16px 16px 0;overflow-x:auto;scrollbar-width:none}
-    .tab-nav::-webkit-scrollbar{display:none}
-    .tab-btn{flex-shrink:0;padding:8px 18px;border-radius:50px;border:2px solid rgba(194,107,255,.25);background:var(--card);font-family:inherit;font-size:.85rem;font-weight:600;color:var(--faint);cursor:pointer;transition:all .2s;white-space:nowrap}
-    .tab-btn.active{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border-color:transparent;box-shadow:0 4px 16px rgba(194,107,255,.35)}
+    .home-header {
+      text-align: center;
+      padding: 64px 24px 0;
+    }
+    .home-title {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 2.8rem;
+      font-weight: 600;
+      color: var(--amber2);
+      letter-spacing: 0.15em;
+      line-height: 1.2;
+    }
+    .home-title small {
+      display: block;
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 300;
+      color: var(--muted);
+      letter-spacing: 0.3em;
+      margin-top: 8px;
+    }
+    .home-sub {
+      margin-top: 16px;
+      font-size: 0.82rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      line-height: 1.7;
+    }
 
-    .tab-panel{display:none}
-    .tab-panel.active{display:block}
-    .container{max-width:660px;margin:20px auto 0;padding:0 16px;display:flex;flex-direction:column;gap:18px}
-
-    /* ── Card ── */
-    .card{background:var(--card);border-radius:var(--r);padding:24px;box-shadow:var(--shadow);backdrop-filter:blur(12px);border:1px solid var(--card-b);transition:background .5s,border .5s}
-    .card h2{font-size:.78rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--faint);margin-bottom:14px}
-
-    /* ── Genre selector ── */
-    .genre-sel{display:flex;gap:10px}
-    .genre-btn{flex:1;padding:12px 6px;border-radius:16px;border:2px solid rgba(194,107,255,.2);background:rgba(255,255,255,.4);font-family:inherit;font-size:.82rem;font-weight:600;color:var(--muted);cursor:pointer;transition:all .2s;text-align:center;line-height:1.5}
-    body.night .genre-btn{background:rgba(255,255,255,.05)}
-    .genre-btn .gi{font-size:1.4rem;display:block;margin-bottom:2px}
-    .genre-btn.active{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border-color:transparent;box-shadow:0 4px 16px rgba(194,107,255,.4)}
-
-    /* ── Mode toggle ── */
-    .mode-toggle{display:flex;border-radius:50px;overflow:hidden;border:2px solid rgba(194,107,255,.25);background:rgba(255,255,255,.3)}
-    body.night .mode-toggle{background:rgba(255,255,255,.05)}
-    .mode-btn{flex:1;padding:9px 6px;border:none;background:transparent;font-family:inherit;font-size:.8rem;font-weight:600;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap}
-    .mode-btn.active{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff}
-
-    /* ── Emotions ── */
-    .emotions{display:flex;flex-wrap:wrap;gap:8px}
-    .emotion-btn{border:2px solid transparent;background:rgba(255,255,255,.8);border-radius:50px;padding:7px 16px;font-size:.85rem;cursor:pointer;transition:all .2s;font-family:inherit;color:var(--txt)}
-    body.night .emotion-btn{background:rgba(255,255,255,.07)}
-    .emotion-btn.active{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border-color:transparent}
-
-    /* ── Sliders ── */
-    .sliders{display:flex;flex-direction:column;gap:16px}
-    .slider-row label{display:flex;justify-content:space-between;font-size:.88rem;font-weight:600;color:var(--muted);margin-bottom:7px}
-    .slider-row label span{background:linear-gradient(135deg,var(--ac),var(--ac2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:700}
-    input[type=range]{-webkit-appearance:none;width:100%;height:6px;border-radius:3px;background:rgba(200,200,220,.4);outline:none;cursor:pointer}
-    input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,var(--ac),var(--ac2));box-shadow:0 2px 8px rgba(194,107,255,.4);cursor:pointer}
-
-    /* ── Textarea + mic ── */
-    .ta-wrap{position:relative}
-    textarea{width:100%;border:2px solid rgba(194,107,255,.2);border-radius:14px;padding:12px 50px 12px 16px;font-size:.92rem;font-family:inherit;resize:none;outline:none;background:rgba(255,255,255,.8);transition:border .2s,background .5s;color:var(--txt)}
-    body.night textarea{background:rgba(255,255,255,.06);border-color:rgba(155,109,255,.2)}
-    textarea::placeholder{color:var(--faint)}
-    textarea:focus{border-color:rgba(194,107,255,.6)}
-    .mic-btn{position:absolute;right:10px;top:50%;transform:translateY(-50%);width:34px;height:34px;border-radius:50%;border:none;background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(194,107,255,.35);transition:all .2s}
-    .mic-btn.recording{background:linear-gradient(135deg,#ff4757,#ff6b81);animation:pulse-mic 1s ease infinite}
-    @keyframes pulse-mic{0%,100%{box-shadow:0 0 0 0 rgba(255,71,87,.4)}50%{box-shadow:0 0 0 10px rgba(255,71,87,0)}}
-    .mic-status{font-size:.75rem;color:var(--ac);margin-top:5px;min-height:16px;font-weight:600}
-    .mic-status.rec{color:#ff4757}
-
-    /* ── Buttons ── */
-    .btn-primary{width:100%;padding:16px;border:none;border-radius:60px;background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;font-size:1rem;font-weight:700;cursor:pointer;box-shadow:0 6px 24px rgba(194,107,255,.4);transition:all .25s;font-family:inherit}
-    .btn-primary:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(194,107,255,.5)}
-    .btn-primary:active{transform:none}
-    .btn-primary:disabled{opacity:.6;cursor:not-allowed;transform:none}
-
-    /* ── Loading ── */
-    .loading{display:none;text-align:center;padding:36px}
-    .loading.show{display:block}
-    .spinner{width:44px;height:44px;border:4px solid rgba(194,107,255,.2);border-top-color:var(--ac);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 14px}
-    @keyframes spin{to{transform:rotate(360deg)}}
-    .loading p{color:var(--faint);font-size:.88rem}
-
-    /* ── Quote card ── */
-    .quote-card{display:none;flex-direction:column;gap:18px}
-    .quote-card.show{display:flex;animation:fadeUp .5s ease both}
-    .qc-header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
-    .lang-badge{display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,rgba(194,107,255,.12),rgba(255,126,95,.12));border:1px solid rgba(194,107,255,.3);border-radius:50px;padding:3px 12px;font-size:.75rem;font-weight:600;color:var(--ac)}
-    .src-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(255,200,50,.12);border:1px solid rgba(255,200,50,.3);border-radius:50px;padding:3px 10px;font-size:.73rem;font-weight:600;color:#cc9900}
-    body.night .src-badge{color:#ffd060;border-color:rgba(255,208,96,.3);background:rgba(255,208,96,.08)}
-    .orig-badge{display:inline-flex;align-items:center;gap:4px;background:linear-gradient(135deg,rgba(155,109,255,.15),rgba(255,126,95,.1));border:1px solid rgba(194,107,255,.4);border-radius:50px;padding:3px 10px;font-size:.73rem;font-weight:600;color:var(--ac)}
-    .fav-btn{background:none;border:none;font-size:1.5rem;cursor:pointer;transition:transform .2s;line-height:1}
-    .fav-btn:hover{transform:scale(1.25)}
-    .fav-btn.pop{animation:heart-pop .3s ease}
-    @keyframes heart-pop{0%{transform:scale(1)}50%{transform:scale(1.4)}100%{transform:scale(1)}}
-    .q-original{font-family:'Playfair Display','Noto Serif JP',serif;font-size:1.55rem;font-style:italic;font-weight:700;line-height:1.5;color:var(--txt);border-left:4px solid;border-image:linear-gradient(180deg,var(--ac),var(--ac2)) 1;padding-left:18px}
-    .q-trans{font-family:'Noto Serif JP',serif;font-size:1.05rem;font-weight:700;line-height:1.7;color:var(--muted);padding-left:18px}
-    .q-author{display:flex;align-items:center;gap:10px}
-    .q-avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--ac),var(--ac2));display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.1rem;font-weight:700;flex-shrink:0}
-    .q-name{font-weight:700;font-size:.92rem;color:var(--txt)}
-    .q-name-jp{font-size:.78rem;color:var(--faint);margin-top:1px}
-    .q-reason{background:linear-gradient(135deg,rgba(194,107,255,.08),rgba(255,126,95,.08));border-radius:16px;padding:16px 18px;font-size:.88rem;line-height:1.7;color:var(--muted);border:1px solid rgba(194,107,255,.15)}
-    body.night .q-reason{background:linear-gradient(135deg,rgba(155,109,255,.1),rgba(126,207,247,.06));border-color:rgba(155,109,255,.2)}
-    .q-reason::before{content:"💌 "}
-    body.night .q-reason::before{content:"🌙 "}
-    .q-actions{display:flex;flex-wrap:wrap;gap:8px}
-    .action-btn{flex:1;min-width:90px;padding:10px 8px;border-radius:50px;border:2px solid rgba(194,107,255,.3);background:var(--card);font-family:inherit;font-size:.82rem;font-weight:600;color:var(--ac);cursor:pointer;transition:all .2s;white-space:nowrap}
-    .action-btn:hover{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border-color:transparent;transform:translateY(-2px)}
-    .action-btn.copied{background:linear-gradient(135deg,#43c6ac,#2ecc71);color:#fff;border-color:transparent}
-    .share-wrap{position:relative;flex:1;min-width:90px}
-    .share-popup{display:none;position:absolute;bottom:calc(100% + 8px);left:0;background:#fff;border-radius:16px;box-shadow:0 8px 30px rgba(0,0,0,.15);padding:8px;gap:6px;flex-direction:column;min-width:180px;border:1px solid rgba(0,0,0,.06);z-index:10}
-    body.night .share-popup{background:#1a1a2e;border-color:rgba(155,109,255,.2)}
-    .share-popup.open{display:flex}
-    .share-item{display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:10px;cursor:pointer;font-size:.85rem;font-weight:600;color:var(--txt);border:none;background:none;font-family:inherit;width:100%;text-align:left;transition:background .15s}
-    .share-item:hover{background:rgba(194,107,255,.08)}
-    body.night .share-wrap{display:none}
-    .error-msg{display:none;background:rgba(255,87,87,.1);border:1px solid rgba(255,87,87,.3);border-radius:14px;padding:14px 18px;color:#e74c3c;font-size:.88rem;line-height:1.6}
-    .error-msg.show{display:block}
-
-    /* ── Prescription card ── */
-    .rx-card{background:#fdf5e6;border-radius:8px;padding:28px 24px 72px;box-shadow:0 6px 32px rgba(0,0,0,.14);border:1.5px solid rgba(0,0,0,.12);position:relative;font-family:'Noto Serif JP',serif;display:none;flex-direction:column;gap:16px;overflow:hidden}
-    body.night .rx-card{background:#1c1628;border-color:rgba(155,109,255,.25)}
-    .rx-card.show{display:flex;animation:fadeUp .5s ease both}
-    .rx-card::before{content:'';position:absolute;top:0;left:0;right:0;height:6px;background:linear-gradient(90deg,var(--ac),var(--ac2))}
-    .rx-header{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid rgba(0,0,0,.1);padding-bottom:14px}
-    body.night .rx-header{border-bottom-color:rgba(255,255,255,.08)}
-    .rx-rp{font-size:2rem;font-weight:900;color:#2c2c2c;letter-spacing:-2px;font-family:'Georgia',serif}
-    body.night .rx-rp{color:var(--txt)}
-    .rx-title{font-size:.82rem;font-weight:700;color:#666;margin-top:2px}
-    body.night .rx-title{color:var(--muted)}
-    .rx-date{font-size:.72rem;color:#999;margin-top:4px}
-    .rx-fav-btn{background:none;border:none;font-size:1.4rem;cursor:pointer;padding:4px}
-    .rx-symptom-wrap{background:rgba(0,0,0,.04);border-radius:10px;padding:12px 16px}
-    body.night .rx-symptom-wrap{background:rgba(255,255,255,.05)}
-    .rx-label{font-size:.68rem;font-weight:700;letter-spacing:2px;color:#999;text-transform:uppercase;margin-bottom:5px}
-    body.night .rx-label{color:var(--faint)}
-    .rx-symptom-text{font-size:.95rem;color:#333;font-weight:700}
-    body.night .rx-symptom-text{color:var(--txt)}
-    .rx-divider{border:none;border-top:1px dashed rgba(0,0,0,.15);margin:4px 0}
-    body.night .rx-divider{border-top-color:rgba(255,255,255,.1)}
-    .rx-quote-section{display:flex;flex-direction:column;gap:8px}
-    .rx-quote-text{font-family:'Playfair Display','Noto Serif JP',serif;font-size:1.35rem;font-style:italic;font-weight:700;color:#1a1a1a;line-height:1.6}
-    body.night .rx-quote-text{color:var(--txt)}
-    .rx-quote-author{font-size:.82rem;color:#888}
-    body.night .rx-quote-author{color:var(--muted)}
-    .rx-meta{display:grid;grid-template-columns:auto 1fr;gap:7px 14px;font-size:.84rem;margin-top:4px}
-    .rx-meta-key{font-weight:700;color:#888;white-space:nowrap}
-    body.night .rx-meta-key{color:var(--faint)}
-    .rx-meta-val{color:#444;line-height:1.4}
-    body.night .rx-meta-val{color:var(--muted)}
-    .rx-stamp{position:absolute;bottom:22px;right:22px;width:66px;height:66px;border:3px solid rgba(46,204,113,.55);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:800;color:rgba(46,204,113,.7);text-align:center;line-height:1.3;transform:rotate(-18deg);letter-spacing:.5px}
-
-    /* ── Weather card ── */
-    .wx-card{display:none;flex-direction:column;overflow:hidden;border-radius:var(--r);box-shadow:var(--shadow)}
-    .wx-card.show{display:flex;animation:fadeUp .5s ease both}
-    .wx-sky{padding:44px 24px 32px;display:flex;flex-direction:column;align-items:center;gap:12px;transition:background 1s}
-    .wx-icon-big{font-size:5.5rem;line-height:1;animation:wx-float 4s ease-in-out infinite}
-    @keyframes wx-float{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-10px) scale(1.04)}}
-    .wx-name{font-size:2rem;font-weight:700;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.25)}
-    .wx-desc{font-size:.92rem;color:rgba(255,255,255,.88);text-align:center;line-height:1.7;max-width:280px}
-    .wx-body{background:var(--card);padding:22px 24px;display:flex;flex-direction:column;gap:16px;border-top:1px solid var(--card-b);backdrop-filter:blur(12px)}
-    .wx-forecast{font-family:'Noto Serif JP',serif;font-size:.97rem;line-height:1.9;color:var(--txt)}
-    .wx-quote-wrap{background:linear-gradient(135deg,rgba(194,107,255,.08),rgba(255,126,95,.08));border-radius:14px;padding:16px 18px;border-left:3px solid var(--ac)}
-    .wx-quote-text{font-family:'Playfair Display','Noto Serif JP',serif;font-size:1.08rem;font-style:italic;font-weight:700;color:var(--txt);line-height:1.55}
-    .wx-quote-author{font-size:.8rem;color:var(--muted);margin-top:7px}
-
-    /* ── Future self tab ── */
-    .letter-card{background:var(--card);border-radius:var(--r);padding:28px 24px;box-shadow:var(--shadow);backdrop-filter:blur(12px);border:1px solid var(--card-b);display:none;flex-direction:column;gap:18px}
-    .letter-card.show{display:flex;animation:fadeUp .5s ease both}
-    .letter-from{font-size:.78rem;color:var(--faint);font-weight:600;letter-spacing:1px;text-transform:uppercase}
-    .letter-body{font-family:'Noto Serif JP',serif;font-size:1rem;line-height:2;color:var(--txt)}
-    .letter-hint{display:flex;align-items:center;gap:10px;background:linear-gradient(135deg,rgba(194,107,255,.1),rgba(255,126,95,.1));border-radius:14px;padding:14px 16px;border:1px solid rgba(194,107,255,.2)}
-    .letter-hint .hint-icon{font-size:1.3rem;flex-shrink:0}
-    .letter-hint p{font-size:.88rem;color:var(--muted);line-height:1.5}
-    .letter-quote{font-family:'Playfair Display','Noto Serif JP',serif;font-size:1.1rem;font-style:italic;font-weight:700;color:var(--ac);text-align:center;padding:12px 0}
-
-    /* ── Emotion translation tab ── */
-    .et-result{display:none;flex-direction:column;gap:16px}
-    .et-result.show{display:flex;animation:fadeUp .5s ease both}
-    .et-translation{font-family:'Noto Serif JP',serif;font-size:1.05rem;line-height:1.8;color:var(--txt);background:linear-gradient(135deg,rgba(194,107,255,.08),rgba(255,126,95,.08));border-radius:18px;padding:20px;border-left:4px solid var(--ac)}
-    .et-core{display:flex;align-items:center;gap:10px}
-    .et-core-label{font-size:.75rem;font-weight:600;color:var(--faint);letter-spacing:1px;text-transform:uppercase}
-    .et-core-val{background:linear-gradient(135deg,var(--ac),var(--ac2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:1.1rem;font-weight:700}
-    .et-gentle{font-size:.92rem;color:var(--muted);line-height:1.6;padding:12px 16px;background:rgba(255,255,255,.4);border-radius:14px}
-    body.night .et-gentle{background:rgba(255,255,255,.05)}
-
-    /* ── Widget tab ── */
-    .widget-section{display:flex;flex-direction:column;gap:14px}
-    .widget-status{display:flex;align-items:center;gap:10px;padding:14px 16px;border-radius:16px;background:rgba(255,255,255,.4);border:1px solid rgba(194,107,255,.2)}
-    body.night .widget-status{background:rgba(255,255,255,.05)}
-    .status-dot{width:10px;height:10px;border-radius:50%;background:#ccc;flex-shrink:0}
-    .status-dot.on{background:#2ecc71;box-shadow:0 0 8px rgba(46,213,113,.6)}
-    .status-text{font-size:.88rem;font-weight:600;color:var(--txt)}
-    .time-row{display:flex;align-items:center;gap:12px}
-    .time-row label{font-size:.88rem;font-weight:600;color:var(--muted);flex-shrink:0}
-    input[type=time]{flex:1;border:2px solid rgba(194,107,255,.25);border-radius:12px;padding:10px 14px;font-size:1rem;font-family:inherit;background:rgba(255,255,255,.8);color:var(--txt);outline:none;transition:border .2s}
-    body.night input[type=time]{background:rgba(255,255,255,.07);color:var(--txt)}
-    input[type=time]:focus{border-color:rgba(194,107,255,.6)}
-    .scriptable-box{background:#1e1e2e;border-radius:16px;padding:20px;overflow-x:auto}
-    .scriptable-box pre{font-size:.72rem;line-height:1.6;color:#cdd6f4;font-family:'Courier New',monospace;white-space:pre}
-    .step-list{display:flex;flex-direction:column;gap:10px}
-    .step{display:flex;align-items:flex-start;gap:12px}
-    .step-num{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;font-size:.78rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .step p{font-size:.88rem;color:var(--muted);line-height:1.5;padding-top:3px}
-    .step p strong{color:var(--txt)}
-    .divider{height:1px;background:rgba(194,107,255,.15);margin:4px 0}
-
-    /* ── Favorites ── */
-    .fav-empty{text-align:center;padding:60px 20px;color:var(--faint);font-size:.95rem}
-    .fav-empty .icon{font-size:2.8rem;margin-bottom:10px}
-    .fav-item{background:var(--card);border-radius:var(--r);padding:22px;box-shadow:var(--shadow);backdrop-filter:blur(12px);border:1px solid var(--card-b);display:flex;flex-direction:column;gap:10px;animation:fadeUp .4s ease both}
-    .fi-header{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
-    .fi-text{font-family:'Playfair Display','Noto Serif JP',serif;font-size:1.05rem;font-style:italic;font-weight:700;color:var(--txt);line-height:1.5;flex:1}
-    .fi-rm{background:none;border:none;font-size:1.1rem;cursor:pointer;color:var(--faint);transition:color .2s;flex-shrink:0}
-    .fi-rm:hover{color:#ff4757}
-    .fi-trans{font-family:'Noto Serif JP',serif;font-size:.9rem;font-weight:700;color:var(--muted)}
-    .fi-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-    .fi-author{font-size:.8rem;color:var(--faint);font-weight:600}
-    .fi-date{font-size:.72rem;color:var(--faint);opacity:.6}
-    .fi-actions{display:flex;gap:7px;flex-wrap:wrap}
-    .fi-btn{padding:6px 14px;border-radius:50px;border:1.5px solid rgba(194,107,255,.3);background:var(--card);font-family:inherit;font-size:.78rem;font-weight:600;color:var(--ac);cursor:pointer;transition:all .2s}
-    .fi-btn:hover{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border-color:transparent}
-
-    /* ── Animations ── */
-    @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-
-    /* ── Night stars ── */
-    .stars{display:none;pointer-events:none}
-    body.night .stars{display:block;position:fixed;top:0;left:0;right:0;bottom:0;z-index:0;overflow:hidden}
-    body.night .container,.tab-nav,header{position:relative;z-index:1}
-    .star{position:absolute;border-radius:50%;background:#fff;animation:twinkle var(--dur) ease-in-out infinite}
-    @keyframes twinkle{0%,100%{opacity:var(--mn)}50%{opacity:var(--mx)}}
-
-    /* ── Diary card ── */
-    .diary-card{display:none;flex-direction:column;gap:0;border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow)}
-    .diary-card.show{display:flex;animation:fadeUp .5s ease both}
-    .diary-paper{background:#fdf6e3;padding:32px 26px 28px;font-family:'Noto Serif JP',serif;position:relative;border-left:4px solid #c9a84c}
-    body.night .diary-paper{background:#1e1a10;border-left-color:#7a6428}
-    .diary-paper::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:repeating-linear-gradient(transparent,transparent 31px,rgba(0,0,0,.06) 31px,rgba(0,0,0,.06) 32px);pointer-events:none}
-    body.night .diary-paper::before{background:repeating-linear-gradient(transparent,transparent 31px,rgba(255,255,255,.04) 31px,rgba(255,255,255,.04) 32px)}
-    .diary-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;position:relative;z-index:1}
-    .diary-date{font-size:1.05rem;font-weight:700;color:#7a6428;letter-spacing:.5px}
-    body.night .diary-date{color:#c9a84c}
-    .diary-meta{text-align:right;font-size:.78rem;color:#a0926a;line-height:1.6}
-    body.night .diary-meta{color:#8a7840}
-    .diary-entry{font-size:.97rem;line-height:2.1;color:#3a2c10;position:relative;z-index:1;white-space:pre-wrap}
-    body.night .diary-entry{color:#d4c89a}
-    .diary-footer{background:#f5ead0;padding:16px 26px;display:flex;flex-direction:column;gap:12px;border-top:1px solid rgba(0,0,0,.08)}
-    body.night .diary-footer{background:#161209;border-top-color:rgba(255,255,255,.06)}
-    .diary-closing{font-family:'Noto Serif JP',serif;font-size:.88rem;font-style:italic;color:#8a7040;text-align:right}
-    body.night .diary-closing{color:#8a7840}
-
-    /* ── Cinema / Narration card ── */
-    .cinema-card{display:none;flex-direction:column;gap:0;border-radius:var(--r);overflow:hidden;box-shadow:0 12px 60px rgba(0,0,0,.5)}
-    .cinema-card.show{display:flex;animation:fadeUp .5s ease both}
-    .cinema-top{background:#0a0a0a;padding:40px 28px 28px;color:#fff}
-    .cinema-chapter{font-size:.72rem;font-weight:700;letter-spacing:3px;color:#666;text-transform:uppercase;margin-bottom:14px}
-    .cinema-narration{font-family:'Noto Serif JP',serif;font-size:1.05rem;line-height:2;color:#e0e0e0;white-space:pre-wrap}
-    .cinema-bottom{background:#111;padding:20px 28px;display:flex;flex-direction:column;gap:12px;border-top:1px solid rgba(255,255,255,.06)}
-    .cinema-theme{font-size:.78rem;color:#666;letter-spacing:1px}
-    .cinema-theme span{color:#c26bff;font-weight:700}
-    .cinema-next{font-family:'Noto Serif JP',serif;font-size:.88rem;color:#555;border-left:2px solid #333;padding-left:14px;font-style:italic}
-
-    /* ── Unsent Letter card ── */
-    .unsent-card{display:none;flex-direction:column;gap:0;border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow)}
-    .unsent-card.show{display:flex;animation:fadeUp .5s ease both}
-    .unsent-paper{background:#fffef5;padding:36px 28px;font-family:'Noto Serif JP',serif}
-    body.night .unsent-paper{background:#1a1812}
-    .unsent-to{font-size:.8rem;font-weight:700;color:#a08060;letter-spacing:1px;margin-bottom:20px;border-bottom:1px solid rgba(0,0,0,.1);padding-bottom:12px}
-    body.night .unsent-to{color:#7a6840;border-bottom-color:rgba(255,255,255,.08)}
-    .unsent-body{font-size:.97rem;line-height:2.1;color:#2c2010;white-space:pre-wrap}
-    body.night .unsent-body{color:#d4c8a0}
-    .unsent-ps{margin-top:20px;padding-top:14px;border-top:1px dashed rgba(0,0,0,.12);font-size:.85rem;color:#8a7050;font-style:italic}
-    body.night .unsent-ps{border-top-color:rgba(255,255,255,.08);color:#8a7840}
-    .unsent-from{background:#f8f3e8;padding:16px 28px;font-size:.82rem;text-align:right;color:#a08060;font-style:italic;border-top:1px solid rgba(0,0,0,.08)}
-    body.night .unsent-from{background:#141008;border-top-color:rgba(255,255,255,.06);color:#7a6840}
-
-    /* ── Lyrics card ── */
-    .lyrics-card{display:none;flex-direction:column;gap:0;border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow)}
-    .lyrics-card.show{display:flex;animation:fadeUp .5s ease both}
-    .album-cover{padding:44px 28px 28px;display:flex;flex-direction:column;gap:6px;min-height:180px;position:relative;overflow:hidden}
-    .album-cover::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(0,0,0,.7));pointer-events:none}
-    .album-title{font-family:'Playfair Display','Noto Serif JP',serif;font-size:1.7rem;font-weight:700;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.5);position:relative;z-index:1}
-    .album-artist{font-size:.85rem;color:rgba(255,255,255,.75);position:relative;z-index:1}
-    .album-genre{font-size:.75rem;color:rgba(255,255,255,.55);position:relative;z-index:1}
-    .lyrics-body{background:#111;padding:28px;display:flex;flex-direction:column;gap:14px}
-    .lyrics-text{font-family:'Noto Serif JP',serif;font-size:.97rem;line-height:2.1;color:#ccc;white-space:pre-wrap}
-    .lyrics-badge{display:inline-block;font-size:.72rem;padding:3px 10px;border-radius:50px;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.5);margin-right:6px}
-    .lyrics-concept{font-size:.8rem;color:#555;font-style:italic;padding-top:10px;border-top:1px solid rgba(255,255,255,.06)}
-
-    /* ── Temperature card ── */
-    .temp-card{display:none;flex-direction:column;gap:0;border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow)}
-    .temp-card.show{display:flex;animation:fadeUp .5s ease both}
-    .temp-top{background:var(--card);backdrop-filter:blur(12px);padding:32px 28px;border-bottom:1px solid var(--card-b)}
-    .temp-location{font-size:.7rem;font-weight:700;letter-spacing:3px;color:var(--faint);text-transform:uppercase;margin-bottom:6px}
-    .temp-main{font-size:4.5rem;font-weight:700;line-height:1;color:var(--txt)}
-    .temp-feels{font-size:.88rem;color:var(--muted);margin-top:4px}
-    .temp-condition{font-size:1rem;font-weight:600;color:var(--txt);margin-top:10px}
-    .temp-grid{background:var(--card);backdrop-filter:blur(12px);padding:18px 28px;display:grid;grid-template-columns:auto 1fr;gap:8px 20px;border-bottom:1px solid var(--card-b)}
-    .tg-key{font-size:.75rem;font-weight:700;color:var(--faint);white-space:nowrap}
-    .tg-val{font-size:.83rem;color:var(--muted)}
-    .temp-obs{background:linear-gradient(135deg,rgba(194,107,255,.08),rgba(255,126,95,.08));padding:20px 28px;font-family:'Noto Serif JP',serif;font-size:.92rem;line-height:1.9;color:var(--txt);border-bottom:1px solid var(--card-b)}
-    .temp-forecast{background:var(--card);backdrop-filter:blur(12px);padding:16px 28px;font-size:.88rem;color:var(--muted);border-left:3px solid var(--ac)}
-
-    /* ── Universe / Canvas card ── */
-    .universe-card{display:none;flex-direction:column;gap:0;border-radius:var(--r);overflow:hidden;box-shadow:0 12px 60px rgba(0,0,0,.5)}
-    .universe-card.show{display:flex;animation:fadeUp .5s ease both}
-    #star-canvas{width:100%;height:280px;display:block}
-    .universe-body{background:#0d0d1a;padding:24px 28px;display:flex;flex-direction:column;gap:14px}
-    .universe-constellation{font-size:1.15rem;font-weight:700;color:#c8a8ff;font-family:'Noto Serif JP',serif}
-    .universe-story{font-family:'Noto Serif JP',serif;font-size:.9rem;line-height:1.9;color:#9898b8}
-    .universe-message{padding:14px 18px;border-radius:14px;background:rgba(194,107,255,.1);border:1px solid rgba(194,107,255,.25);font-family:'Noto Serif JP',serif;font-size:.92rem;color:#c8a8ff;line-height:1.7}
-
-    /* ── Book card ── */
-    .book-empty{text-align:center;padding:50px 20px;color:var(--faint)}
-    .book-empty .icon{font-size:2.5rem;margin-bottom:10px}
-    .book-chapter{background:var(--card);border-radius:var(--r);padding:22px;box-shadow:var(--shadow);backdrop-filter:blur(12px);border:1px solid var(--card-b);display:flex;flex-direction:column;gap:8px;animation:fadeUp .4s ease both}
-    .bc-type{font-size:.68rem;font-weight:700;letter-spacing:2px;color:var(--faint);text-transform:uppercase}
-    .bc-title{font-family:'Noto Serif JP',serif;font-size:1rem;font-weight:700;color:var(--txt)}
-    .bc-emotion{font-size:.82rem;color:var(--muted);font-style:italic}
-    .bc-date{font-size:.72rem;color:var(--faint)}
-
-    /* ── Silence screen ── */
-    .silence-wrap{min-height:55vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;text-align:center;padding:40px 20px}
-    .silence-breath{font-family:'Noto Serif JP',serif;font-size:1.8rem;color:var(--ac);animation:breath-anim 5s ease-in-out infinite;line-height:1.5}
-    @keyframes breath-anim{0%,100%{opacity:.3;transform:scale(1)}50%{opacity:1;transform:scale(1.04)}}
-    .silence-sub{font-size:.88rem;color:var(--faint);line-height:1.8}
-    .silence-result{display:none;flex-direction:column;gap:16px;width:100%;text-align:left}
-    .silence-result.show{display:flex;animation:fadeUp .8s ease both}
-    .silence-message{font-family:'Noto Serif JP',serif;font-size:1rem;line-height:2;color:var(--txt);background:var(--card);backdrop-filter:blur(12px);border-radius:var(--r);padding:22px;border:1px solid var(--card-b);border-left:3px solid var(--ac)}
-    .silence-big{font-family:'Playfair Display','Noto Serif JP',serif;font-size:2.1rem;font-style:italic;color:var(--ac);text-align:center;padding:16px 0;line-height:1.4}
-    .silence-presence{font-size:.85rem;color:var(--muted);text-align:center;font-style:italic}
-
-    /* ── Hero ── */
-    #hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 24px;position:relative;z-index:1}
-    .hero-badge{font-size:4rem;margin-bottom:20px;animation:hero-float 3s ease-in-out infinite;display:block}
-    @keyframes hero-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
-    #hero h1{font-size:2.8rem;font-weight:700;background:linear-gradient(90deg,var(--ac),var(--ac2),#43c6ac);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:14px;line-height:1.2}
-    #hero p{font-size:1rem;color:var(--muted);margin-bottom:56px;line-height:1.7;max-width:300px}
-    .scroll-hint{display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--faint);font-size:.78rem;letter-spacing:2px;animation:scroll-bounce 2s ease infinite}
-    @keyframes scroll-bounce{0%,100%{transform:translateY(0);opacity:.6}50%{transform:translateY(10px);opacity:1}}
-
-    /* ── Home Grid ── */
-    #home-grid{padding:32px 16px 100px;max-width:660px;margin:0 auto}
-    .grid-title{font-size:.78rem;font-weight:700;letter-spacing:2.5px;color:var(--faint);text-transform:uppercase;text-align:center;margin-bottom:20px}
-    .tab-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-    .tg-btn{background:var(--card);border:1.5px solid var(--card-b);border-radius:20px;padding:20px 8px 18px;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;font-family:inherit;transition:all .2s;box-shadow:var(--shadow);backdrop-filter:blur(12px)}
-    .tg-btn:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(194,107,255,.2)}
-    .tg-btn:active{transform:scale(.93)}
-    .tg-emoji{font-size:2rem;line-height:1}
-    .tg-name{font-size:.75rem;font-weight:700;color:var(--txt);text-align:center;line-height:1.3}
-
-    /* ── Panel Section ── */
-    #panel-section{display:none;padding-bottom:80px}
-    .panel-header{display:flex;align-items:center;gap:14px;padding:20px 16px 0;max-width:660px;margin:0 auto}
-    .back-btn{background:var(--card);border:1.5px solid var(--card-b);border-radius:50px;padding:10px 20px;font-family:inherit;font-size:.85rem;font-weight:600;color:var(--txt);cursor:pointer;backdrop-filter:blur(12px);transition:all .2s;white-space:nowrap;flex-shrink:0}
-    .back-btn:active{transform:scale(.93)}
-    .panel-title-text{font-size:1.05rem;font-weight:700;color:var(--txt)}
-
-    /* ── Wizard ── */
-    .wizard-header{max-width:660px;margin:16px auto 0;padding:0 16px;display:flex;flex-direction:column;gap:8px}
-    .wizard-track{height:5px;background:rgba(194,107,255,.15);border-radius:3px;overflow:hidden}
-    .wizard-fill{height:100%;background:linear-gradient(90deg,var(--ac),var(--ac2));border-radius:3px;transition:width .45s ease;width:0%}
-    .wizard-meta{display:flex;justify-content:space-between;align-items:center;font-size:.75rem;color:var(--faint);font-weight:600}
-    .wizard-step{display:none}
-    .wizard-step.active{display:block;animation:fadeUp .35s ease both}
-    .wizard-nav{display:flex;gap:10px;padding:12px 16px 0;max-width:660px;margin:0 auto}
-    .btn-back-step{flex:0 0 auto;padding:14px 20px;border-radius:60px;border:2px solid rgba(194,107,255,.3);background:var(--card);font-family:inherit;font-size:.9rem;font-weight:600;color:var(--muted);cursor:pointer;transition:all .2s;backdrop-filter:blur(12px)}
-    .btn-next-step{flex:1;padding:16px;border:none;border-radius:60px;background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;font-size:1rem;font-weight:700;cursor:pointer;box-shadow:0 6px 24px rgba(194,107,255,.4);transition:all .25s;font-family:inherit}
-    .btn-next-step:hover{transform:translateY(-2px)}
-    .btn-next-step:active{transform:none}
+    /* ── Feature grid ── */
+    .feature-grid {
+      padding: 48px 20px 100px;
+      max-width: 520px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .grid-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.25em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      padding-left: 4px;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .feat-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px 10px 16px;
+      cursor: pointer;
+      text-align: center;
+      transition: background 0.3s, border-color 0.3s, transform 0.2s;
+      user-select: none;
+      position: relative;
+      overflow: hidden;
+    }
+    .feat-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 0%, rgba(245,158,11,0.1) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .feat-card:active { transform: scale(0.96); }
+    .feat-card:hover { border-color: rgba(245,158,11,0.3); }
+    .feat-card:hover::before { opacity: 1; }
+    .feat-icon { font-size: 1.5rem; margin-bottom: 8px; display: block; }
+    .feat-name {
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--txt2);
+      letter-spacing: 0.04em;
+      line-height: 1.4;
+    }
+    .feat-card.primary {
+      border-color: rgba(245,158,11,0.25);
+      background: linear-gradient(160deg, #1E293B 0%, #162032 100%);
+    }
+    .feat-card.primary .feat-name { color: var(--amber2); }
 
     /* ── Scroll reveal ── */
-    .sr{opacity:0;transform:translateY(32px);transition:opacity .6s cubic-bezier(.22,1,.36,1),transform .6s cubic-bezier(.22,1,.36,1)}
-    .sr.visible{opacity:1;transform:translateY(0)}
-    .sr-left{opacity:0;transform:translateX(-28px);transition:opacity .6s cubic-bezier(.22,1,.36,1),transform .6s cubic-bezier(.22,1,.36,1)}
-    .sr-left.visible{opacity:1;transform:translateX(0)}
-    .sr-scale{opacity:0;transform:scale(.88);transition:opacity .5s cubic-bezier(.22,1,.36,1),transform .5s cubic-bezier(.22,1,.36,1)}
-    .sr-scale.visible{opacity:1;transform:scale(1)}
-    /* hero items animate on load */
-    .hero-anim{opacity:0;transform:translateY(24px);animation:hero-enter .7s cubic-bezier(.22,1,.36,1) forwards}
-    @keyframes hero-enter{to{opacity:1;transform:translateY(0)}}
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ── Panel section ── */
+    #panel {
+      display: none;
+      min-height: 100vh;
+      position: relative;
+      z-index: 1;
+    }
+    .panel-header {
+      display: flex;
+      align-items: center;
+      padding: 56px 20px 24px;
+      gap: 12px;
+      max-width: 560px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .back-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--bg3);
+      color: var(--muted);
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .back-btn:hover { border-color: var(--amber); color: var(--amber); }
+    .panel-title {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--txt2);
+      letter-spacing: 0.08em;
+    }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+    .panel-body {
+      max-width: 560px;
+      margin: 0 auto;
+      padding: 0 20px 100px;
+    }
+
+    /* ── Cards in panels ── */
+    .tomo-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 24px;
+      margin-bottom: 14px;
+    }
+    .tomo-card-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.22em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    /* ── Wizard ── */
+    .wizard-step { display: none; }
+    .wizard-step.active { display: block; }
+
+    .wizard-progress {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 28px;
+      padding: 0 2px;
+    }
+    .wp-dot {
+      height: 2px;
+      flex: 1;
+      border-radius: 2px;
+      background: var(--faint);
+      transition: background 0.4s;
+    }
+    .wp-dot.done { background: var(--amber); }
+    .wp-dot.active { background: var(--amber2); }
+
+    /* ── Genre buttons ── */
+    .genre-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .genre-btn {
+      flex: 1;
+      padding: 14px 8px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: var(--bg2);
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.25s;
+      text-align: center;
+      line-height: 1.6;
+    }
+    .genre-btn .gi { font-size: 1.3rem; display: block; margin-bottom: 4px; }
+    .genre-btn.active {
+      background: var(--amber-glow);
+      border-color: var(--amber);
+      color: var(--amber2);
+    }
+
+    /* ── Mode toggle ── */
+    .mode-row {
+      display: flex;
+      border-radius: 50px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--bg2);
+      margin-bottom: 0;
+    }
+    .mode-btn {
+      flex: 1;
+      padding: 10px 6px;
+      border: none;
+      background: transparent;
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+      font-size: 0.76rem;
+      font-weight: 500;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.25s;
+      white-space: nowrap;
+    }
+    .mode-btn.active {
+      background: var(--amber-glow);
+      color: var(--amber2);
+    }
+
+    /* ── Emotions ── */
+    .emotions-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+    .emo-btn {
+      border: 1px solid var(--border);
+      background: var(--bg2);
+      border-radius: 50px;
+      padding: 7px 16px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+      color: var(--txt2);
+    }
+    .emo-btn.active {
+      background: var(--amber-glow);
+      border-color: var(--amber);
+      color: var(--amber2);
+    }
+
+    /* ── Sliders ── */
+    .slider-block {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .slider-row label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--txt2);
+      margin-bottom: 8px;
+    }
+    .slider-row label span {
+      color: var(--amber);
+      font-weight: 600;
+    }
+    input[type=range] {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 4px;
+      border-radius: 2px;
+      background: var(--faint);
+      outline: none;
+      cursor: pointer;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--amber);
+      box-shadow: 0 0 8px rgba(245,158,11,0.5);
+      cursor: pointer;
+    }
+
+    /* ── Textarea ── */
+    .ta-wrap { position: relative; }
+    textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 50px 14px 16px;
+      font-size: 0.9rem;
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+      resize: none;
+      outline: none;
+      background: var(--bg2);
+      color: var(--txt);
+      transition: border-color 0.25s;
+      line-height: 1.7;
+    }
+    textarea::placeholder { color: var(--muted); }
+    textarea:focus { border-color: rgba(245,158,11,0.4); }
+    .mic-btn {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: none;
+      background: var(--amber-glow);
+      color: var(--amber);
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .mic-btn.recording { background: rgba(239,68,68,0.2); color: #EF4444; animation: pulse-mic 1s infinite; }
+    @keyframes pulse-mic { 0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,.3)}50%{box-shadow:0 0 0 8px rgba(239,68,68,0)} }
+    .mic-status { font-size: 0.72rem; color: var(--amber); margin-top: 6px; min-height: 16px; }
+    .mic-status.rec { color: #EF4444; }
+
+    /* ── Buttons ── */
+    .btn-primary {
+      width: 100%;
+      padding: 15px;
+      border-radius: 14px;
+      border: none;
+      background: linear-gradient(135deg, #F59E0B 0%, #FBBF24 100%);
+      color: #0F172A;
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.06em;
+      transition: opacity 0.2s, transform 0.15s;
+      box-shadow: 0 4px 20px rgba(245,158,11,0.3);
+    }
+    .btn-primary:hover { opacity: 0.9; }
+    .btn-primary:active { transform: scale(0.98); }
+    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-ghost {
+      width: 100%;
+      padding: 13px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-ghost:hover { border-color: var(--amber); color: var(--amber); }
+    .btn-row { display: flex; gap: 10px; margin-top: 14px; }
+    .btn-row .btn-ghost { flex: 1; }
+    .btn-row .btn-primary { flex: 2; }
+
+    /* ── Loading state ── */
+    .loading-state {
+      display: none;
+      text-align: center;
+      padding: 48px 24px;
+    }
+    .loading-state.visible { display: block; }
+    .loading-flame {
+      font-size: 2rem;
+      animation: flame-flicker 2s ease-in-out infinite;
+      margin-bottom: 16px;
+    }
+    @keyframes flame-flicker {
+      0%,100%{opacity:0.7;transform:scale(1) rotate(-2deg)}
+      33%{opacity:1;transform:scale(1.08) rotate(1deg)}
+      66%{opacity:0.85;transform:scale(1.04) rotate(-1deg)}
+    }
+    .loading-text {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 0.88rem;
+      color: var(--muted);
+      letter-spacing: 0.12em;
+      line-height: 2;
+    }
+
+    /* ── Quote scroll feed ── */
+    #quotes-feed {
+      display: none;
+    }
+    #quotes-feed.visible { display: block; }
+    .quote-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 36px 28px 28px;
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.9s ease, transform 0.9s ease;
+    }
+    .quote-card.in { opacity: 1; transform: none; }
+    .quote-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(245,158,11,0.3), transparent);
+    }
+    .quote-card-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      color: var(--amber);
+      text-transform: uppercase;
+      background: var(--amber-glow2);
+      border: 1px solid rgba(245,158,11,0.15);
+      border-radius: 50px;
+      padding: 4px 12px;
+      margin-bottom: 20px;
+    }
+    .quote-original {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1.15rem;
+      font-weight: 500;
+      color: var(--txt);
+      line-height: 1.85;
+      letter-spacing: 0.04em;
+      margin-bottom: 16px;
+    }
+    .quote-translation {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 0.88rem;
+      color: var(--txt2);
+      line-height: 1.85;
+      letter-spacing: 0.03em;
+      margin-bottom: 20px;
+      padding-left: 14px;
+      border-left: 2px solid rgba(245,158,11,0.25);
+    }
+    .quote-author-line {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+    .quote-author-dot {
+      width: 20px;
+      height: 1px;
+      background: rgba(245,158,11,0.4);
+    }
+    .quote-author-name {
+      font-size: 0.78rem;
+      color: var(--amber2);
+      letter-spacing: 0.08em;
+    }
+    .quote-reason {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.8;
+      letter-spacing: 0.03em;
+    }
+
+    /* Prescription card */
+    .rx-card {
+      margin-top: 14px;
+      background: linear-gradient(160deg, rgba(245,158,11,0.07) 0%, var(--bg2) 100%);
+      border: 1px solid rgba(245,158,11,0.2);
+      border-radius: 16px;
+      padding: 18px;
+    }
+    .rx-title {
+      font-size: 0.62rem;
+      letter-spacing: 0.25em;
+      color: var(--amber);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .rx-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+      font-size: 0.8rem;
+    }
+    .rx-label { color: var(--muted); flex-shrink: 0; width: 44px; }
+    .rx-val { color: var(--txt2); }
+
+    /* ── Another button ── */
+    .another-btn {
+      width: 100%;
+      padding: 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(245,158,11,0.25);
+      background: var(--amber-glow2);
+      color: var(--amber2);
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      letter-spacing: 0.08em;
+      transition: all 0.2s;
+      margin-top: 8px;
+      margin-bottom: 30px;
+    }
+    .another-btn:hover { background: var(--amber-glow); border-color: var(--amber); }
+
+    /* ── Generic panel content ── */
+    .simple-input-area {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .result-block {
+      display: none;
+      margin-top: 16px;
+    }
+    .result-block.visible { display: block; }
+    .result-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px 24px;
+      margin-bottom: 12px;
+    }
+    .result-title {
+      font-size: 0.65rem;
+      letter-spacing: 0.22em;
+      color: var(--amber);
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .result-body {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 0.96rem;
+      color: var(--txt);
+      line-height: 1.9;
+      letter-spacing: 0.04em;
+    }
+    .result-sub {
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.8;
+      margin-top: 12px;
+    }
+
+    /* ── Silence panel ── */
+    .silence-choices { display: flex; flex-direction: column; gap: 10px; }
+    .silence-choice {
+      padding: 18px 20px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: var(--bg2);
+      cursor: pointer;
+      font-size: 0.88rem;
+      color: var(--txt2);
+      letter-spacing: 0.04em;
+      transition: all 0.25s;
+      line-height: 1.6;
+    }
+    .silence-choice:hover { border-color: rgba(245,158,11,0.3); color: var(--amber2); }
+
+    /* ── Favorites ── */
+    .fav-list { display: flex; flex-direction: column; gap: 12px; }
+    .fav-item {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+    }
+    .fav-quote {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 0.92rem;
+      color: var(--txt);
+      line-height: 1.8;
+      margin-bottom: 10px;
+    }
+    .fav-meta {
+      font-size: 0.72rem;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .fav-del {
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+      padding: 4px;
+    }
+    .fav-del:hover { color: #EF4444; }
+    .fav-empty {
+      text-align: center;
+      padding: 48px 24px;
+      color: var(--muted);
+      font-size: 0.85rem;
+      line-height: 2;
+    }
+    .fav-empty .fav-icon { font-size: 2rem; margin-bottom: 12px; opacity: 0.4; }
+
+    /* ── Save to fav btn on quote cards ── */
+    .save-fav-btn {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .save-fav-btn:hover, .save-fav-btn.saved {
+      border-color: var(--amber);
+      color: var(--amber);
+      background: var(--amber-glow2);
+    }
+
+    /* ── Error state ── */
+    .error-msg {
+      display: none;
+      background: rgba(239,68,68,0.08);
+      border: 1px solid rgba(239,68,68,0.2);
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 0.82rem;
+      color: #FCA5A5;
+      line-height: 1.7;
+      margin-top: 12px;
+    }
+    .error-msg.visible { display: block; }
+
+    /* ── Book / lyric / temp / universe / diary panels ── */
+    .uni-stars {
+      position: relative;
+      width: 100%;
+      height: 200px;
+      background: var(--bg);
+      border-radius: 16px;
+      margin-bottom: 14px;
+      overflow: hidden;
+    }
+    .star-dot {
+      position: absolute;
+      border-radius: 50%;
+      animation: twinkle 3s ease-in-out infinite;
+    }
+    @keyframes twinkle { 0%,100%{opacity:.3}50%{opacity:1} }
+
+    /* ── Narrative card ── */
+    .narr-chapter {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      color: var(--amber);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .narr-text {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 0.96rem;
+      color: var(--txt);
+      line-height: 1.95;
+      letter-spacing: 0.04em;
+    }
+    .narr-next {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── Smooth fade for result reveals ── */
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(18px); }
+      to   { opacity:1; transform:none; }
+    }
+    .fade-in { animation: fadeUp 1s ease forwards; }
+
+    /* ── Divider ── */
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 20px 0;
+    }
+
+    /* ── Inline small quote in results ── */
+    .inline-quote {
+      margin-top: 16px;
+      padding: 16px;
+      border-left: 2px solid rgba(245,158,11,0.3);
+      background: var(--bg);
+      border-radius: 0 12px 12px 0;
+    }
+    .inline-quote p { font-family:'Shippori Mincho',serif; font-size:0.88rem; color:var(--txt2); line-height:1.8; }
+    .inline-quote small { font-size:0.72rem; color:var(--amber2); margin-top:6px; display:block; }
+
+    /* ── Temperature table ── */
+    .temp-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .temp-cell {
+      background: var(--bg);
+      border-radius: 12px;
+      padding: 12px 14px;
+    }
+    .temp-key { font-size:0.65rem; letter-spacing:0.15em; color:var(--muted); text-transform:uppercase; margin-bottom:4px; }
+    .temp-val { font-size:1rem; color:var(--amber2); font-weight:600; }
+
+    /* ── Lyrics card ── */
+    .lyrics-text {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 0.9rem;
+      color: var(--txt);
+      line-height: 2.1;
+      letter-spacing: 0.06em;
+      white-space: pre-line;
+    }
+    .lyrics-meta {
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── Weather gradient card ── */
+    .weather-bg {
+      border-radius: 18px;
+      padding: 28px 24px;
+      margin-bottom: 12px;
+    }
+    .weather-icon { font-size: 3rem; margin-bottom: 8px; }
+    .weather-name { font-family:'Shippori Mincho',serif; font-size:1.4rem; color:#fff; margin-bottom:6px; }
+    .weather-desc { font-size:0.82rem; color:rgba(255,255,255,0.7); line-height:1.7; }
+    .weather-forecast { margin-top:14px; font-size:0.78rem; color:rgba(255,255,255,0.6); line-height:1.7; }
+
+    /* ── Future self ── */
+    .future-letter {
+      font-family:'Shippori Mincho',serif;
+      font-size:0.92rem;
+      color:var(--txt);
+      line-height:2;
+      white-space:pre-line;
+    }
+    .future-from {
+      font-size:0.78rem;
+      color:var(--amber2);
+      text-align:right;
+      margin-top:16px;
+    }
+
+    /* ── Letter ── */
+    .letter-to {
+      font-size:0.72rem;
+      letter-spacing:0.2em;
+      color:var(--amber);
+      text-transform:uppercase;
+      margin-bottom:14px;
+    }
+    .letter-body {
+      font-family:'Shippori Mincho',serif;
+      font-size:0.92rem;
+      color:var(--txt);
+      line-height:2;
+    }
+    .letter-ps {
+      margin-top:16px;
+      padding-top:14px;
+      border-top:1px dashed var(--border);
+      font-size:0.8rem;
+      color:var(--muted);
+      line-height:1.8;
+    }
+    .letter-from {
+      font-size:0.78rem;
+      color:var(--amber2);
+      text-align:right;
+      margin-top:12px;
+    }
+
+    /* ── Emotion translate ── */
+    .emo-core-badge {
+      display:inline-block;
+      background:var(--amber-glow);
+      border:1px solid rgba(245,158,11,0.3);
+      color:var(--amber2);
+      border-radius:50px;
+      padding:4px 14px;
+      font-size:0.75rem;
+      margin-bottom:14px;
+    }
+    .emo-translation {
+      font-family:'Shippori Mincho',serif;
+      font-size:0.92rem;
+      color:var(--txt);
+      line-height:1.95;
+    }
+    .emo-gentle {
+      font-size:0.82rem;
+      color:var(--txt2);
+      line-height:1.8;
+      margin-top:14px;
+      padding:14px;
+      background:var(--bg);
+      border-radius:12px;
+    }
   </style>
 </head>
 <body>
-<div class="stars" id="stars"></div>
-<div class="night-banner">🌙 深夜モード — ゆっくりしていってね</div>
+  <div class="orb"></div>
 
-<!-- ══════════ HERO ══════════ -->
-<section id="hero">
-  <span class="hero-badge hero-anim" style="animation-delay:.1s">✨</span>
-  <h1 id="app-title" class="hero-anim" style="animation-delay:.25s">今日の名言</h1>
-  <p id="app-sub" class="hero-anim" style="animation-delay:.4s">あなたの気分に寄り添う言葉を届けます</p>
-  <div class="scroll-hint hero-anim" style="animation-delay:.6s">
-    <span>スクロール</span>
-    <span>↓</span>
-  </div>
-</section>
-
-<!-- ══════════ HOME GRID ══════════ -->
-<section id="home-grid">
-  <p class="grid-title sr">どれを試しますか？</p>
-  <div class="tab-grid">
-    <button class="tg-btn sr" style="transition-delay:.05s" onclick="openTab('quote')"><span class="tg-emoji">🔍</span><span class="tg-name">名言を探す</span></button>
-    <button class="tg-btn sr" style="transition-delay:.1s" onclick="openTab('future')"><span class="tg-emoji">🔮</span><span class="tg-name">未来の自分</span></button>
-    <button class="tg-btn sr" style="transition-delay:.15s" onclick="openTab('emotion')"><span class="tg-emoji">💭</span><span class="tg-name">感情翻訳</span></button>
-    <button class="tg-btn sr" style="transition-delay:.2s" onclick="openTab('weather')"><span class="tg-emoji">🌤</span><span class="tg-name">天気予報</span></button>
-    <button class="tg-btn sr" style="transition-delay:.25s" onclick="openTab('diary')"><span class="tg-emoji">📔</span><span class="tg-name">日記</span></button>
-    <button class="tg-btn sr" style="transition-delay:.3s" onclick="openTab('narration')"><span class="tg-emoji">🎬</span><span class="tg-name">物語</span></button>
-    <button class="tg-btn sr" style="transition-delay:.35s" onclick="openTab('unsentletter')"><span class="tg-emoji">💌</span><span class="tg-name">手紙</span></button>
-    <button class="tg-btn sr" style="transition-delay:.4s" onclick="openTab('lyrics')"><span class="tg-emoji">🎵</span><span class="tg-name">歌詞</span></button>
-    <button class="tg-btn sr" style="transition-delay:.45s" onclick="openTab('temperature')"><span class="tg-emoji">🌡</span><span class="tg-name">温度</span></button>
-    <button class="tg-btn sr" style="transition-delay:.5s" onclick="openTab('universe')"><span class="tg-emoji">🌌</span><span class="tg-name">宇宙</span></button>
-    <button class="tg-btn sr" style="transition-delay:.55s" onclick="openTab('book')"><span class="tg-emoji">📚</span><span class="tg-name">本</span></button>
-    <button class="tg-btn sr" style="transition-delay:.6s" onclick="openTab('silence')"><span class="tg-emoji">🤫</span><span class="tg-name">沈黙</span></button>
-    <button class="tg-btn sr" style="transition-delay:.65s" id="fav-tab-btn" onclick="openTab('fav')"><span class="tg-emoji">❤️</span><span class="tg-name">お気に入り<span id="fav-count"></span></span></button>
-    <button class="tg-btn sr" style="transition-delay:.7s" onclick="openTab('widget')"><span class="tg-emoji">📱</span><span class="tg-name">ウィジェット</span></button>
-  </div>
-</section>
-
-<!-- ══════════ PANEL SECTION ══════════ -->
-<section id="panel-section">
-  <div class="panel-header">
-    <button class="back-btn" onclick="goHome()">← ホーム</button>
-    <span class="panel-title-text" id="panel-title"></span>
-  </div>
-
-<!-- ══════════ TAB: 名言を探す ══════════ -->
-<div id="tab-quote" class="tab-panel active">
-
-  <!-- Wizard progress bar -->
-  <div class="wizard-header" id="wizard-header">
-    <div class="wizard-track"><div class="wizard-fill" id="wizard-fill"></div></div>
-    <div class="wizard-meta">
-      <span id="wizard-step-name">ジャンル・モード</span>
-      <span id="wizard-step-num">1 / 3</span>
+  <!-- ══════════════════════════════════════ HOME ══════════════ -->
+  <div id="home">
+    <div class="home-header">
+      <div class="home-title">
+        灯
+        <small>TOMOSHIBI</small>
+      </div>
+      <p class="home-sub">静かに、あなたに寄り添う言葉</p>
     </div>
-  </div>
 
-  <!-- Step 1: ジャンル + 言葉のモード -->
-  <div class="wizard-step active" id="wstep-1">
-    <div class="container">
-      <div class="card">
-        <h2>今日のジャンル</h2>
-        <div class="genre-sel">
-          <button class="genre-btn" data-genre="great" onclick="setGenre('great',this)"><span class="gi">🏛️</span>世界の偉人</button>
-          <button class="genre-btn active" data-genre="mix" onclick="setGenre('mix',this)"><span class="gi">✨</span>ミックス</button>
-          <button class="genre-btn" data-genre="anime" onclick="setGenre('anime',this)"><span class="gi">🎌</span>アニメ</button>
+    <div class="feature-grid">
+      <div class="grid-label">何をお探しですか</div>
+
+      <div class="grid-3 reveal">
+        <div class="feat-card primary" onclick="openTab('quote')">
+          <span class="feat-icon">🕯️</span>
+          <span class="feat-name">言葉を<br>探す</span>
+        </div>
+        <div class="feat-card" onclick="openTab('future')">
+          <span class="feat-icon">✉️</span>
+          <span class="feat-name">未来の<br>自分へ</span>
+        </div>
+        <div class="feat-card" onclick="openTab('emotion')">
+          <span class="feat-icon">🌀</span>
+          <span class="feat-name">感情を<br>翻訳</span>
         </div>
       </div>
-      <div class="card">
-        <h2>言葉のモード</h2>
-        <div class="mode-toggle">
-          <button class="mode-btn active" onclick="setQuoteMode('normal',this)">📖 名言を探す</button>
-          <button class="mode-btn" onclick="setQuoteMode('rx',this)">🏥 処方箋</button>
-          <button class="mode-btn" onclick="setQuoteMode('original',this)">🔮 AI創作</button>
-        </div>
-      </div>
-    </div>
-    <div class="wizard-nav">
-      <button class="btn-next-step" onclick="wizardNext()">次へ →</button>
-    </div>
-  </div>
 
-  <!-- Step 2: 感情タグ + スライダー -->
-  <div class="wizard-step" id="wstep-2">
-    <div class="container">
-      <div class="card">
-        <h2>今日の感情タグ</h2>
-        <div class="emotions" id="emotions">
-          <button class="emotion-btn" data-val="嬉しい">😊 嬉しい</button>
-          <button class="emotion-btn" data-val="落ち込んでいる">😔 落ち込んでいる</button>
-          <button class="emotion-btn" data-val="疲れた">😩 疲れた</button>
-          <button class="emotion-btn" data-val="燃えている">🔥 燃えている</button>
-          <button class="emotion-btn" data-val="迷っている">🤔 迷っている</button>
-          <button class="emotion-btn" data-val="不安">😰 不安</button>
-          <button class="emotion-btn" data-val="穏やか">🌿 穏やか</button>
-          <button class="emotion-btn" data-val="感謝している">🙏 感謝している</button>
-          <button class="emotion-btn" data-val="愛に溢れている">💖 愛に溢れている</button>
-          <button class="emotion-btn" data-val="挑戦したい">💪 挑戦したい</button>
+      <div class="grid-3 reveal">
+        <div class="feat-card" onclick="openTab('weather')">
+          <span class="feat-icon">🌤</span>
+          <span class="feat-name">心の<br>天気</span>
         </div>
-        <p style="margin-top:10px;font-size:.75rem;color:var(--faint)">複数選択OK。なくてもスキップできます。</p>
+        <div class="feat-card" onclick="openTab('diary')">
+          <span class="feat-icon">📓</span>
+          <span class="feat-name">誰かの<br>日記</span>
+        </div>
+        <div class="feat-card" onclick="openTab('narration')">
+          <span class="feat-icon">🎬</span>
+          <span class="feat-name">人生<br>ナレーション</span>
+        </div>
       </div>
-      <div class="card">
-        <h2>今日の状態を数値で</h2>
-        <div class="sliders">
-          <div class="slider-row"><label>⚡ 元気度 <span id="ev">5</span></label><input type="range" id="energy" min="1" max="10" value="5" oninput="document.getElementById('ev').textContent=this.value"></div>
-          <div class="slider-row"><label>🌀 ストレス度 <span id="sv">5</span></label><input type="range" id="stress" min="1" max="10" value="5" oninput="document.getElementById('sv').textContent=this.value"></div>
-          <div class="slider-row"><label>🚀 やる気度 <span id="mv">5</span></label><input type="range" id="motivation" min="1" max="10" value="5" oninput="document.getElementById('mv').textContent=this.value"></div>
+
+      <div class="grid-3 reveal">
+        <div class="feat-card" onclick="openTab('letter')">
+          <span class="feat-icon">💌</span>
+          <span class="feat-name">言えなかった<br>言葉</span>
+        </div>
+        <div class="feat-card" onclick="openTab('lyrics')">
+          <span class="feat-icon">🎵</span>
+          <span class="feat-name">感情の<br>歌詞</span>
+        </div>
+        <div class="feat-card" onclick="openTab('temperature')">
+          <span class="feat-icon">🌡️</span>
+          <span class="feat-name">感情<br>気象</span>
+        </div>
+      </div>
+
+      <div class="grid-3 reveal">
+        <div class="feat-card" onclick="openTab('universe')">
+          <span class="feat-icon">🌌</span>
+          <span class="feat-name">感情の<br>星座</span>
+        </div>
+        <div class="feat-card" onclick="openTab('silence')">
+          <span class="feat-icon">🌙</span>
+          <span class="feat-name">何も<br>言えない</span>
+        </div>
+        <div class="feat-card" onclick="openTab('fav')">
+          <span class="feat-icon">🔖</span>
+          <span class="feat-name">保存した<br>言葉</span>
         </div>
       </div>
     </div>
-    <div class="wizard-nav">
-      <button class="btn-back-step" onclick="wizardPrev()">← 戻る</button>
-      <button class="btn-next-step" onclick="wizardNext()">次へ →</button>
-    </div>
   </div>
 
-  <!-- Step 3: 状況を一言で + Generate + Results -->
-  <div class="wizard-step" id="wstep-3">
-    <div class="container">
-      <div class="card">
-        <h2>今日の状況を一言で（任意）</h2>
-        <div class="ta-wrap">
-          <textarea id="mood-text" rows="3" placeholder="例：大事なプレゼンの前で緊張している…"></textarea>
-          <button class="mic-btn" id="mic-btn" onclick="toggleMic()" title="音声入力">🎤</button>
+  <!-- ══════════════════════════════════════ PANEL ══════════════ -->
+  <div id="panel">
+    <div class="panel-header">
+      <button class="back-btn" onclick="goHome()">←</button>
+      <span class="panel-title" id="panel-title"></span>
+    </div>
+
+    <div class="panel-body">
+
+      <!-- ── QUOTE WIZARD ── -->
+      <div class="tab-panel" id="tab-quote">
+        <div class="wizard-progress" id="wiz-progress">
+          <div class="wp-dot active" id="wp-1"></div>
+          <div class="wp-dot" id="wp-2"></div>
+          <div class="wp-dot" id="wp-3"></div>
         </div>
-        <div class="mic-status" id="mic-status"></div>
-      </div>
 
-      <button class="btn-primary" id="gen-btn" onclick="getQuote()">✨ 今日の名言を受け取る</button>
-
-      <div class="card loading" id="loading"><div class="spinner"></div><p id="load-txt">あなたの気分に最適な言葉を探しています…</p></div>
-      <div class="error-msg" id="error-msg"></div>
-
-      <!-- 通常名言カード -->
-      <div class="card quote-card" id="quote-card">
-        <div class="qc-header">
-          <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">
-            <span class="lang-badge" id="q-lang">英語</span>
-            <span class="src-badge" id="q-src" style="display:none"></span>
-          </div>
-          <div style="display:flex;align-items:center;gap:10px">
-            <span style="font-size:.75rem;color:var(--faint)" id="hist-note"></span>
-            <button class="fav-btn" id="fav-btn" onclick="toggleFav()">🤍</button>
-          </div>
-        </div>
-        <div class="q-original" id="q-original"></div>
-        <div class="q-trans" id="q-trans"></div>
-        <div class="q-author"><div class="q-avatar" id="q-av"></div><div><div class="q-name" id="q-author"></div><div class="q-name-jp" id="q-authJp"></div></div></div>
-        <div class="q-reason" id="q-reason"></div>
-        <div class="q-actions">
-          <button class="action-btn" id="copy-btn" onclick="copyQuote()">📋 コピー</button>
-          <button class="action-btn" onclick="getQuote()">🔄 別の名言</button>
-          <div class="share-wrap">
-            <button class="action-btn" onclick="toggleShare(event)">📤 シェア ▾</button>
-            <div class="share-popup" id="share-popup">
-              <button class="share-item" onclick="shareTwitter()"><span style="font-size:1rem;width:22px;text-align:center">𝕏</span> X でシェア</button>
-              <button class="share-item" onclick="shareLine()"><span style="color:#06c755;font-size:1rem;width:22px;text-align:center">💬</span> LINE でシェア</button>
-              <button class="share-item" onclick="shareIG()"><span style="font-size:1rem;width:22px;text-align:center">📸</span> Instagram 用コピー</button>
+        <!-- Step 1: Genre + Mode -->
+        <div class="wizard-step active" id="ws-1">
+          <div class="tomo-card">
+            <div class="tomo-card-label">ジャンル</div>
+            <div class="genre-row">
+              <button class="genre-btn active" data-genre="mix" onclick="setGenre('mix',this)">
+                <span class="gi">✨</span>おまかせ
+              </button>
+              <button class="genre-btn" data-genre="great" onclick="setGenre('great',this)">
+                <span class="gi">🌍</span>偉人
+              </button>
+              <button class="genre-btn" data-genre="anime" onclick="setGenre('anime',this)">
+                <span class="gi">⚔️</span>アニメ
+              </button>
             </div>
           </div>
-        </div>
-      </div>
-
-      <!-- 処方箋カード -->
-      <div class="rx-card" id="rx-card">
-        <div class="rx-header">
-          <div>
-            <div class="rx-rp">Rp.</div>
-            <div class="rx-title">本日の処方箋</div>
-            <div class="rx-date" id="rx-date"></div>
+          <div class="tomo-card">
+            <div class="tomo-card-label">言葉のモード</div>
+            <div class="mode-row">
+              <button class="mode-btn active" data-mode="normal" onclick="setMode('normal',this)">通常</button>
+              <button class="mode-btn" data-mode="night" onclick="setMode('night',this)">深夜モード</button>
+              <button class="mode-btn" data-mode="prescription" onclick="setMode('prescription',this)">処方箋</button>
+              <button class="mode-btn" data-mode="original" onclick="setMode('original',this)">AIオリジナル</button>
+            </div>
           </div>
-          <button class="rx-fav-btn" id="rx-fav-btn" onclick="toggleFavRx()">🤍</button>
+          <button class="btn-primary" style="margin-top:14px" onclick="wizardNext()">次へ →</button>
         </div>
-        <div class="rx-symptom-wrap">
-          <div class="rx-label">症　状</div>
-          <div class="rx-symptom-text" id="rx-symptom"></div>
-        </div>
-        <hr class="rx-divider" />
-        <div class="rx-quote-section">
-          <div class="rx-label">処　方</div>
-          <div class="rx-quote-text" id="rx-quote-text"></div>
-          <div class="rx-quote-author" id="rx-quote-author"></div>
-        </div>
-        <hr class="rx-divider" />
-        <div class="rx-meta">
-          <span class="rx-meta-key">用　法</span><span class="rx-meta-val" id="rx-usage"></span>
-          <span class="rx-meta-key">効　能</span><span class="rx-meta-val" id="rx-effect"></span>
-          <span class="rx-meta-key">注　意</span><span class="rx-meta-val" id="rx-caution"></span>
-        </div>
-        <div class="rx-stamp">処<br>方<br>済</div>
-        <div class="q-actions" style="margin-top:4px">
-          <button class="action-btn" onclick="copyRx()">📋 コピー</button>
-          <button class="action-btn" onclick="getQuote()">🔄 別の処方</button>
-        </div>
-      </div>
-    </div>
 
-    <div class="wizard-nav" style="margin-top:8px">
-      <button class="btn-back-step" onclick="wizardPrev()">← 戻る</button>
-    </div>
-  </div>
-
-</div>
-
-<!-- ══════════ TAB: 未来の自分 ══════════ -->
-<div id="tab-future" class="tab-panel">
-  <div class="container">
-    <div class="card">
-      <h2>あなたのこと</h2>
-      <div style="display:flex;flex-direction:column;gap:14px">
-        <div>
-          <label style="font-size:.82rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">📅 今の年齢（任意）</label>
-          <input id="f-age" type="number" min="1" max="120" placeholder="例: 22" style="width:120px;border:2px solid rgba(194,107,255,.2);border-radius:12px;padding:10px 14px;font-size:1rem;font-family:inherit;background:rgba(255,255,255,.8);color:var(--txt);outline:none" />
-        </div>
-        <div>
-          <label style="font-size:.82rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">😔 今の悩み・不安</label>
-          <div class="ta-wrap"><textarea id="f-worries" rows="3" placeholder="例：仕事がうまくいかない、将来が不安、人間関係で悩んでいる…"></textarea></div>
-        </div>
-        <div>
-          <label style="font-size:.82rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">🌟 目標・夢</label>
-          <div class="ta-wrap"><textarea id="f-goals" rows="3" placeholder="例：自分のビジネスを作りたい、もっと自分を好きになりたい…"></textarea></div>
-        </div>
-      </div>
-    </div>
-
-    <button class="btn-primary" id="future-btn" onclick="getFutureSelf()">🔮 3年後の自分からメッセージを受け取る</button>
-
-    <div class="card loading" id="future-loading"><div class="spinner"></div><p>3年後の自分からの言葉を受信中…</p></div>
-    <div class="error-msg" id="future-error"></div>
-
-    <div class="card letter-card" id="letter-card">
-      <div class="letter-from" id="letter-from">3年後のあなた より</div>
-      <div class="letter-body" id="letter-body"></div>
-      <div class="divider"></div>
-      <div class="letter-hint">
-        <div class="hint-icon">🌱</div>
-        <p id="letter-hint"></p>
-      </div>
-      <div class="letter-quote" id="letter-quote"></div>
-      <button class="action-btn" style="border-radius:50px" onclick="copyLetter()">📋 手紙をコピー</button>
-    </div>
-  </div>
-</div>
-
-<!-- ══════════ TAB: 感情翻訳 ══════════ -->
-<div id="tab-emotion" class="tab-panel">
-  <div class="container">
-    <div class="card">
-      <h2>今の気持ちをそのまま入力してください</h2>
-      <div class="ta-wrap">
-        <textarea id="et-input" rows="3" placeholder="例：もう無理　/　疲れた　/　死にたい　/　なんかしんどい…"></textarea>
-      </div>
-      <p style="margin-top:8px;font-size:.78rem;color:var(--faint)">どんな言葉でもOK。AIが本当の感情を翻訳します。</p>
-    </div>
-
-    <button class="btn-primary" id="et-btn" onclick="translateEmotion()">💭 気持ちを翻訳する</button>
-
-    <div class="card loading" id="et-loading"><div class="spinner"></div><p>気持ちの奥を読み解いています…</p></div>
-    <div class="error-msg" id="et-error"></div>
-
-    <div class="et-result" id="et-result">
-      <div class="card" style="display:flex;flex-direction:column;gap:14px">
-        <div class="et-core">
-          <span class="et-core-label">核心</span>
-          <span class="et-core-val" id="et-core"></span>
-        </div>
-        <div class="et-translation" id="et-trans"></div>
-        <div class="et-gentle" id="et-gentle"></div>
-      </div>
-      <div class="card quote-card show" style="animation:none" id="et-quote-card">
-        <div class="qc-header">
-          <span class="lang-badge" id="etq-lang">英語</span>
-          <button class="fav-btn" onclick="toggleFavEt()">🤍</button>
-        </div>
-        <div class="q-original" id="etq-original"></div>
-        <div class="q-trans" id="etq-trans"></div>
-        <div class="q-author"><div class="q-avatar" id="etq-av"></div><div><div class="q-name" id="etq-author"></div><div class="q-name-jp" id="etq-authJp"></div></div></div>
-        <div class="q-actions">
-          <button class="action-btn" onclick="copyEtQuote()">📋 コピー</button>
-          <button class="action-btn" onclick="saveFavEt()">❤️ 保存</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ══════════ TAB: 天気予報 ══════════ -->
-<div id="tab-weather" class="tab-panel">
-  <div class="container">
-    <div class="card">
-      <h2>今の気分を教えてください</h2>
-      <div class="ta-wrap">
-        <textarea id="wx-input" rows="2" placeholder="例：なんかどんよりする　/　テンション上がらない　/　ぼんやりしてる…"></textarea>
-      </div>
-      <p style="margin-top:8px;font-size:.78rem;color:var(--faint)">AIが今日の心の天気に変換します。</p>
-    </div>
-
-    <button class="btn-primary" id="wx-btn" onclick="getWeather()">🌤 今日の心の天気を見る</button>
-
-    <div class="card loading" id="wx-loading"><div class="spinner"></div><p>今日の心の天気を予測中…</p></div>
-    <div class="error-msg" id="wx-error"></div>
-
-    <div class="wx-card" id="wx-card">
-      <div class="wx-sky" id="wx-sky">
-        <div class="wx-icon-big" id="wx-icon">🌤</div>
-        <div class="wx-name" id="wx-name"></div>
-        <div class="wx-desc" id="wx-desc"></div>
-      </div>
-      <div class="wx-body">
-        <div class="wx-forecast" id="wx-forecast"></div>
-        <div class="wx-quote-wrap">
-          <div class="wx-quote-text" id="wx-quote-text"></div>
-          <div class="wx-quote-author" id="wx-quote-author"></div>
-        </div>
-        <div class="q-actions">
-          <button class="action-btn" onclick="copyWx()">📋 コピー</button>
-          <button class="action-btn" onclick="saveFavWx()">❤️ 保存</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ══════════ TAB: お気に入り ══════════ -->
-<div id="tab-fav" class="tab-panel">
-  <div class="container" id="fav-list"></div>
-</div>
-
-<!-- ══════════ TAB: ウィジェット ══════════ -->
-<div id="tab-widget" class="tab-panel">
-  <div class="container">
-
-    <div class="card">
-      <h2>📲 毎日プッシュ通知</h2>
-      <div class="widget-section">
-        <div class="widget-status">
-          <div class="status-dot" id="push-dot"></div>
-          <div class="status-text" id="push-status-txt">通知は未設定です</div>
-        </div>
-        <div class="time-row">
-          <label>⏰ 通知時刻</label>
-          <input type="time" id="push-time" value="08:00" />
-        </div>
-        <div class="card" style="padding:14px">
-          <h2 style="margin-bottom:10px">ジャンル</h2>
-          <div class="genre-sel" id="push-genre-sel">
-            <button class="genre-btn" data-genre="great" onclick="setPushGenre('great',this)"><span class="gi">🏛️</span>偉人</button>
-            <button class="genre-btn active" data-genre="mix" onclick="setPushGenre('mix',this)"><span class="gi">✨</span>ミックス</button>
-            <button class="genre-btn" data-genre="anime" onclick="setPushGenre('anime',this)"><span class="gi">🎌</span>アニメ</button>
+        <!-- Step 2: Emotions + Sliders -->
+        <div class="wizard-step" id="ws-2">
+          <div class="tomo-card">
+            <div class="tomo-card-label">今の感情タグ（複数可）</div>
+            <div class="emotions-wrap" id="emotions-wrap">
+              <!-- populated by JS -->
+            </div>
+          </div>
+          <div class="tomo-card">
+            <div class="tomo-card-label">今の状態</div>
+            <div class="slider-block">
+              <div class="slider-row">
+                <label>元気度 <span id="v-energy">5</span></label>
+                <input type="range" min="1" max="10" value="5" id="sl-energy" oninput="document.getElementById('v-energy').textContent=this.value" />
+              </div>
+              <div class="slider-row">
+                <label>ストレス度 <span id="v-stress">5</span></label>
+                <input type="range" min="1" max="10" value="5" id="sl-stress" oninput="document.getElementById('v-stress').textContent=this.value" />
+              </div>
+              <div class="slider-row">
+                <label>やる気度 <span id="v-motiv">5</span></label>
+                <input type="range" min="1" max="10" value="5" id="sl-motiv" oninput="document.getElementById('v-motiv').textContent=this.value" />
+              </div>
+            </div>
+          </div>
+          <div class="btn-row">
+            <button class="btn-ghost" onclick="wizardPrev()">← 戻る</button>
+            <button class="btn-primary" onclick="wizardNext()">次へ →</button>
           </div>
         </div>
-        <button class="btn-primary" id="push-btn" onclick="togglePush()">🔔 通知を有効にする</button>
-        <button class="action-btn" style="border-radius:50px;margin-top:-8px" id="test-push-btn" onclick="testPush()" disabled>🧪 テスト通知を送る</button>
-        <p style="font-size:.75rem;color:var(--faint);text-align:center;line-height:1.6">※ Chrome / Edge での使用を推奨。<br>iOSは「ホーム画面に追加」後に有効になります。</p>
-      </div>
-    </div>
 
-    <div class="card">
-      <h2>🍎 iOS ホーム画面ウィジェット（Scriptable）</h2>
-      <div class="widget-section">
-        <div class="step-list">
-          <div class="step"><div class="step-num">1</div><p><strong>「Scriptable」</strong>アプリを App Store からインストール</p></div>
-          <div class="step"><div class="step-num">2</div><p>下のコードをコピーして Scriptable に貼り付け</p></div>
-          <div class="step"><div class="step-num">3</div><p>コード1行目の <strong>SERVER_URL</strong> を自分のサーバーURLに変更<br><span style="font-size:.72rem;opacity:.7">（ローカルの場合は同じWi-Fi内のIPアドレス）</span></p></div>
-          <div class="step"><div class="step-num">4</div><p>ホーム画面でウィジェットを長押し → Scriptable を選択</p></div>
+        <!-- Step 3: Mood text + Generate -->
+        <div class="wizard-step" id="ws-3">
+          <div class="tomo-card">
+            <div class="tomo-card-label">今日の状況を一言で（任意）</div>
+            <div class="ta-wrap">
+              <textarea id="mood-text" rows="3" placeholder="例：仕事で失敗した、眠れない夜が続いている…"></textarea>
+              <button class="mic-btn" id="mic-btn" onclick="toggleMic()">🎤</button>
+            </div>
+            <div class="mic-status" id="mic-status"></div>
+          </div>
+
+          <div class="loading-state" id="quote-loading">
+            <div class="loading-flame">🕯️</div>
+            <div class="loading-text">あなたの言葉を、<br>静かに読んでいます…</div>
+          </div>
+          <div class="error-msg" id="quote-error"></div>
+
+          <div class="btn-row" id="ws3-btns">
+            <button class="btn-ghost" onclick="wizardPrev()">← 戻る</button>
+            <button class="btn-primary" onclick="generateQuote()">言葉を灯す</button>
+          </div>
         </div>
-        <button class="btn-primary" style="margin-top:4px" onclick="copyScriptable()">📋 Scriptableコードをコピー</button>
-        <div class="scriptable-box" id="scriptable-preview">
-          <pre id="scriptable-code"></pre>
-        </div>
-      </div>
-    </div>
 
-    <div class="card">
-      <h2>🤖 Android ホーム画面に追加</h2>
-      <div class="step-list">
-        <div class="step"><div class="step-num">1</div><p>Chrome でこのアプリを開く</p></div>
-        <div class="step"><div class="step-num">2</div><p>右上メニュー（⋮）→ <strong>「ホーム画面に追加」</strong></p></div>
-        <div class="step"><div class="step-num">3</div><p>ホーム画面にアイコンが追加され、アプリとして起動できます</p></div>
-      </div>
-      <button class="btn-primary" style="margin-top:14px" onclick="installPWA()">📲 ホーム画面に追加</button>
-    </div>
-
-  </div>
-</div>
-
-<!-- ══════════ TAB: 日記 ══════════ -->
-<div id="tab-diary" class="tab-panel">
-  <div class="container">
-    <div class="card">
-      <h2>今の気持ちを教えてください</h2>
-      <div class="ta-wrap">
-        <textarea id="diary-input" rows="3" placeholder="例：孤独　/ 誰もわかってくれない　/ ずっと疲れてる…"></textarea>
-      </div>
-      <p style="margin-top:8px;font-size:.78rem;color:var(--faint)">同じ気持ちだった誰かの日記が、どこかに残っています。</p>
-    </div>
-    <button class="btn-primary" id="diary-btn" onclick="getDiary()">📔 誰かの日記を開く</button>
-    <div class="card loading" id="diary-loading"><div class="spinner"></div><p>日記のページを探しています…</p></div>
-    <div class="error-msg" id="diary-error"></div>
-    <div class="diary-card" id="diary-card">
-      <div class="diary-paper">
-        <div class="diary-header">
-          <div class="diary-date" id="diary-date"></div>
-          <div class="diary-meta"><span id="diary-city"></span><br><span id="diary-weather"></span></div>
-        </div>
-        <div class="diary-entry" id="diary-entry"></div>
-      </div>
-      <div class="diary-footer">
-        <div class="diary-closing" id="diary-closing"></div>
-        <div class="q-actions">
-          <button class="action-btn" onclick="copyDiary()">📋 コピー</button>
-          <button class="action-btn" onclick="getDiary()">🔄 別のページ</button>
-          <button class="action-btn" onclick="saveDiaryToBook()">📚 本に追加</button>
+        <!-- Quotes feed -->
+        <div id="quotes-feed">
+          <button class="another-btn" onclick="generateQuote()">+ もう一つ、言葉を灯す</button>
+          <div id="quotes-list"></div>
         </div>
       </div>
-    </div>
-  </div>
-</div>
 
-<!-- ══════════ TAB: 物語 ══════════ -->
-<div id="tab-narration" class="tab-panel">
-  <div class="container">
-    <div class="card">
-      <h2>今日のあなたの話</h2>
-      <div style="display:flex;flex-direction:column;gap:12px">
-        <div>
-          <label style="font-size:.82rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">📌 今日あったこと（任意）</label>
-          <textarea id="nar-event" rows="2" placeholder="例：面接に落ちた、誰かに傷つけられた、何もできなかった…"></textarea>
+      <!-- ── FUTURE SELF ── -->
+      <div class="tab-panel" id="tab-future">
+        <div class="simple-input-area">
+          <div class="tomo-card">
+            <div class="tomo-card-label">あなたの年齢（任意）</div>
+            <input type="number" id="future-age" placeholder="例：24" min="10" max="99"
+              style="width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-family:inherit;font-size:0.9rem;color:var(--txt);outline:none;">
+          </div>
+          <div class="tomo-card">
+            <div class="tomo-card-label">今の悩み</div>
+            <textarea id="future-worries" rows="3" placeholder="例：進路が決まらない、人間関係が疲れる…"></textarea>
+          </div>
+          <div class="tomo-card">
+            <div class="tomo-card-label">目標・夢（任意）</div>
+            <textarea id="future-goals" rows="2" placeholder="例：好きなことで生きたい…"></textarea>
+          </div>
+          <div class="loading-state" id="future-loading">
+            <div class="loading-flame">✉️</div>
+            <div class="loading-text">3年後の自分が<br>言葉を選んでいます…</div>
+          </div>
+          <div class="error-msg" id="future-error"></div>
+          <button class="btn-primary" onclick="genFuture()">手紙を受け取る</button>
         </div>
-        <div>
-          <label style="font-size:.82rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">💭 今の感情（任意）</label>
-          <textarea id="nar-emotion" rows="2" placeholder="例：虚しい、もう無理、少しだけ前に進めた気がする…"></textarea>
-        </div>
-      </div>
-    </div>
-    <button class="btn-primary" id="nar-btn" onclick="getNarration()">🎬 あなたの物語を語る</button>
-    <div class="card loading" id="nar-loading"><div class="spinner"></div><p>あなたの章を書いています…</p></div>
-    <div class="error-msg" id="nar-error"></div>
-    <div class="cinema-card" id="cinema-card">
-      <div class="cinema-top">
-        <div class="cinema-chapter" id="cinema-chapter"></div>
-        <div class="cinema-narration" id="cinema-narration"></div>
-      </div>
-      <div class="cinema-bottom">
-        <div class="cinema-theme">テーマ：<span id="cinema-theme"></span></div>
-        <div class="cinema-next" id="cinema-next"></div>
-        <div class="q-actions" style="margin-top:4px">
-          <button class="action-btn" style="color:#ccc;border-color:rgba(255,255,255,.2)" onclick="copyNarration()">📋 コピー</button>
-          <button class="action-btn" style="color:#ccc;border-color:rgba(255,255,255,.2)" onclick="getNarration()">🔄 別の解釈</button>
-          <button class="action-btn" style="color:#ccc;border-color:rgba(255,255,255,.2)" onclick="saveNarToBook()">📚 本に追加</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ══════════ TAB: 手紙 ══════════ -->
-<div id="tab-unsentletter" class="tab-panel">
-  <div class="container">
-    <div class="card">
-      <h2>今の気持ちをそのまま</h2>
-      <div class="ta-wrap">
-        <textarea id="letter-input" rows="3" placeholder="例：報われない、ずっと我慢してた、誰かに気づいてほしかった…"></textarea>
-      </div>
-      <p style="margin-top:8px;font-size:.78rem;color:var(--faint)">あなたの感情の奥にある"言えなかった言葉"を見つけます。</p>
-    </div>
-    <button class="btn-primary" id="letter-btn" onclick="getUnsentLetter()">💌 届かなかった言葉を見つける</button>
-    <div class="card loading" id="letter-loading"><div class="spinner"></div><p>言えなかった言葉を探しています…</p></div>
-    <div class="error-msg" id="letter-error"></div>
-    <div class="unsent-card" id="unsent-card">
-      <div class="unsent-paper">
-        <div class="unsent-to" id="unsent-to"></div>
-        <div class="unsent-body" id="unsent-body"></div>
-        <div class="unsent-ps" id="unsent-ps"></div>
-      </div>
-      <div class="unsent-from" id="unsent-from">
-        <div class="q-actions" style="justify-content:flex-end;margin-bottom:10px">
-          <button class="action-btn" onclick="copyLetter2()">📋 コピー</button>
-          <button class="action-btn" onclick="getUnsentLetter()">🔄 別の言葉</button>
-          <button class="action-btn" onclick="saveLetterToBook()">📚 本に追加</button>
-        </div>
-        <span id="unsent-from-text"></span>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ══════════ TAB: 歌詞 ══════════ -->
-<div id="tab-lyrics" class="tab-panel">
-  <div class="container">
-    <div class="card">
-      <h2>この感情の歌を作る</h2>
-      <div class="ta-wrap">
-        <textarea id="lyrics-input" rows="3" placeholder="例：努力しても報われない / 誰かに会いたい / 全部どうでもよくなった…"></textarea>
-      </div>
-      <p style="margin-top:8px;font-size:.78rem;color:var(--faint)">聴いたことないのに、なぜか知っている歌が生まれます。</p>
-    </div>
-    <button class="btn-primary" id="lyrics-btn" onclick="getLyrics()">🎵 この感情の歌を作る</button>
-    <div class="card loading" id="lyrics-loading"><div class="spinner"></div><p>あなたの感情が曲になっています…</p></div>
-    <div class="error-msg" id="lyrics-error"></div>
-    <div class="lyrics-card" id="lyrics-card">
-      <div class="album-cover" id="album-cover">
-        <div class="album-title" id="album-title"></div>
-        <div class="album-artist" id="album-artist"></div>
-        <div class="album-genre" id="album-genre"></div>
-      </div>
-      <div class="lyrics-body">
-        <div style="margin-bottom:4px">
-          <span class="lyrics-badge" id="lyrics-tempo"></span>
-        </div>
-        <div class="lyrics-text" id="lyrics-text"></div>
-        <div class="lyrics-concept" id="lyrics-concept"></div>
-        <div class="q-actions" style="margin-top:8px">
-          <button class="action-btn" style="color:#ccc;border-color:rgba(255,255,255,.2)" onclick="copyLyrics()">📋 コピー</button>
-          <button class="action-btn" style="color:#ccc;border-color:rgba(255,255,255,.2)" onclick="getLyrics()">🔄 別の曲</button>
-          <button class="action-btn" style="color:#ccc;border-color:rgba(255,255,255,.2)" onclick="saveLyricsToBook()">📚 本に追加</button>
+        <div class="result-block" id="future-result">
+          <div class="result-card fade-in">
+            <div class="result-title" id="fr-from"></div>
+            <div class="future-letter" id="fr-message"></div>
+            <div class="future-from" id="fr-sign"></div>
+            <div class="divider"></div>
+            <div class="result-sub" id="fr-hint"></div>
+            <div class="inline-quote" id="fr-quote-wrap" style="display:none">
+              <p id="fr-quote-text"></p>
+              <small id="fr-quote-author"></small>
+            </div>
+          </div>
+          <button class="btn-ghost" style="margin-top:8px" onclick="resetPanel('future')">もう一度</button>
         </div>
       </div>
-    </div>
-  </div>
-</div>
 
-<!-- ══════════ TAB: 温度 ══════════ -->
-<div id="tab-temperature" class="tab-panel">
-  <div class="container">
-    <div class="card">
-      <h2>感情を計測する</h2>
-      <div class="ta-wrap">
-        <textarea id="temp-input" rows="3" placeholder="例：ずっとモヤモヤしてる / 心が冷えてる / 久しぶりに温かい気持ち…"></textarea>
-      </div>
-      <p style="margin-top:8px;font-size:.78rem;color:var(--faint)">今の心の"気温"を精密に計測します。</p>
-    </div>
-    <button class="btn-primary" id="temp-btn" onclick="getTemperature()">🌡 感情を計測する</button>
-    <div class="card loading" id="temp-loading"><div class="spinner"></div><p>感情を気象データに変換中…</p></div>
-    <div class="error-msg" id="temp-error"></div>
-    <div class="temp-card" id="temp-card">
-      <div class="temp-top">
-        <div class="temp-location">感情気象観測所</div>
-        <div class="temp-main" id="temp-main"></div>
-        <div class="temp-feels" id="temp-feels"></div>
-        <div class="temp-condition" id="temp-condition"></div>
-      </div>
-      <div class="temp-grid">
-        <span class="tg-key">💧 湿度</span><span class="tg-val" id="tg-humidity"></span>
-        <span class="tg-key">🌬 風</span><span class="tg-val" id="tg-wind"></span>
-        <span class="tg-key">👁 視界</span><span class="tg-val" id="tg-visibility"></span>
-        <span class="tg-key">📊 気圧</span><span class="tg-val" id="tg-pressure"></span>
-      </div>
-      <div class="temp-obs" id="temp-obs"></div>
-      <div class="temp-forecast" id="temp-forecast"></div>
-      <div style="padding:14px 28px;background:var(--card);backdrop-filter:blur(12px)">
-        <div class="q-actions">
-          <button class="action-btn" onclick="copyTemp()">📋 コピー</button>
-          <button class="action-btn" onclick="getTemperature()">🔄 再計測</button>
-          <button class="action-btn" onclick="saveTempToBook()">📚 本に追加</button>
+      <!-- ── EMOTION TRANSLATE ── -->
+      <div class="tab-panel" id="tab-emotion">
+        <div class="simple-input-area" id="emotion-input-area">
+          <div class="tomo-card">
+            <div class="tomo-card-label">今の気持ちを一言で</div>
+            <textarea id="emotion-text" rows="3" placeholder="例：なんとなくしんどい、やる気が出ない…"></textarea>
+          </div>
+          <div class="loading-state" id="emotion-loading">
+            <div class="loading-flame">🌀</div>
+            <div class="loading-text">感情の奥を<br>静かに読み解いています…</div>
+          </div>
+          <div class="error-msg" id="emotion-error"></div>
+          <button class="btn-primary" onclick="genEmotion()">感情を翻訳する</button>
+        </div>
+        <div class="result-block" id="emotion-result">
+          <div class="result-card fade-in">
+            <div class="result-title">感情の翻訳</div>
+            <div class="emo-core-badge" id="er-core"></div>
+            <div class="emo-translation" id="er-translation"></div>
+            <div class="emo-gentle" id="er-gentle"></div>
+            <div class="inline-quote" id="er-quote-wrap" style="display:none">
+              <p id="er-quote-text"></p>
+              <small id="er-quote-author"></small>
+            </div>
+          </div>
+          <button class="btn-ghost" style="margin-top:8px" onclick="resetPanel('emotion')">もう一度</button>
         </div>
       </div>
-    </div>
-  </div>
-</div>
 
-<!-- ══════════ TAB: 宇宙 ══════════ -->
-<div id="tab-universe" class="tab-panel">
-  <div class="container">
-    <div class="card">
-      <h2>感情を星に変える</h2>
-      <div class="ta-wrap">
-        <textarea id="universe-input" rows="3" placeholder="例：孤独だけど悪くない / 希望と不安が混ざってる / ゆっくり回復してる…"></textarea>
-      </div>
-      <p style="margin-top:8px;font-size:.78rem;color:var(--faint)">あなたの感情が、宇宙のどこかに刻まれます。</p>
-    </div>
-    <button class="btn-primary" id="universe-btn" onclick="getUniverse()">🌌 感情を星に変える</button>
-    <div class="card loading" id="universe-loading"><div class="spinner"></div><p>あなただけの星座を描いています…</p></div>
-    <div class="error-msg" id="universe-error"></div>
-    <div class="universe-card" id="universe-card">
-      <canvas id="star-canvas"></canvas>
-      <div class="universe-body">
-        <div class="universe-constellation" id="universe-constellation"></div>
-        <div class="universe-story" id="universe-story"></div>
-        <div class="universe-message" id="universe-message"></div>
-        <div class="q-actions" style="margin-top:4px">
-          <button class="action-btn" style="color:#c8a8ff;border-color:rgba(194,107,255,.3)" onclick="copyUniverse()">📋 コピー</button>
-          <button class="action-btn" style="color:#c8a8ff;border-color:rgba(194,107,255,.3)" onclick="getUniverse()">🔄 別の星座</button>
-          <button class="action-btn" style="color:#c8a8ff;border-color:rgba(194,107,255,.3)" onclick="saveUniverseToBook()">📚 本に追加</button>
+      <!-- ── WEATHER ── -->
+      <div class="tab-panel" id="tab-weather">
+        <div class="simple-input-area" id="weather-input-area">
+          <div class="tomo-card">
+            <div class="tomo-card-label">今の気持ちを一言で</div>
+            <textarea id="weather-text" rows="3" placeholder="例：なんだかモヤモヤする…"></textarea>
+          </div>
+          <div class="loading-state" id="weather-loading">
+            <div class="loading-flame">🌤</div>
+            <div class="loading-text">心の天気を<br>観測しています…</div>
+          </div>
+          <div class="error-msg" id="weather-error"></div>
+          <button class="btn-primary" onclick="genWeather()">天気を見る</button>
+        </div>
+        <div class="result-block" id="weather-result">
+          <div class="weather-bg fade-in" id="wr-bg">
+            <div class="weather-icon" id="wr-icon"></div>
+            <div class="weather-name" id="wr-name"></div>
+            <div class="weather-desc" id="wr-desc"></div>
+            <div class="weather-forecast" id="wr-forecast"></div>
+          </div>
+          <div class="inline-quote" id="wr-quote-wrap" style="display:none">
+            <p id="wr-quote-text"></p>
+            <small id="wr-quote-author"></small>
+          </div>
+          <button class="btn-ghost" style="margin-top:12px" onclick="resetPanel('weather')">もう一度</button>
         </div>
       </div>
-    </div>
-  </div>
-</div>
 
-<!-- ══════════ TAB: 本 ══════════ -->
-<div id="tab-book" class="tab-panel">
-  <div class="container" id="book-list"></div>
-</div>
-
-<!-- ══════════ TAB: 沈黙 ══════════ -->
-<div id="tab-silence" class="tab-panel">
-  <div class="container">
-    <div class="silence-wrap" id="silence-wrap">
-      <div class="silence-breath" id="silence-breath">ここにいていい</div>
-      <div class="silence-sub">言葉にしなくてもいい場所です<br>ただ、ここにいてください</div>
-      <div style="width:100%;max-width:360px">
-        <textarea id="silence-input" rows="3" placeholder="（気が向いたら、何かを…）" style="width:100%;opacity:.5;transition:opacity .3s" oninput="onSilenceType(event)" onfocus="this.style.opacity='.9'" onblur="this.style.opacity='.5'"></textarea>
-        <p class="silence-hint" id="silence-hint" style="font-size:.75rem;color:var(--faint);text-align:center;margin-top:8px;line-height:1.5"></p>
+      <!-- ── DIARY ── -->
+      <div class="tab-panel" id="tab-diary">
+        <div class="simple-input-area" id="diary-input-area">
+          <div class="tomo-card">
+            <div class="tomo-card-label">今の感情を一言で</div>
+            <textarea id="diary-text" rows="3" placeholder="例：誰にも言えない寂しさがある…"></textarea>
+          </div>
+          <div class="loading-state" id="diary-loading">
+            <div class="loading-flame">📓</div>
+            <div class="loading-text">書かれなかった日記を<br>探しています…</div>
+          </div>
+          <div class="error-msg" id="diary-error"></div>
+          <button class="btn-primary" onclick="genDiary()">日記を開く</button>
+        </div>
+        <div class="result-block" id="diary-result">
+          <div class="result-card fade-in">
+            <div class="result-title" id="dr-header"></div>
+            <div class="result-body" id="dr-entry"></div>
+            <div class="result-sub" style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border)" id="dr-closing"></div>
+          </div>
+          <button class="btn-ghost" style="margin-top:8px" onclick="resetPanel('diary')">別のページ</button>
+        </div>
       </div>
-      <div class="silence-result" id="silence-result">
-        <div class="silence-message" id="silence-message"></div>
-        <div class="silence-big" id="silence-big"></div>
-        <div class="silence-presence" id="silence-presence"></div>
+
+      <!-- ── NARRATION ── -->
+      <div class="tab-panel" id="tab-narration">
+        <div class="simple-input-area" id="narration-input-area">
+          <div class="tomo-card">
+            <div class="tomo-card-label">今日あったこと</div>
+            <textarea id="narr-event" rows="3" placeholder="例：朝から何もうまくいかなかった…"></textarea>
+          </div>
+          <div class="tomo-card">
+            <div class="tomo-card-label">今の感情（任意）</div>
+            <textarea id="narr-emotion" rows="2" placeholder="例：疲れ、少し投げやりな気持ち…"></textarea>
+          </div>
+          <div class="loading-state" id="narration-loading">
+            <div class="loading-flame">🎬</div>
+            <div class="loading-text">あなたの今日を<br>映画として語っています…</div>
+          </div>
+          <div class="error-msg" id="narration-error"></div>
+          <button class="btn-primary" onclick="genNarration()">ナレーションを聞く</button>
+        </div>
+        <div class="result-block" id="narration-result">
+          <div class="result-card fade-in">
+            <div class="narr-chapter" id="nr-chapter"></div>
+            <div class="narr-text" id="nr-narration"></div>
+            <div class="narr-next" id="nr-next"></div>
+          </div>
+          <div class="result-sub" style="text-align:right;padding-right:8px" id="nr-theme"></div>
+          <button class="btn-ghost" style="margin-top:12px" onclick="resetPanel('narration')">もう一度</button>
+        </div>
       </div>
-    </div>
-  </div>
-</div>
 
-</section>
+      <!-- ── LETTER ── -->
+      <div class="tab-panel" id="tab-letter">
+        <div class="simple-input-area" id="letter-input-area">
+          <div class="tomo-card">
+            <div class="tomo-card-label">今の感情を一言で</div>
+            <textarea id="letter-text" rows="3" placeholder="例：ずっと我慢してきた、伝えられなかったことがある…"></textarea>
+          </div>
+          <div class="loading-state" id="letter-loading">
+            <div class="loading-flame">💌</div>
+            <div class="loading-text">言えなかった言葉を<br>探しています…</div>
+          </div>
+          <div class="error-msg" id="letter-error"></div>
+          <button class="btn-primary" onclick="genLetter()">手紙を開く</button>
+        </div>
+        <div class="result-block" id="letter-result">
+          <div class="result-card fade-in">
+            <div class="letter-to" id="lr-to"></div>
+            <div class="letter-body" id="lr-body"></div>
+            <div class="letter-ps" id="lr-ps"></div>
+            <div class="letter-from" id="lr-from"></div>
+          </div>
+          <button class="btn-ghost" style="margin-top:8px" onclick="resetPanel('letter')">別の手紙</button>
+        </div>
+      </div>
 
-<script>
-// ══════════════════════════════════════════
-//  State
-// ══════════════════════════════════════════
-const selEmotions = new Set();
-let recentQuotes = JSON.parse(localStorage.getItem('rq') || '[]');
-let favs = JSON.parse(localStorage.getItem('favs') || '[]');
-let curQuote = null, curEtQuote = null, curWxQuote = null;
-let recognition = null, isRec = false;
-let currentGenre = 'mix', pushGenre = 'mix';
-let quoteMode = 'normal'; // 'normal' | 'rx' | 'original'
-let swReg = null, pushSub = null;
-let deferredInstall = null;
+      <!-- ── LYRICS ── -->
+      <div class="tab-panel" id="tab-lyrics">
+        <div class="simple-input-area" id="lyrics-input-area">
+          <div class="tomo-card">
+            <div class="tomo-card-label">今の感情を一言で</div>
+            <textarea id="lyrics-text" rows="3" placeholder="例：会えない人のことを考えてしまう…"></textarea>
+          </div>
+          <div class="loading-state" id="lyrics-loading">
+            <div class="loading-flame">🎵</div>
+            <div class="loading-text">感情から<br>歌を生み出しています…</div>
+          </div>
+          <div class="error-msg" id="lyrics-error"></div>
+          <button class="btn-primary" onclick="genLyrics()">曲を作る</button>
+        </div>
+        <div class="result-block" id="lyrics-result">
+          <div class="result-card fade-in">
+            <div class="result-title" id="lyr-genre"></div>
+            <div style="font-family:'Shippori Mincho',serif;font-size:1.3rem;color:var(--amber2);margin-bottom:6px" id="lyr-title"></div>
+            <div style="font-size:0.75rem;color:var(--muted);margin-bottom:20px" id="lyr-artist"></div>
+            <div class="lyrics-text" id="lyr-lyrics"></div>
+            <div class="lyrics-meta" id="lyr-concept"></div>
+          </div>
+          <button class="btn-ghost" style="margin-top:8px" onclick="resetPanel('lyrics')">別の曲</button>
+        </div>
+      </div>
 
-// ══════════════════════════════════════════
-//  Night mode
-// ══════════════════════════════════════════
-const h = new Date().getHours();
-const isNight = h >= 22 || h < 4;
-if (isNight) {
-  document.body.classList.add('night');
-  document.getElementById('app-title').textContent = '🌙 深夜の言葉';
-  document.getElementById('app-sub').textContent = 'ひとりの夜に、そっと寄り添う言葉を届けます';
-  const c = document.getElementById('stars');
-  for (let i = 0; i < 60; i++) {
-    const s = document.createElement('div'); s.className = 'star';
-    const sz = Math.random()*3+1, dur = (Math.random()*3+2).toFixed(1)+'s';
-    s.style.cssText = `width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--dur:${dur};--mn:${(Math.random()*.2+.05).toFixed(2)};--mx:${(Math.random()*.4+.3).toFixed(2)};animation-delay:${(Math.random()*3).toFixed(1)}s`;
-    c.appendChild(s);
-  }
-}
+      <!-- ── TEMPERATURE ── -->
+      <div class="tab-panel" id="tab-temperature">
+        <div class="simple-input-area" id="temperature-input-area">
+          <div class="tomo-card">
+            <div class="tomo-card-label">今の感情を一言で</div>
+            <textarea id="temp-text" rows="3" placeholder="例：なんとなく冷えている感じ…"></textarea>
+          </div>
+          <div class="loading-state" id="temperature-loading">
+            <div class="loading-flame">🌡️</div>
+            <div class="loading-text">感情を気象データに<br>変換しています…</div>
+          </div>
+          <div class="error-msg" id="temperature-error"></div>
+          <button class="btn-primary" onclick="genTemp()">観測する</button>
+        </div>
+        <div class="result-block" id="temperature-result">
+          <div class="result-card fade-in">
+            <div class="result-title">感情気象データ</div>
+            <div class="temp-grid">
+              <div class="temp-cell"><div class="temp-key">気温</div><div class="temp-val" id="tr-temp"></div></div>
+              <div class="temp-cell"><div class="temp-key">体感</div><div class="temp-val" id="tr-feels"></div></div>
+              <div class="temp-cell"><div class="temp-key">湿度</div><div class="temp-val" id="tr-humidity"></div></div>
+              <div class="temp-cell"><div class="temp-key">気圧</div><div class="temp-val" id="tr-pressure"></div></div>
+            </div>
+            <div class="result-sub" id="tr-condition"></div>
+            <div class="result-sub" id="tr-wind" style="margin-top:6px"></div>
+            <div class="divider"></div>
+            <div class="result-body" style="font-size:0.85rem" id="tr-obs"></div>
+            <div class="result-sub" style="margin-top:10px;color:var(--amber2)" id="tr-forecast"></div>
+          </div>
+          <button class="btn-ghost" style="margin-top:8px" onclick="resetPanel('temperature')">再観測</button>
+        </div>
+      </div>
 
-// ══════════════════════════════════════════
-//  Service Worker + Push
-// ══════════════════════════════════════════
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js').then(r => { swReg = r; checkPushStatus(); });
-}
+      <!-- ── UNIVERSE ── -->
+      <div class="tab-panel" id="tab-universe">
+        <div class="simple-input-area" id="universe-input-area">
+          <div class="tomo-card">
+            <div class="tomo-card-label">今の感情を一言で</div>
+            <textarea id="uni-text" rows="3" placeholder="例：浮いている感じ、どこか遠くにいる…"></textarea>
+          </div>
+          <div class="loading-state" id="universe-loading">
+            <div class="loading-flame">🌌</div>
+            <div class="loading-text">あなただけの<br>星座を描いています…</div>
+          </div>
+          <div class="error-msg" id="universe-error"></div>
+          <button class="btn-primary" onclick="genUniverse()">星座を見る</button>
+        </div>
+        <div class="result-block" id="universe-result">
+          <div class="result-card fade-in">
+            <div class="result-title">あなたの星座</div>
+            <div style="font-family:'Shippori Mincho',serif;font-size:1.2rem;color:var(--amber2);margin-bottom:14px" id="ur-name"></div>
+            <div class="uni-stars" id="ur-stars"></div>
+            <div class="result-body" style="font-size:0.88rem" id="ur-story"></div>
+            <div style="margin-top:14px;padding:14px;background:var(--bg);border-radius:12px;font-size:0.82rem;color:var(--txt2);line-height:1.8" id="ur-msg"></div>
+          </div>
+          <button class="btn-ghost" style="margin-top:8px" onclick="resetPanel('universe')">別の星座</button>
+        </div>
+      </div>
 
-async function checkPushStatus() {
-  if (!swReg || !('PushManager' in window)) return;
-  const sub = await swReg.pushManager.getSubscription();
-  pushSub = sub;
-  updatePushUI(!!sub);
-}
+      <!-- ── SILENCE ── -->
+      <div class="tab-panel" id="tab-silence">
+        <div style="margin-bottom:20px;font-family:'Shippori Mincho',serif;font-size:0.88rem;color:var(--muted);line-height:2;letter-spacing:0.06em">
+          言葉にしなくていい。<br>今、どんな感じですか？
+        </div>
+        <div class="silence-choices" id="silence-choices">
+          <div class="silence-choice" onclick="genSilence('silent')">ただ、ここにいる</div>
+          <div class="silence-choice" onclick="genSilence('hesitant')">何か書こうとして、やめた</div>
+          <div class="silence-choice" onclick="genSilence('watching')">ただ画面を見ている</div>
+        </div>
+        <div class="loading-state" id="silence-loading">
+          <div class="loading-flame">🌙</div>
+          <div class="loading-text">ただ、そこにいます</div>
+        </div>
+        <div class="result-block" id="silence-result">
+          <div class="result-card fade-in">
+            <div class="result-body" style="font-size:1rem;line-height:2.1" id="sr-message"></div>
+            <div class="divider"></div>
+            <div style="font-family:'Shippori Mincho',serif;font-size:1.4rem;color:var(--amber2);text-align:center;padding:12px 0" id="sr-breath"></div>
+            <div class="result-sub" style="text-align:center" id="sr-presence"></div>
+          </div>
+          <button class="btn-ghost" style="margin-top:8px" onclick="resetPanel('silence')">もう一度</button>
+        </div>
+      </div>
 
-function updatePushUI(isOn) {
-  const dot = document.getElementById('push-dot');
-  const txt = document.getElementById('push-status-txt');
-  const btn = document.getElementById('push-btn');
-  const testBtn = document.getElementById('test-push-btn');
-  if (isOn) {
-    dot.classList.add('on'); txt.textContent = '通知は有効です ✓';
-    btn.textContent = '🔕 通知を無効にする'; testBtn.disabled = false;
-  } else {
-    dot.classList.remove('on'); txt.textContent = '通知は未設定です';
-    btn.textContent = '🔔 通知を有効にする'; testBtn.disabled = true;
-  }
-}
+      <!-- ── FAVORITES ── -->
+      <div class="tab-panel" id="tab-fav">
+        <div id="fav-list-wrap"></div>
+      </div>
 
-async function togglePush() {
-  if (!swReg) { alert('Service Worker が利用できません。Chrome をお試しください。'); return; }
-  if (pushSub) {
-    await pushSub.unsubscribe();
-    await fetch('/api/push/unsubscribe', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ endpoint: pushSub.endpoint }) });
-    pushSub = null; updatePushUI(false); return;
-  }
-  const perm = await Notification.requestPermission();
-  if (perm !== 'granted') { alert('通知の許可が必要です。ブラウザの設定から許可してください。'); return; }
-  const r = await fetch('/api/push/vapid-key');
-  const { key } = await r.json();
-  const sub = await swReg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: urlBase64ToUint8Array(key) });
-  pushSub = sub;
-  await fetch('/api/push/subscribe', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ subscription: sub.toJSON(), time: document.getElementById('push-time').value, genre: pushGenre }) });
-  updatePushUI(true);
-  alert('✅ 設定完了！毎日 ' + document.getElementById('push-time').value + ' に名言が届きます。');
-}
+    </div><!-- /panel-body -->
+  </div><!-- /panel -->
 
-async function testPush() {
-  if (!pushSub) return;
-  const btn = document.getElementById('test-push-btn');
-  btn.disabled = true; btn.textContent = '送信中…';
-  try {
-    await fetch('/api/push/test', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ subscription: pushSub.toJSON(), genre: pushGenre }) });
-    btn.textContent = '✅ 送信しました！';
-  } catch(e) { btn.textContent = '⚠️ 失敗'; }
-  setTimeout(() => { btn.disabled = false; btn.textContent = '🧪 テスト通知を送る'; }, 3000);
-}
+  <script>
+    // ── State ──────────────────────────────────────────────────
+    let selectedGenre = 'mix';
+    let selectedMode = 'normal';
+    let selectedEmotions = [];
+    let wizardStep = 1;
+    let recentQuotes = [];
+    let favorites = JSON.parse(localStorage.getItem('tomoshibi-favs') || '[]');
 
-function setPushGenre(g, btn) {
-  pushGenre = g;
-  document.querySelectorAll('#push-genre-sel .genre-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-}
+    const PANEL_TITLES = {
+      quote:       '言葉を探す',
+      future:      '未来の自分から',
+      emotion:     '感情を翻訳する',
+      weather:     '心の天気',
+      diary:       '誰かの日記',
+      narration:   '人生ナレーション',
+      letter:      '言えなかった言葉',
+      lyrics:      '感情の歌詞',
+      temperature: '感情気象',
+      universe:    '感情の星座',
+      silence:     '何も言えない夜に',
+      fav:         '保存した言葉',
+    };
 
-function urlBase64ToUint8Array(b64) {
-  const p = b64.replace(/-/g,'+').replace(/_/g,'/');
-  const raw = atob(p.padEnd(p.length + (4 - p.length%4)%4,'='));
-  return Uint8Array.from([...raw].map(c => c.charCodeAt(0)));
-}
+    const EMOTIONS = [
+      '不安','焦り','怒り','悲しい','泣きたい','孤独','寂しい','傷ついた',
+      '空虚','心が重い','眠れない','頑張れない','疲れた','虚しい','憂鬱',
+      '懐かしい','後悔','嫉妬','恥ずかしい','申し訳ない',
+      '嬉しい','ワクワク','感謝','穏やか','すっきり','やる気','希望',
+      'ときめき','達成感','愛おしい'
+    ];
 
-window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferredInstall = e; });
-function installPWA() {
-  if (deferredInstall) { deferredInstall.prompt(); }
-  else { alert('Chrome の右上メニュー（⋮）→「ホーム画面に追加」からインストールできます。'); }
-}
+    // Populate emotions
+    (function() {
+      const wrap = document.getElementById('emotions-wrap');
+      EMOTIONS.forEach(e => {
+        const b = document.createElement('button');
+        b.className = 'emo-btn';
+        b.textContent = e;
+        b.onclick = () => {
+          b.classList.toggle('active');
+          if (b.classList.contains('active')) selectedEmotions.push(e);
+          else selectedEmotions = selectedEmotions.filter(x => x !== e);
+        };
+        wrap.appendChild(b);
+      });
+    })();
 
-// ══════════════════════════════════════════
-//  Scriptable widget code
-// ══════════════════════════════════════════
-function getScriptableCode() {
-  const url = window.location.origin;
-  return `// ✨ 今日の名言 - Scriptable iOS Widget
-const SERVER_URL = "${url}";
-
-const widget = new ListWidget();
-widget.backgroundColor = new Color("#0D0D1A");
-widget.setPadding(12, 14, 12, 14);
-widget.url = SERVER_URL;
-
-let req = new Request(SERVER_URL + "/api/quote");
-req.method = "POST";
-req.headers = {"Content-Type": "application/json"};
-req.body = JSON.stringify({
-  mood: "", energy: "5", stress: "5", motivation: "5",
-  emotions: [], recentQuotes: [], genre: "mix"
-});
-
-try {
-  const data = await req.loadJSON();
-  if (data.success) {
-    const q = data.quote;
-    const title = widget.addText("✨ 今日の名言");
-    title.textColor = new Color("#c26bff");
-    title.font = Font.boldSystemFont(9);
-    widget.addSpacer(6);
-    const quote = widget.addText(\`"\${q.original.slice(0, 80)}"\`);
-    quote.textColor = Color.white();
-    quote.font = new Font("Georgia-Italic", 12);
-    quote.minimumScaleFactor = 0.5;
-    widget.addSpacer(6);
-    if (q.translation) {
-      const trans = widget.addText(\`「\${q.translation.slice(0, 50)}」\`);
-      trans.textColor = new Color("#cccccc");
-      trans.font = Font.systemFont(10);
-      trans.minimumScaleFactor = 0.5;
-      widget.addSpacer(4);
+    // ── Navigation ────────────────────────────────────────────
+    function openTab(tab) {
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('tab-' + tab).classList.add('active');
+      document.getElementById('panel-title').textContent = PANEL_TITLES[tab] || '';
+      document.getElementById('home').style.display = 'none';
+      document.getElementById('panel').style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      if (tab === 'quote') { wizardStep = 1; wizardGoTo(1); }
+      if (tab === 'fav') renderFavs();
     }
-    const author = widget.addText("— " + (q.authorJp || q.author));
-    author.textColor = new Color("#ff7e5f");
-    author.font = Font.boldSystemFont(9);
-  }
-} catch(e) {
-  const err = widget.addText("接続エラー");
-  err.textColor = Color.red();
-  err.font = Font.systemFont(10);
-}
 
-Script.setWidget(widget);
-Script.complete();`;
-}
-
-function renderScriptableCode() {
-  document.getElementById('scriptable-code').textContent = getScriptableCode();
-}
-
-function copyScriptable() {
-  navigator.clipboard.writeText(getScriptableCode()).then(() => {
-    const btn = event.currentTarget;
-    btn.textContent = '✅ コピーしました！';
-    setTimeout(() => { btn.textContent = '📋 Scriptableコードをコピー'; }, 2500);
-  });
-}
-
-// ══════════════════════════════════════════
-//  Navigation
-// ══════════════════════════════════════════
-const TAB_TITLES = {
-  quote:'🔍 名言を探す', future:'🔮 未来の自分', emotion:'💭 感情翻訳',
-  weather:'🌤 天気予報', diary:'📔 日記', narration:'🎬 物語',
-  unsentletter:'💌 手紙', lyrics:'🎵 歌詞', temperature:'🌡 温度',
-  universe:'🌌 宇宙', book:'📚 本', silence:'🤫 沈黙',
-  fav:'❤️ お気に入り', widget:'📱 ウィジェット'
-};
-
-function openTab(tab) {
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  document.getElementById('tab-' + tab).classList.add('active');
-  document.getElementById('panel-title').textContent = TAB_TITLES[tab] || '';
-  document.getElementById('home-grid').style.display = 'none';
-  // ヒーローは一度タブを選んだら非表示にしてグリッドをトップに
-  document.getElementById('hero').style.display = 'none';
-  document.getElementById('panel-section').style.display = 'block';
-  window.scrollTo({ top: 0, behavior: 'instant' });
-  if (tab === 'quote') { wizardCurrentStep = 1; wizardGoTo(1); }
-  if (tab === 'fav') renderFavs();
-  if (tab === 'widget') renderScriptableCode();
-  if (tab === 'book') renderBook();
-  if (tab === 'silence') onSilenceTabOpen();
-}
-
-function goHome() {
-  document.getElementById('panel-section').style.display = 'none';
-  document.getElementById('home-grid').style.display = 'block';
-  // ヒーローは非表示のままグリッドが最上部
-  window.scrollTo({ top: 0, behavior: 'instant' });
-}
-
-// Keep switchTab as alias for any existing inline calls
-function switchTab(tab, btn) { openTab(tab); }
-
-// ══════════════════════════════════════════
-//  Quote Wizard
-// ══════════════════════════════════════════
-let wizardCurrentStep = 1;
-const WIZARD_TOTAL = 3;
-const WIZARD_NAMES = ['ジャンル・モード','感情タグ・状態','状況を一言で'];
-
-function wizardGoTo(n) {
-  document.querySelectorAll('.wizard-step').forEach(s => s.classList.remove('active'));
-  document.getElementById('wstep-' + n).classList.add('active');
-  wizardCurrentStep = n;
-  const pct = ((n - 1) / (WIZARD_TOTAL - 1)) * 100;
-  document.getElementById('wizard-fill').style.width = pct + '%';
-  document.getElementById('wizard-step-num').textContent = n + ' / ' + WIZARD_TOTAL;
-  document.getElementById('wizard-step-name').textContent = WIZARD_NAMES[n - 1];
-  document.getElementById('panel-section').scrollTo({ top: 0, behavior: 'smooth' });
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-function wizardNext() {
-  if (wizardCurrentStep < WIZARD_TOTAL) wizardGoTo(wizardCurrentStep + 1);
-}
-
-function wizardPrev() {
-  if (wizardCurrentStep > 1) wizardGoTo(wizardCurrentStep - 1);
-}
-
-// ══════════════════════════════════════════
-//  Genre & Mode
-// ══════════════════════════════════════════
-function setGenre(g, btn) {
-  currentGenre = g;
-  document.querySelectorAll('.genre-sel:not(#push-genre-sel) .genre-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-}
-
-function setQuoteMode(mode, btn) {
-  quoteMode = mode;
-  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  const genBtn = document.getElementById('gen-btn');
-  if (mode === 'rx') genBtn.textContent = '🏥 処方箋を受け取る';
-  else if (mode === 'original') genBtn.textContent = '🔮 あなただけの言葉を生み出す';
-  else genBtn.textContent = '✨ 今日の名言を受け取る';
-}
-
-// ══════════════════════════════════════════
-//  Emotion buttons
-// ══════════════════════════════════════════
-document.querySelectorAll('.emotion-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const v = btn.dataset.val;
-    if (selEmotions.has(v)) { selEmotions.delete(v); btn.classList.remove('active'); }
-    else { selEmotions.add(v); btn.classList.add('active'); }
-  });
-});
-
-// ══════════════════════════════════════════
-//  Voice input
-// ══════════════════════════════════════════
-function toggleMic() {
-  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) { alert('Chrome をお試しください。'); return; }
-  if (isRec) { stopMic(); return; }
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  recognition = new SR(); recognition.lang = 'ja-JP'; recognition.interimResults = true;
-  const base = document.getElementById('mood-text').value;
-  recognition.onstart = () => { isRec = true; document.getElementById('mic-btn').classList.add('recording'); document.getElementById('mic-btn').textContent = '⏹'; document.getElementById('mic-status').textContent = '🔴 録音中…'; document.getElementById('mic-status').classList.add('rec'); };
-  recognition.onresult = e => { let f='',i=''; for(let j=e.resultIndex;j<e.results.length;j++){const t=e.results[j][0].transcript; if(e.results[j].isFinal)f+=t; else i+=t;} document.getElementById('mood-text').value=base+(base&&(f||i)?' ':'')+( f||i); };
-  recognition.onend = stopMic;
-  recognition.start();
-}
-function stopMic() { isRec=false; if(recognition){try{recognition.stop()}catch(e){}} document.getElementById('mic-btn').classList.remove('recording'); document.getElementById('mic-btn').textContent='🎤'; document.getElementById('mic-status').textContent=''; document.getElementById('mic-status').classList.remove('rec'); }
-
-// ══════════════════════════════════════════
-//  Quote tab
-// ══════════════════════════════════════════
-async function getQuote() {
-  const btn = document.getElementById('gen-btn');
-  const loading = document.getElementById('loading');
-  const err = document.getElementById('error-msg');
-  document.getElementById('quote-card').classList.remove('show');
-  document.getElementById('rx-card').classList.remove('show');
-  btn.disabled=true; loading.classList.add('show'); err.classList.remove('show'); closeShare();
-
-  const loadTxt = document.getElementById('load-txt');
-  if (quoteMode === 'rx') loadTxt.textContent = '症状を分析し、処方を準備しています…';
-  else if (quoteMode === 'original') loadTxt.textContent = 'あなただけの言葉を創作しています…';
-  else loadTxt.textContent = 'あなたの気分に最適な言葉を探しています…';
-
-  try {
-    const res = await fetch('/api/quote', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        mood: document.getElementById('mood-text').value.trim(),
-        energy: document.getElementById('energy').value,
-        stress: document.getElementById('stress').value,
-        motivation: document.getElementById('motivation').value,
-        emotions: [...selEmotions],
-        recentQuotes: recentQuotes.slice(-30),
-        genre: currentGenre,
-        isNightMode: isNight,
-        prescriptionMode: quoteMode === 'rx',
-        originalMode: quoteMode === 'original'
-      })
-    });
-    const data = await res.json();
-    if (!data.success) throw new Error(data.error);
-    curQuote = data.quote;
-    if (quoteMode === 'rx') showPrescription(data.quote);
-    else showQuote(data.quote);
-    recentQuotes.push(data.quote.original);
-    if (recentQuotes.length > 50) recentQuotes = recentQuotes.slice(-50);
-    localStorage.setItem('rq', JSON.stringify(recentQuotes));
-  } catch(e) { err.textContent='⚠️ '+e.message; err.classList.add('show'); }
-  finally { btn.disabled=false; loading.classList.remove('show'); }
-}
-
-function showQuote(q) {
-  const sb = document.getElementById('q-src');
-  if (q.sourceType === 'original') {
-    sb.textContent = '🔮 AI創作'; sb.style.display = '';
-    sb.className = 'orig-badge';
-  } else {
-    sb.className = 'src-badge';
-    if (q.sourceType==='anime'||(q.authorJp&&q.authorJp.includes('/'))) { sb.textContent='🎌 アニメ'; sb.style.display=''; }
-    else if (q.sourceType==='great') { sb.textContent='🏛️ 偉人'; sb.style.display=''; }
-    else sb.style.display='none';
-  }
-  document.getElementById('q-lang').textContent = q.language || '日本語';
-  document.getElementById('q-original').textContent = '"'+q.original+'"';
-  const t = document.getElementById('q-trans');
-  if (q.translation?.trim()) { t.textContent='「'+q.translation+'」'; t.style.display=''; } else t.style.display='none';
-  document.getElementById('q-author').textContent = q.author||'';
-  document.getElementById('q-authJp').textContent = q.authorJp&&q.authorJp!==q.author ? q.authorJp : '';
-  document.getElementById('q-av').textContent = (q.authorJp||q.author||'?')[0];
-  document.getElementById('q-reason').textContent = q.reason||'';
-  document.getElementById('hist-note').textContent = recentQuotes.length>0 ? '履歴 '+recentQuotes.length+' 件' : '';
-  document.getElementById('fav-btn').textContent = favs.some(f=>f.original===q.original) ? '❤️' : '🤍';
-  document.getElementById('copy-btn').textContent='📋 コピー'; document.getElementById('copy-btn').classList.remove('copied');
-  const card = document.getElementById('quote-card');
-  card.classList.remove('show'); void card.offsetWidth; card.classList.add('show');
-  card.scrollIntoView({behavior:'smooth',block:'nearest'});
-}
-
-function showPrescription(q) {
-  const now = new Date();
-  document.getElementById('rx-date').textContent =
-    now.getFullYear()+'年'+(now.getMonth()+1)+'月'+now.getDate()+'日 処方';
-  document.getElementById('rx-symptom').textContent = q.prescription?.symptom || '感情の疲弊';
-  document.getElementById('rx-quote-text').textContent = '"' + q.original + '"';
-  document.getElementById('rx-quote-author').textContent = '— ' + (q.authorJp || q.author || '');
-  document.getElementById('rx-usage').textContent = q.prescription?.usage || '1日1回、静かな場所で';
-  document.getElementById('rx-effect').textContent = q.prescription?.effect || '';
-  document.getElementById('rx-caution').textContent = q.prescription?.caution || '';
-  document.getElementById('rx-fav-btn').textContent = favs.some(f=>f.original===q.original) ? '❤️' : '🤍';
-  const card = document.getElementById('rx-card');
-  card.classList.remove('show'); void card.offsetWidth; card.classList.add('show');
-  card.scrollIntoView({behavior:'smooth',block:'nearest'});
-}
-
-function toggleFavRx() {
-  if (!curQuote) return;
-  const btn = document.getElementById('rx-fav-btn');
-  const idx = favs.findIndex(f=>f.original===curQuote.original);
-  if (idx>=0) { favs.splice(idx,1); btn.textContent='🤍'; }
-  else { addFav(curQuote); btn.textContent='❤️'; }
-  localStorage.setItem('favs', JSON.stringify(favs));
-  updateFavCount();
-}
-
-function copyRx() {
-  if (!curQuote) return;
-  const p = curQuote.prescription;
-  const text = [
-    '【本日の処方箋】',
-    '症状: ' + (p?.symptom||''),
-    '処方: "' + curQuote.original + '"',
-    '    — ' + (curQuote.authorJp||curQuote.author||''),
-    '用法: ' + (p?.usage||''),
-    '効能: ' + (p?.effect||''),
-    '注意: ' + (p?.caution||'')
-  ].filter(Boolean).join('\n');
-  navigator.clipboard.writeText(text);
-  event.currentTarget.textContent='✅ コピー済み';
-  setTimeout(()=>{event.currentTarget.textContent='📋 コピー'},2000);
-}
-
-// ══════════════════════════════════════════
-//  Future self tab
-// ══════════════════════════════════════════
-async function getFutureSelf() {
-  const btn = document.getElementById('future-btn');
-  const loading = document.getElementById('future-loading');
-  const card = document.getElementById('letter-card');
-  const err = document.getElementById('future-error');
-  btn.disabled=true; loading.classList.add('show'); card.classList.remove('show'); err.classList.remove('show');
-  try {
-    const res = await fetch('/api/future-self', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ age: document.getElementById('f-age').value, worries: document.getElementById('f-worries').value.trim(), goals: document.getElementById('f-goals').value.trim() }) });
-    const data = await res.json();
-    if (!data.success) throw new Error(data.error);
-    const r = data.result;
-    document.getElementById('letter-from').textContent = r.from || '3年後のあなた より';
-    document.getElementById('letter-body').textContent = r.message;
-    document.getElementById('letter-hint').textContent = r.hint;
-    document.getElementById('letter-quote').textContent = '「'+r.quote+'」';
-    card.classList.remove('show'); void card.offsetWidth; card.classList.add('show');
-    card.scrollIntoView({behavior:'smooth',block:'nearest'});
-  } catch(e) { err.textContent='⚠️ '+e.message; err.classList.add('show'); }
-  finally { btn.disabled=false; loading.classList.remove('show'); }
-}
-
-function copyLetter() {
-  const text = document.getElementById('letter-body').textContent + '\n\n「' + document.getElementById('letter-quote').textContent + '」\n' + document.getElementById('letter-from').textContent;
-  navigator.clipboard.writeText(text);
-  event.currentTarget.textContent='✅ コピーしました！';
-  setTimeout(()=>{event.currentTarget.textContent='📋 手紙をコピー'},2000);
-}
-
-// ══════════════════════════════════════════
-//  Emotion translation tab
-// ══════════════════════════════════════════
-async function translateEmotion() {
-  const btn=document.getElementById('et-btn'), loading=document.getElementById('et-loading'), result=document.getElementById('et-result'), err=document.getElementById('et-error');
-  const emotion = document.getElementById('et-input').value.trim();
-  if (!emotion) { err.textContent='気持ちを入力してください'; err.classList.add('show'); return; }
-  btn.disabled=true; loading.classList.add('show'); result.classList.remove('show'); err.classList.remove('show');
-  try {
-    const res = await fetch('/api/translate-emotion', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ emotion }) });
-    const data = await res.json();
-    if (!data.success) throw new Error(data.error);
-    const r = data.result;
-    document.getElementById('et-core').textContent = r.core;
-    document.getElementById('et-trans').textContent = r.translation;
-    document.getElementById('et-gentle').textContent = r.gentle;
-    const q = r.quote;
-    curEtQuote = q;
-    document.getElementById('etq-lang').textContent = q.language||'日本語';
-    document.getElementById('etq-original').textContent = '"'+q.original+'"';
-    const et = document.getElementById('etq-trans');
-    if (q.translation?.trim()) { et.textContent='「'+q.translation+'」'; et.style.display=''; } else et.style.display='none';
-    document.getElementById('etq-author').textContent = q.author||'';
-    document.getElementById('etq-authJp').textContent = q.authorJp&&q.authorJp!==q.author ? q.authorJp : '';
-    document.getElementById('etq-av').textContent = (q.authorJp||q.author||'?')[0];
-    result.classList.remove('show'); void result.offsetWidth; result.classList.add('show');
-    result.scrollIntoView({behavior:'smooth',block:'nearest'});
-  } catch(e) { err.textContent='⚠️ '+e.message; err.classList.add('show'); }
-  finally { btn.disabled=false; loading.classList.remove('show'); }
-}
-
-function copyEtQuote() {
-  if (!curEtQuote) return;
-  const text = ['"'+curEtQuote.original+'"', curEtQuote.translation?'「'+curEtQuote.translation+'」':'', '— '+(curEtQuote.authorJp||curEtQuote.author)].filter(Boolean).join('\n');
-  navigator.clipboard.writeText(text);
-  event.currentTarget.textContent='✅ コピー済み'; setTimeout(()=>{event.currentTarget.textContent='📋 コピー'},2000);
-}
-
-function saveFavEt() { if(!curEtQuote) return; addFav(curEtQuote); event.currentTarget.textContent='✅ 保存しました！'; setTimeout(()=>{event.currentTarget.textContent='❤️ 保存'},2000); }
-function toggleFavEt() { if(!curEtQuote) return; addFav(curEtQuote); event.currentTarget.textContent='❤️'; }
-
-// ══════════════════════════════════════════
-//  Weather tab
-// ══════════════════════════════════════════
-async function getWeather() {
-  const btn = document.getElementById('wx-btn');
-  const loading = document.getElementById('wx-loading');
-  const card = document.getElementById('wx-card');
-  const err = document.getElementById('wx-error');
-  const emotion = document.getElementById('wx-input').value.trim();
-  if (!emotion) { err.textContent='気分を入力してください'; err.classList.add('show'); return; }
-  btn.disabled=true; loading.classList.add('show'); card.classList.remove('show'); err.classList.remove('show');
-  try {
-    const res = await fetch('/api/weather-emotion', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ emotion }) });
-    const data = await res.json();
-    if (!data.success) throw new Error(data.error);
-    showWeather(data.result);
-  } catch(e) { err.textContent='⚠️ '+e.message; err.classList.add('show'); }
-  finally { btn.disabled=false; loading.classList.remove('show'); }
-}
-
-function showWeather(r) {
-  document.getElementById('wx-icon').textContent = r.icon || '🌤';
-  document.getElementById('wx-name').textContent = r.weather || '';
-  document.getElementById('wx-desc').textContent = r.description || '';
-  document.getElementById('wx-forecast').textContent = r.forecast || '';
-  const sky = document.getElementById('wx-sky');
-  const parts = (r.gradient || '#4a90d9, #7ecff7').split(',').map(s => s.trim());
-  sky.style.background = `linear-gradient(160deg, ${parts[0]}, ${parts[1] || parts[0]})`;
-  curWxQuote = r.quote || null;
-  if (r.quote) {
-    document.getElementById('wx-quote-text').textContent = '"' + r.quote.original + '"';
-    const a = (r.quote.authorJp && r.quote.authorJp !== r.quote.author) ? r.quote.authorJp : r.quote.author;
-    document.getElementById('wx-quote-author').textContent = '— ' + (a || '');
-  }
-  const card = document.getElementById('wx-card');
-  card.classList.remove('show'); void card.offsetWidth; card.classList.add('show');
-  card.scrollIntoView({behavior:'smooth',block:'nearest'});
-}
-
-function copyWx() {
-  if (!curWxQuote) return;
-  const text = ['"'+curWxQuote.original+'"', curWxQuote.translation?'「'+curWxQuote.translation+'」':'', '— '+(curWxQuote.authorJp||curWxQuote.author)].filter(Boolean).join('\n');
-  navigator.clipboard.writeText(text);
-  event.currentTarget.textContent='✅ コピー済み'; setTimeout(()=>{event.currentTarget.textContent='📋 コピー'},2000);
-}
-
-function saveFavWx() {
-  if (!curWxQuote) return;
-  addFav(curWxQuote);
-  event.currentTarget.textContent='✅ 保存！';
-  setTimeout(()=>{event.currentTarget.textContent='❤️ 保存'},2000);
-}
-
-// ══════════════════════════════════════════
-//  Favorites
-// ══════════════════════════════════════════
-function addFav(q) {
-  if (!favs.some(f=>f.original===q.original)) {
-    favs.unshift({...q, savedAt: new Date().toISOString()});
-    localStorage.setItem('favs', JSON.stringify(favs));
-    updateFavCount();
-  }
-}
-
-function toggleFav() {
-  if (!curQuote) return;
-  const btn = document.getElementById('fav-btn');
-  const idx = favs.findIndex(f=>f.original===curQuote.original);
-  if (idx>=0) { favs.splice(idx,1); btn.textContent='🤍'; }
-  else { addFav(curQuote); btn.textContent='❤️'; btn.classList.add('pop'); setTimeout(()=>btn.classList.remove('pop'),300); }
-  localStorage.setItem('favs', JSON.stringify(favs));
-  updateFavCount();
-}
-
-function updateFavCount() { document.getElementById('fav-count').textContent = favs.length>0 ? ' ('+favs.length+')' : ''; }
-
-function renderFavs() {
-  const c = document.getElementById('fav-list');
-  if (!favs.length) { c.innerHTML='<div class="fav-empty"><div class="icon">💭</div><p>まだお気に入りがありません<br>名言カードの ❤️ で保存できます</p></div>'; return; }
-  c.innerHTML = favs.map((q,i)=>`
-    <div class="fav-item">
-      <div class="fi-header"><div class="fi-text">"${esc(q.original)}"</div><button class="fi-rm" onclick="removeFav(${i})">✕</button></div>
-      ${q.translation?`<div class="fi-trans">「${esc(q.translation)}」</div>`:''}
-      <div class="fi-meta"><div class="fi-author">— ${esc(q.authorJp||q.author||'')}</div>${(q.sourceType==='anime'||(q.authorJp&&q.authorJp.includes('/')))?'<span class="src-badge" style="font-size:.7rem;padding:2px 9px">🎌 アニメ</span>':q.sourceType==='original'?'<span class="orig-badge" style="font-size:.7rem;padding:2px 9px">🔮 AI創作</span>':''}</div>
-      <div class="fi-date">${fmtDate(q.savedAt)}</div>
-      <div class="fi-actions">
-        <button class="fi-btn" onclick="copyFav(${i})">📋 コピー</button>
-        <button class="fi-btn" onclick="shareFavTw(${i})">𝕏 シェア</button>
-        <button class="fi-btn" onclick="shareFavLine(${i})">💬 LINE</button>
-      </div>
-    </div>`).join('');
-}
-
-function removeFav(i) { favs.splice(i,1); localStorage.setItem('favs',JSON.stringify(favs)); updateFavCount(); renderFavs(); }
-function copyFav(i) { const q=favs[i]; navigator.clipboard.writeText(['"'+q.original+'"',q.translation?'「'+q.translation+'」':'','— '+(q.authorJp||q.author)].filter(Boolean).join('\n')); }
-
-// ══════════════════════════════════════════
-//  Copy & Share
-// ══════════════════════════════════════════
-function copyQuote() {
-  if (!curQuote) return;
-  navigator.clipboard.writeText(['"'+curQuote.original+'"',curQuote.translation?'「'+curQuote.translation+'」':'','— '+(curQuote.authorJp||curQuote.author)].filter(Boolean).join('\n')).then(()=>{
-    const b=document.getElementById('copy-btn'); b.textContent='✅ コピー済み'; b.classList.add('copied'); setTimeout(()=>{b.textContent='📋 コピー';b.classList.remove('copied')},2000);
-  });
-}
-function toggleShare(e) { e.stopPropagation(); document.getElementById('share-popup').classList.toggle('open'); }
-function closeShare() { document.getElementById('share-popup').classList.remove('open'); }
-document.addEventListener('click', closeShare);
-
-function buildShareText(q) {
-  return ['✨ '+q.original, q.translation?'「'+q.translation+'」':'', '— '+(q.authorJp||q.author), '\n#今日の名言 #名言'].filter(Boolean).join('\n');
-}
-function shareTwitter() { if(!curQuote)return; window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(buildShareText(curQuote)),'_blank'); closeShare(); }
-function shareLine() { if(!curQuote)return; window.open('https://social-plugins.line.me/lineit/share?text='+encodeURIComponent(buildShareText(curQuote)),'_blank'); closeShare(); }
-function shareIG() { if(!curQuote)return; navigator.clipboard.writeText(buildShareText(curQuote)).then(()=>{alert('📸 コピーしました！Instagramに貼り付けてください。')}); closeShare(); }
-function shareFavTw(i) { window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(buildShareText(favs[i])),'_blank'); }
-function shareFavLine(i) { window.open('https://social-plugins.line.me/lineit/share?text='+encodeURIComponent(buildShareText(favs[i])),'_blank'); }
-
-// ══════════════════════════════════════════
-//  Utils
-// ══════════════════════════════════════════
-function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-function fmtDate(iso) { if(!iso)return''; const d=new Date(iso); return d.getFullYear()+'年'+(d.getMonth()+1)+'月'+d.getDate()+'日 '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'); }
-
-updateFavCount();
-
-// ══════════════════════════════════════════
-//  Book (localStorage)
-// ══════════════════════════════════════════
-let bookEntries = JSON.parse(localStorage.getItem('book') || '[]');
-const typeLabel = { diary:'📔 日記', narration:'🎬 物語', letter:'💌 手紙', lyrics:'🎵 歌詞', temperature:'🌡 温度', universe:'🌌 宇宙' };
-
-function addToBook(type, emotion, title, content) {
-  bookEntries.unshift({ id: Date.now(), type, emotion, title, content, date: new Date().toISOString() });
-  if (bookEntries.length > 100) bookEntries = bookEntries.slice(0, 100);
-  localStorage.setItem('book', JSON.stringify(bookEntries));
-}
-
-function renderBook() {
-  const c = document.getElementById('book-list');
-  if (!bookEntries.length) {
-    c.innerHTML = '<div class="book-empty"><div class="icon">📚</div><p>まだページがありません<br>各機能の「📚 本に追加」でページが増えていきます</p></div>';
-    return;
-  }
-  c.innerHTML = bookEntries.map((e, i) => `
-    <div class="book-chapter">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start">
-        <span class="bc-type">${typeLabel[e.type] || e.type}</span>
-        <button style="background:none;border:none;font-size:.9rem;color:var(--faint);cursor:pointer" onclick="removeBookEntry(${i})">✕</button>
-      </div>
-      <div class="bc-title">${esc(e.title)}</div>
-      <div class="bc-emotion">"${esc(e.emotion)}"</div>
-      <div class="bc-date">${fmtDate(e.date)}</div>
-    </div>`).join('');
-}
-
-function removeBookEntry(i) { bookEntries.splice(i,1); localStorage.setItem('book',JSON.stringify(bookEntries)); renderBook(); }
-
-// ══════════════════════════════════════════
-//  Tab: 日記
-// ══════════════════════════════════════════
-let curDiary = null;
-async function getDiary() {
-  const emotion = document.getElementById('diary-input').value.trim();
-  if (!emotion) { showErr('diary-error','気持ちを入力してください'); return; }
-  setLoading('diary',true);
-  try {
-    const data = await apiPost('/api/diary', { emotion });
-    curDiary = data.result;
-    showDiary(data.result);
-  } catch(e) { showErr('diary-error', e.message); }
-  finally { setLoading('diary',false); }
-}
-
-function showDiary(r) {
-  document.getElementById('diary-date').textContent = r.date;
-  document.getElementById('diary-city').textContent = r.city;
-  document.getElementById('diary-weather').textContent = r.weather;
-  document.getElementById('diary-entry').textContent = r.entry;
-  document.getElementById('diary-closing').textContent = r.closing;
-  showCard('diary-card');
-}
-
-function copyDiary() {
-  if (!curDiary) return;
-  navigator.clipboard.writeText([curDiary.date, curDiary.city+'　'+curDiary.weather, '', curDiary.entry, '', curDiary.closing].join('\n'));
-  flashBtn(event, '✅ コピー済み', '📋 コピー');
-}
-
-function saveDiaryToBook() {
-  if (!curDiary) return;
-  addToBook('diary', document.getElementById('diary-input').value, curDiary.date+'　'+curDiary.city, curDiary);
-  flashBtn(event, '✅ 追加しました！', '📚 本に追加');
-}
-
-// ══════════════════════════════════════════
-//  Tab: 物語
-// ══════════════════════════════════════════
-let curNarration = null;
-async function getNarration() {
-  const event2 = document.getElementById('nar-event').value.trim();
-  const emotion = document.getElementById('nar-emotion').value.trim();
-  if (!event2 && !emotion) { showErr('nar-error','出来事か感情を入力してください'); return; }
-  setLoading('narration',true);
-  try {
-    const data = await apiPost('/api/narration', { event: event2, emotion });
-    curNarration = data.result;
-    showNarration(data.result);
-  } catch(e) { showErr('nar-error', e.message); }
-  finally { setLoading('narration',false); }
-}
-
-function showNarration(r) {
-  document.getElementById('cinema-chapter').textContent = r.chapter;
-  document.getElementById('cinema-narration').textContent = r.narration;
-  document.getElementById('cinema-theme').textContent = r.theme;
-  document.getElementById('cinema-next').textContent = r.next;
-  showCard('cinema-card');
-}
-
-function copyNarration() {
-  if (!curNarration) return;
-  navigator.clipboard.writeText([curNarration.chapter, '', curNarration.narration, '', '— '+curNarration.theme].join('\n'));
-  flashBtn(event, '✅ コピー済み', '📋 コピー');
-}
-
-function saveNarToBook() {
-  if (!curNarration) return;
-  const e2 = document.getElementById('nar-event').value || document.getElementById('nar-emotion').value;
-  addToBook('narration', e2, curNarration.chapter, curNarration);
-  flashBtn(event, '✅ 追加しました！', '📚 本に追加');
-}
-
-// ══════════════════════════════════════════
-//  Tab: 手紙
-// ══════════════════════════════════════════
-let curLetter2 = null;
-async function getUnsentLetter() {
-  const emotion = document.getElementById('letter-input').value.trim();
-  if (!emotion) { showErr('letter-error','気持ちを入力してください'); return; }
-  setLoading('unsentletter',true);
-  try {
-    const data = await apiPost('/api/letter', { emotion });
-    curLetter2 = data.result;
-    showUnsentLetter(data.result);
-  } catch(e) { showErr('letter-error', e.message); }
-  finally { setLoading('unsentletter',false); }
-}
-
-function showUnsentLetter(r) {
-  document.getElementById('unsent-to').textContent = r.to;
-  document.getElementById('unsent-body').textContent = r.letter;
-  document.getElementById('unsent-ps').textContent = 'P.S. ' + r.ps;
-  document.getElementById('unsent-from-text').textContent = r.from;
-  showCard('unsent-card');
-}
-
-function copyLetter2() {
-  if (!curLetter2) return;
-  navigator.clipboard.writeText([curLetter2.to, '', curLetter2.letter, '', 'P.S. '+curLetter2.ps, '', curLetter2.from].join('\n'));
-  flashBtn(event, '✅ コピー済み', '📋 コピー');
-}
-
-function saveLetterToBook() {
-  if (!curLetter2) return;
-  addToBook('letter', document.getElementById('letter-input').value, curLetter2.to, curLetter2);
-  flashBtn(event, '✅ 追加しました！', '📚 本に追加');
-}
-
-// ══════════════════════════════════════════
-//  Tab: 歌詞
-// ══════════════════════════════════════════
-let curLyrics = null;
-async function getLyrics() {
-  const emotion = document.getElementById('lyrics-input').value.trim();
-  if (!emotion) { showErr('lyrics-error','感情を入力してください'); return; }
-  setLoading('lyrics',true);
-  try {
-    const data = await apiPost('/api/lyrics', { emotion });
-    curLyrics = data.result;
-    showLyrics(data.result);
-  } catch(e) { showErr('lyrics-error', e.message); }
-  finally { setLoading('lyrics',false); }
-}
-
-function showLyrics(r) {
-  const colors = (r.colors || '#1a1a2e,#16213e').split(',').map(s => s.trim());
-  document.getElementById('album-cover').style.background = `linear-gradient(135deg, ${colors[0]}, ${colors[1] || colors[0]})`;
-  document.getElementById('album-title').textContent = r.title;
-  document.getElementById('album-artist').textContent = r.artist;
-  document.getElementById('album-genre').textContent = r.genre;
-  document.getElementById('lyrics-tempo').textContent = r.tempo;
-  document.getElementById('lyrics-text').textContent = r.lyrics;
-  document.getElementById('lyrics-concept').textContent = '✦ ' + r.concept;
-  showCard('lyrics-card');
-}
-
-function copyLyrics() {
-  if (!curLyrics) return;
-  navigator.clipboard.writeText(['"'+curLyrics.title+'" / '+curLyrics.artist, curLyrics.genre, '', curLyrics.lyrics, '', '✦ '+curLyrics.concept].join('\n'));
-  flashBtn(event, '✅ コピー済み', '📋 コピー');
-}
-
-function saveLyricsToBook() {
-  if (!curLyrics) return;
-  addToBook('lyrics', document.getElementById('lyrics-input').value, '"'+curLyrics.title+'" / '+curLyrics.artist, curLyrics);
-  flashBtn(event, '✅ 追加しました！', '📚 本に追加');
-}
-
-// ══════════════════════════════════════════
-//  Tab: 温度
-// ══════════════════════════════════════════
-let curTemp = null;
-async function getTemperature() {
-  const emotion = document.getElementById('temp-input').value.trim();
-  if (!emotion) { showErr('temp-error','感情を入力してください'); return; }
-  setLoading('temperature',true);
-  try {
-    const data = await apiPost('/api/temperature', { emotion });
-    curTemp = data.result;
-    showTemperature(data.result);
-  } catch(e) { showErr('temp-error', e.message); }
-  finally { setLoading('temperature',false); }
-}
-
-function showTemperature(r) {
-  document.getElementById('temp-main').innerHTML = r.temperature;
-  document.getElementById('temp-feels').textContent = r.feelsLike;
-  document.getElementById('temp-condition').textContent = r.condition;
-  document.getElementById('tg-humidity').textContent = r.humidity;
-  document.getElementById('tg-wind').textContent = r.wind;
-  document.getElementById('tg-visibility').textContent = r.visibility;
-  document.getElementById('tg-pressure').textContent = r.pressure;
-  document.getElementById('temp-obs').textContent = r.observation;
-  document.getElementById('temp-forecast').textContent = '📅 明日：' + r.forecast;
-  showCard('temp-card');
-}
-
-function copyTemp() {
-  if (!curTemp) return;
-  const r = curTemp;
-  navigator.clipboard.writeText(['【感情気象観測】', '気温：'+r.temperature+'（'+r.feelsLike+'）', '天候：'+r.condition, '湿度：'+r.humidity+'　風：'+r.wind, '', r.observation, '', '📅 '+r.forecast].join('\n'));
-  flashBtn(event, '✅ コピー済み', '📋 コピー');
-}
-
-function saveTempToBook() {
-  if (!curTemp) return;
-  addToBook('temperature', document.getElementById('temp-input').value, curTemp.temperature + '　' + curTemp.condition, curTemp);
-  flashBtn(event, '✅ 追加しました！', '📚 本に追加');
-}
-
-// ══════════════════════════════════════════
-//  Tab: 宇宙
-// ══════════════════════════════════════════
-let curUniverse = null;
-async function getUniverse() {
-  const emotion = document.getElementById('universe-input').value.trim();
-  if (!emotion) { showErr('universe-error','感情を入力してください'); return; }
-  setLoading('universe',true);
-  try {
-    const data = await apiPost('/api/universe', { emotion });
-    curUniverse = data.result;
-    showUniverse(data.result);
-  } catch(e) { showErr('universe-error', e.message); }
-  finally { setLoading('universe',false); }
-}
-
-function showUniverse(r) {
-  document.getElementById('universe-constellation').textContent = r.constellation;
-  document.getElementById('universe-story').textContent = r.story;
-  document.getElementById('universe-message').textContent = r.message;
-  const card = document.getElementById('universe-card');
-  card.classList.remove('show'); void card.offsetWidth; card.classList.add('show');
-  card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  setTimeout(() => drawStars(r), 100);
-}
-
-function drawStars(r) {
-  const canvas = document.getElementById('star-canvas');
-  if (!canvas) return;
-  const dpr = window.devicePixelRatio || 1;
-  const w = canvas.offsetWidth;
-  const h = 280;
-  canvas.width = w * dpr;
-  canvas.height = h * dpr;
-  canvas.style.width = w + 'px';
-  canvas.style.height = h + 'px';
-  const ctx = canvas.getContext('2d');
-  ctx.scale(dpr, dpr);
-
-  ctx.fillStyle = r.bgColor || '#0a0a2e';
-  ctx.fillRect(0, 0, w, h);
-
-  // bg star field
-  for (let i = 0; i < 100; i++) {
-    const x = Math.random() * w, y = Math.random() * h;
-    const s = Math.random() * 1.2 + .3;
-    ctx.beginPath(); ctx.arc(x, y, s, 0, Math.PI*2);
-    ctx.fillStyle = `rgba(255,255,255,${(Math.random()*.4+.1).toFixed(2)})`; ctx.fill();
-  }
-
-  const stars = r.stars || [];
-  const cx = w / 2, cy = h / 2;
-  const placed = stars.map((star, i) => {
-    const angle = (i / stars.length) * Math.PI * 2 - Math.PI/2;
-    const dist = 70 + Math.random() * 50;
-    return { ...star, x: cx + Math.cos(angle) * dist, y: cy + Math.sin(angle) * dist * .7 };
-  });
-
-  // lines
-  ctx.strokeStyle = 'rgba(255,255,255,.12)';
-  ctx.lineWidth = .8;
-  for (let i = 0; i < placed.length; i++) {
-    const a = placed[i], b = placed[(i + 1) % placed.length];
-    ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
-  }
-
-  // stars
-  placed.forEach(star => {
-    const radius = (star.size || 3) * 2.2;
-    const grd = ctx.createRadialGradient(star.x, star.y, 0, star.x, star.y, radius * 2.5);
-    grd.addColorStop(0, star.color || '#fff');
-    grd.addColorStop(1, 'transparent');
-    ctx.beginPath(); ctx.arc(star.x, star.y, radius * 2.5, 0, Math.PI*2);
-    ctx.fillStyle = grd; ctx.fill();
-    ctx.beginPath(); ctx.arc(star.x, star.y, radius * .6, 0, Math.PI*2);
-    ctx.fillStyle = '#fff'; ctx.fill();
-    ctx.fillStyle = 'rgba(255,255,255,.65)';
-    ctx.font = `10px 'Noto Serif JP', serif`;
-    ctx.textAlign = 'center';
-    ctx.fillText(star.name, star.x, star.y - radius - 5);
-  });
-}
-
-function copyUniverse() {
-  if (!curUniverse) return;
-  navigator.clipboard.writeText([curUniverse.constellation, '', curUniverse.story, '', curUniverse.message].join('\n'));
-  flashBtn(event, '✅ コピー済み', '📋 コピー');
-}
-
-function saveUniverseToBook() {
-  if (!curUniverse) return;
-  addToBook('universe', document.getElementById('universe-input').value, curUniverse.constellation, curUniverse);
-  flashBtn(event, '✅ 追加しました！', '📚 本に追加');
-}
-
-// ══════════════════════════════════════════
-//  Tab: 沈黙
-// ══════════════════════════════════════════
-let silenceTimer = null, silenceTriggered = false;
-let deletes = 0, totalKeys = 0;
-
-function onSilenceTabOpen() {
-  silenceTriggered = false; deletes = 0; totalKeys = 0;
-  document.getElementById('silence-result').classList.remove('show');
-  document.getElementById('silence-input').value = '';
-  document.getElementById('silence-hint').textContent = '';
-  clearTimeout(silenceTimer);
-  silenceTimer = setTimeout(() => {
-    if (!silenceTriggered) getSilence('silent');
-  }, 6000);
-}
-
-function onSilenceType(e) {
-  if (e.inputType === 'deleteContentBackward') deletes++;
-  totalKeys++;
-  const ratio = totalKeys > 8 ? deletes / totalKeys : 0;
-  if (ratio > .35 && !silenceTriggered) {
-    clearTimeout(silenceTimer);
-    getSilence('hesitant');
-  }
-  if (totalKeys === 1) {
-    document.getElementById('silence-hint').textContent = '書いても、消してもいい。';
-  }
-}
-
-async function getSilence(pattern) {
-  silenceTriggered = true;
-  clearTimeout(silenceTimer);
-  try {
-    const data = await apiPost('/api/silence', { pattern });
-    const r = data.result;
-    document.getElementById('silence-message').textContent = r.message;
-    document.getElementById('silence-big').textContent = r.breath;
-    document.getElementById('silence-presence').textContent = r.presence;
-    document.getElementById('silence-result').classList.remove('show');
-    void document.getElementById('silence-result').offsetWidth;
-    document.getElementById('silence-result').classList.add('show');
-  } catch(e) { /* silent fail */ }
-}
-
-// ══════════════════════════════════════════
-//  Shared helpers
-// ══════════════════════════════════════════
-async function apiPost(url, body) {
-  let res;
-  try {
-    res = await fetch(url, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) });
-  } catch(e) {
-    throw new Error('ネットワークエラーが発生しました。接続を確認してください。');
-  }
-  let data;
-  try {
-    data = await res.json();
-  } catch(e) {
-    if (res.status >= 500) throw new Error('サーバーが起動中です。無料プランのため初回起動に50秒ほどかかります。少し待ってからもう一度お試しください 🙏');
-    throw new Error('サーバーからの応答を読み取れませんでした。');
-  }
-  if (!data.success) throw new Error(data.error);
-  return data;
-}
-
-function setLoading(tabId, on) {
-  const ids = {
-    diary: ['diary-btn','diary-loading','diary-error'],
-    narration: ['nar-btn','nar-loading','nar-error'],
-    unsentletter: ['letter-btn','letter-loading','letter-error'],
-    lyrics: ['lyrics-btn','lyrics-loading','lyrics-error'],
-    temperature: ['temp-btn','temp-loading','temp-error'],
-    universe: ['universe-btn','universe-loading','universe-error'],
-  };
-  const [btnId, loadId, errId] = ids[tabId] || [];
-  if (btnId) document.getElementById(btnId).disabled = on;
-  if (loadId) document.getElementById(loadId).classList.toggle('show', on);
-  if (errId && on) document.getElementById(errId).classList.remove('show');
-}
-
-function showErr(id, msg) { const el = document.getElementById(id); if(el){el.textContent='⚠️ '+msg; el.classList.add('show');} }
-
-function showCard(id) {
-  const card = document.getElementById(id);
-  card.classList.remove('show'); void card.offsetWidth; card.classList.add('show');
-  card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-}
-
-function flashBtn(e, on, off) {
-  const btn = e.currentTarget;
-  const orig = btn.textContent;
-  btn.textContent = on;
-  setTimeout(() => { btn.textContent = off || orig; }, 2200);
-}
-
-// new-tab hooks are handled in the original switchTab below
-
-// ══════════════════════════════════════════
-//  Scroll reveal (IntersectionObserver)
-// ══════════════════════════════════════════
-(function() {
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        io.unobserve(entry.target);
+    function goHome() {
+      document.getElementById('panel').style.display = 'none';
+      document.getElementById('home').style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      triggerReveal();
+    }
+
+    // ── Wizard ────────────────────────────────────────────────
+    function wizardGoTo(n) {
+      wizardStep = n;
+      document.querySelectorAll('.wizard-step').forEach((s, i) => {
+        s.classList.toggle('active', i + 1 === n);
+      });
+      for (let i = 1; i <= 3; i++) {
+        const d = document.getElementById('wp-' + i);
+        if (i < n) { d.classList.add('done'); d.classList.remove('active'); }
+        else if (i === n) { d.classList.add('active'); d.classList.remove('done'); }
+        else { d.classList.remove('done', 'active'); }
       }
-    });
-  }, { threshold: 0.08 });
+    }
+    function wizardNext() { if (wizardStep < 3) wizardGoTo(wizardStep + 1); }
+    function wizardPrev() { if (wizardStep > 1) wizardGoTo(wizardStep - 1); }
 
-  function observeAll() {
-    document.querySelectorAll('.sr, .sr-left, .sr-scale').forEach(el => {
-      // reset if re-entering home
-      el.classList.remove('visible');
-      io.observe(el);
-    });
-  }
+    function setGenre(g, btn) {
+      selectedGenre = g;
+      document.querySelectorAll('.genre-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+    function setMode(m, btn) {
+      selectedMode = m;
+      document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
 
-  // Initial observe on load
-  observeAll();
+    // ── API helper ────────────────────────────────────────────
+    async function apiPost(url, body) {
+      let res;
+      try {
+        res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+      } catch(e) {
+        throw new Error('ネットワークエラーが発生しました。接続を確認してください。');
+      }
+      let data;
+      try { data = await res.json(); } catch(e) {
+        if (res.status >= 500) throw new Error('サーバーが起動中です。無料プランのため初回起動に50秒ほどかかります。少し待ってからもう一度お試しください 🙏');
+        throw new Error('サーバーからの応答を読み取れませんでした。');
+      }
+      if (!data.success) throw new Error(data.error);
+      return data;
+    }
 
-  // Re-observe when returning to home grid
-  const origGoHome = window.goHome;
-  window.goHome = function() {
-    origGoHome && origGoHome();
-    // brief delay so grid is visible before observing
-    setTimeout(observeAll, 50);
-  };
-})();
-</script>
+    // ── Quote generation ──────────────────────────────────────
+    async function generateQuote() {
+      const loadEl = document.getElementById('quote-loading');
+      const errEl = document.getElementById('quote-error');
+      const ws3btns = document.getElementById('ws3-btns');
+      const feedEl = document.getElementById('quotes-feed');
+
+      loadEl.classList.add('visible');
+      errEl.classList.remove('visible');
+      ws3btns.style.display = 'none';
+      feedEl.classList.remove('visible');
+
+      try {
+        const data = await apiPost('/api/quote', {
+          mood: document.getElementById('mood-text').value,
+          energy: document.getElementById('sl-energy').value,
+          stress: document.getElementById('sl-stress').value,
+          motivation: document.getElementById('sl-motiv').value,
+          emotions: selectedEmotions,
+          recentQuotes,
+          genre: selectedMode === 'original' ? 'mix' : selectedGenre,
+          isNightMode: selectedMode === 'night',
+          prescriptionMode: selectedMode === 'prescription',
+          originalMode: selectedMode === 'original',
+        });
+
+        loadEl.classList.remove('visible');
+        feedEl.classList.add('visible');
+        document.getElementById('quotes-feed').style.display = 'block';
+
+        // Move wizard steps off screen (not needed anymore)
+        document.querySelectorAll('.wizard-step').forEach(s => s.classList.remove('active'));
+        document.getElementById('wiz-progress').style.display = 'none';
+
+        const q = data.quote;
+        if (q.original) recentQuotes.push(q.original.slice(0, 60));
+        if (recentQuotes.length > 8) recentQuotes.shift();
+
+        appendQuoteCard(q);
+      } catch(e) {
+        loadEl.classList.remove('visible');
+        ws3btns.style.display = 'flex';
+        errEl.textContent = e.message;
+        errEl.classList.add('visible');
+      }
+    }
+
+    function appendQuoteCard(q) {
+      const list = document.getElementById('quotes-list');
+      const id = 'qc-' + Date.now();
+      const isSaved = favorites.some(f => f.original === q.original);
+
+      const card = document.createElement('div');
+      card.className = 'quote-card';
+      card.id = id;
+
+      const badge = q.sourceType === 'anime' ? '⚔️ アニメ' : q.sourceType === 'original' ? '✨ AIオリジナル' : '🌍 偉人';
+
+      let rxHtml = '';
+      if (q.prescription) {
+        rxHtml = `<div class="rx-card">
+          <div class="rx-title">処方箋</div>
+          <div class="rx-row"><span class="rx-label">症状</span><span class="rx-val">${q.prescription.symptom}</span></div>
+          <div class="rx-row"><span class="rx-label">用法</span><span class="rx-val">${q.prescription.usage}</span></div>
+          <div class="rx-row"><span class="rx-label">効果</span><span class="rx-val">${q.prescription.effect}</span></div>
+          <div class="rx-row"><span class="rx-label">注意</span><span class="rx-val">${q.prescription.caution}</span></div>
+        </div>`;
+      }
+
+      card.innerHTML = `
+        <button class="save-fav-btn${isSaved?' saved':''}" onclick="toggleFav('${id}',this)" title="保存">🔖</button>
+        <div class="quote-card-badge">${badge}</div>
+        <div class="quote-original">${q.original}</div>
+        ${q.translation ? `<div class="quote-translation">${q.translation}</div>` : ''}
+        <div class="quote-author-line">
+          <div class="quote-author-dot"></div>
+          <div class="quote-author-name">${q.authorJp || q.author}</div>
+        </div>
+        ${q.reason ? `<div class="quote-reason">${q.reason}</div>` : ''}
+        ${rxHtml}
+      `;
+
+      card._quoteData = q;
+      list.appendChild(card);
+
+      // Animate in
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => { card.classList.add('in'); });
+      });
+
+      // Scroll to it
+      setTimeout(() => {
+        card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }
+
+    function toggleFav(cardId, btn) {
+      const card = document.getElementById(cardId);
+      const q = card._quoteData;
+      const existing = favorites.findIndex(f => f.original === q.original);
+      if (existing >= 0) {
+        favorites.splice(existing, 1);
+        btn.classList.remove('saved');
+      } else {
+        favorites.push({ original: q.original, translation: q.translation, authorJp: q.authorJp || q.author, savedAt: new Date().toISOString() });
+        btn.classList.add('saved');
+      }
+      localStorage.setItem('tomoshibi-favs', JSON.stringify(favorites));
+    }
+
+    // ── Generic panel helpers ─────────────────────────────────
+    function showLoading(key, show) {
+      document.getElementById(key + '-loading').classList.toggle('visible', show);
+    }
+    function showError(key, msg) {
+      const el = document.getElementById(key + '-error');
+      el.textContent = msg;
+      el.classList.toggle('visible', !!msg);
+    }
+    function showResult(key, show) {
+      document.getElementById(key + '-result').classList.toggle('visible', show);
+      if (show) {
+        const inputArea = document.getElementById(key + '-input-area');
+        if (inputArea) inputArea.style.display = 'none';
+      }
+    }
+    function resetPanel(key) {
+      document.getElementById(key + '-result').classList.remove('visible');
+      const inputArea = document.getElementById(key + '-input-area');
+      if (inputArea) inputArea.style.display = '';
+      showError(key, '');
+    }
+
+    // ── Future self ──────────────────────────────────────────
+    async function genFuture() {
+      showLoading('future', true); showError('future', ''); showResult('future', false);
+      try {
+        const d = await apiPost('/api/future-self', {
+          age: document.getElementById('future-age').value,
+          worries: document.getElementById('future-worries').value,
+          goals: document.getElementById('future-goals').value,
+        });
+        const r = d.result;
+        document.getElementById('fr-from').textContent = r.from || '3年後のあなたより';
+        document.getElementById('fr-message').textContent = r.message;
+        document.getElementById('fr-sign').textContent = '— ' + (r.from || '3年後より');
+        document.getElementById('fr-hint').textContent = r.hint;
+        if (r.quote) {
+          document.getElementById('fr-quote-text').textContent = r.quote;
+          document.getElementById('fr-quote-author').textContent = '座右の銘';
+          document.getElementById('fr-quote-wrap').style.display = '';
+        }
+        showLoading('future', false); showResult('future', true);
+      } catch(e) { showLoading('future', false); showError('future', e.message); }
+    }
+
+    // ── Emotion translate ────────────────────────────────────
+    async function genEmotion() {
+      showLoading('emotion', true); showError('emotion', ''); showResult('emotion', false);
+      try {
+        const d = await apiPost('/api/translate-emotion', { emotion: document.getElementById('emotion-text').value });
+        const r = d.result;
+        document.getElementById('er-core').textContent = r.core;
+        document.getElementById('er-translation').textContent = r.translation;
+        document.getElementById('er-gentle').textContent = r.gentle;
+        if (r.quote) {
+          const txt = r.quote.translation ? `${r.quote.original}　—　${r.quote.translation}` : r.quote.original;
+          document.getElementById('er-quote-text').textContent = txt;
+          document.getElementById('er-quote-author').textContent = r.quote.authorJp || r.quote.author;
+          document.getElementById('er-quote-wrap').style.display = '';
+        }
+        showLoading('emotion', false); showResult('emotion', true);
+      } catch(e) { showLoading('emotion', false); showError('emotion', e.message); }
+    }
+
+    // ── Weather ──────────────────────────────────────────────
+    async function genWeather() {
+      showLoading('weather', true); showError('weather', ''); showResult('weather', false);
+      try {
+        const d = await apiPost('/api/weather-emotion', { emotion: document.getElementById('weather-text').value });
+        const r = d.result;
+        const bg = document.getElementById('wr-bg');
+        bg.style.background = `linear-gradient(160deg, ${r.gradient})`;
+        document.getElementById('wr-icon').textContent = r.icon;
+        document.getElementById('wr-name').textContent = r.weather;
+        document.getElementById('wr-desc').textContent = r.description;
+        document.getElementById('wr-forecast').textContent = r.forecast;
+        if (r.quote) {
+          const txt = r.quote.translation ? `${r.quote.original}　—　${r.quote.translation}` : r.quote.original;
+          document.getElementById('wr-quote-text').textContent = txt;
+          document.getElementById('wr-quote-author').textContent = r.quote.authorJp || r.quote.author;
+          document.getElementById('wr-quote-wrap').style.display = '';
+        }
+        showLoading('weather', false); showResult('weather', true);
+      } catch(e) { showLoading('weather', false); showError('weather', e.message); }
+    }
+
+    // ── Diary ────────────────────────────────────────────────
+    async function genDiary() {
+      showLoading('diary', true); showError('diary', ''); showResult('diary', false);
+      try {
+        const d = await apiPost('/api/diary', { emotion: document.getElementById('diary-text').value });
+        const r = d.result;
+        document.getElementById('dr-header').textContent = `${r.date}　${r.weather}　${r.city}`;
+        document.getElementById('dr-entry').textContent = r.entry;
+        document.getElementById('dr-closing').textContent = r.closing;
+        showLoading('diary', false); showResult('diary', true);
+      } catch(e) { showLoading('diary', false); showError('diary', e.message); }
+    }
+
+    // ── Narration ────────────────────────────────────────────
+    async function genNarration() {
+      showLoading('narration', true); showError('narration', ''); showResult('narration', false);
+      try {
+        const d = await apiPost('/api/narration', {
+          event: document.getElementById('narr-event').value,
+          emotion: document.getElementById('narr-emotion').value,
+        });
+        const r = d.result;
+        document.getElementById('nr-chapter').textContent = r.chapter;
+        document.getElementById('nr-narration').textContent = r.narration;
+        document.getElementById('nr-next').textContent = '次章への予告：' + r.next;
+        document.getElementById('nr-theme').textContent = 'テーマ：' + r.theme;
+        showLoading('narration', false); showResult('narration', true);
+      } catch(e) { showLoading('narration', false); showError('narration', e.message); }
+    }
+
+    // ── Letter ───────────────────────────────────────────────
+    async function genLetter() {
+      showLoading('letter', true); showError('letter', ''); showResult('letter', false);
+      try {
+        const d = await apiPost('/api/letter', { emotion: document.getElementById('letter-text').value });
+        const r = d.result;
+        document.getElementById('lr-to').textContent = r.to;
+        document.getElementById('lr-body').textContent = r.letter;
+        document.getElementById('lr-ps').textContent = '追伸：' + r.ps;
+        document.getElementById('lr-from').textContent = r.from;
+        showLoading('letter', false); showResult('letter', true);
+      } catch(e) { showLoading('letter', false); showError('letter', e.message); }
+    }
+
+    // ── Lyrics ───────────────────────────────────────────────
+    async function genLyrics() {
+      showLoading('lyrics', true); showError('lyrics', ''); showResult('lyrics', false);
+      try {
+        const d = await apiPost('/api/lyrics', { emotion: document.getElementById('lyrics-text').value });
+        const r = d.result;
+        document.getElementById('lyr-genre').textContent = r.genre + '　' + r.tempo;
+        document.getElementById('lyr-title').textContent = r.title;
+        document.getElementById('lyr-artist').textContent = r.artist;
+        document.getElementById('lyr-lyrics').textContent = r.lyrics;
+        document.getElementById('lyr-concept').textContent = r.concept;
+        showLoading('lyrics', false); showResult('lyrics', true);
+      } catch(e) { showLoading('lyrics', false); showError('lyrics', e.message); }
+    }
+
+    // ── Temperature ──────────────────────────────────────────
+    async function genTemp() {
+      showLoading('temperature', true); showError('temperature', ''); showResult('temperature', false);
+      try {
+        const d = await apiPost('/api/temperature', { emotion: document.getElementById('temp-text').value });
+        const r = d.result;
+        document.getElementById('tr-temp').textContent = r.temperature;
+        document.getElementById('tr-feels').textContent = r.feelsLike;
+        document.getElementById('tr-humidity').textContent = r.humidity;
+        document.getElementById('tr-pressure').textContent = r.pressure;
+        document.getElementById('tr-condition').textContent = r.condition;
+        document.getElementById('tr-wind').textContent = '風：' + r.wind + '　視界：' + r.visibility;
+        document.getElementById('tr-obs').textContent = r.observation;
+        document.getElementById('tr-forecast').textContent = '明日：' + r.forecast;
+        showLoading('temperature', false); showResult('temperature', true);
+      } catch(e) { showLoading('temperature', false); showError('temperature', e.message); }
+    }
+
+    // ── Universe ─────────────────────────────────────────────
+    async function genUniverse() {
+      showLoading('universe', true); showError('universe', ''); showResult('universe', false);
+      try {
+        const d = await apiPost('/api/universe', { emotion: document.getElementById('uni-text').value });
+        const r = d.result;
+        document.getElementById('ur-name').textContent = r.constellation;
+        document.getElementById('ur-story').textContent = r.story;
+        document.getElementById('ur-msg').textContent = r.message;
+
+        // Draw stars
+        const canvas = document.getElementById('ur-stars');
+        canvas.innerHTML = '';
+        if (r.bgColor) canvas.style.background = r.bgColor;
+        (r.stars || []).forEach(s => {
+          const dot = document.createElement('div');
+          dot.className = 'star-dot';
+          const sz = (s.size || 2) * 3;
+          dot.style.cssText = `width:${sz}px;height:${sz}px;background:${s.color||'#FFD89B'};
+            left:${Math.random()*85+5}%;top:${Math.random()*75+5}%;
+            animation-delay:${Math.random()*2}s;box-shadow:0 0 ${sz*2}px ${s.color||'#FFD89B'}`;
+          const label = document.createElement('span');
+          label.style.cssText = 'position:absolute;top:100%;left:50%;transform:translateX(-50%);font-size:9px;color:rgba(255,255,255,0.5);white-space:nowrap;margin-top:2px;';
+          label.textContent = s.name;
+          dot.appendChild(label);
+          canvas.appendChild(dot);
+        });
+
+        showLoading('universe', false); showResult('universe', true);
+      } catch(e) { showLoading('universe', false); showError('universe', e.message); }
+    }
+
+    // ── Silence ──────────────────────────────────────────────
+    async function genSilence(pattern) {
+      document.getElementById('silence-choices').style.display = 'none';
+      showLoading('silence', true);
+      try {
+        const d = await apiPost('/api/silence', { pattern });
+        const r = d.result;
+        document.getElementById('sr-message').textContent = r.message;
+        document.getElementById('sr-breath').textContent = r.breath;
+        document.getElementById('sr-presence').textContent = r.presence;
+        showLoading('silence', false);
+        document.getElementById('silence-result').classList.add('visible');
+      } catch(e) {
+        showLoading('silence', false);
+        document.getElementById('silence-choices').style.display = '';
+      }
+    }
+
+    function resetPanel(key) {
+      const resEl = document.getElementById(key + '-result');
+      if (resEl) resEl.classList.remove('visible');
+      const inputArea = document.getElementById(key + '-input-area');
+      if (inputArea) inputArea.style.display = '';
+      if (key === 'silence') {
+        document.getElementById('silence-choices').style.display = '';
+        document.getElementById('silence-result').classList.remove('visible');
+      }
+      showError(key, '');
+    }
+
+    // ── Favorites ────────────────────────────────────────────
+    function renderFavs() {
+      const wrap = document.getElementById('fav-list-wrap');
+      if (!favorites.length) {
+        wrap.innerHTML = `<div class="fav-empty"><div class="fav-icon">🔖</div>保存した言葉はありません。<br>名言カードの 🔖 から保存できます。</div>`;
+        return;
+      }
+      wrap.innerHTML = `<div class="fav-list">${favorites.map((f, i) => `
+        <div class="fav-item">
+          <div class="fav-quote">${f.original}${f.translation ? '<br><span style="font-size:0.82rem;color:var(--muted)">'+f.translation+'</span>' : ''}</div>
+          <div class="fav-meta">
+            <span style="color:var(--amber2)">${f.authorJp}</span>
+            <button class="fav-del" onclick="delFav(${i})">×</button>
+          </div>
+        </div>
+      `).join('')}</div>`;
+    }
+    function delFav(i) {
+      favorites.splice(i, 1);
+      localStorage.setItem('tomoshibi-favs', JSON.stringify(favorites));
+      renderFavs();
+    }
+
+    // ── Microphone ───────────────────────────────────────────
+    let recognition, isRecording = false;
+    function toggleMic() {
+      if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
+        document.getElementById('mic-status').textContent = '音声認識はこのブラウザ非対応です';
+        return;
+      }
+      if (isRecording) {
+        recognition && recognition.stop();
+        return;
+      }
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      recognition = new SpeechRecognition();
+      recognition.lang = 'ja-JP';
+      recognition.interimResults = true;
+      recognition.onstart = () => {
+        isRecording = true;
+        document.getElementById('mic-btn').classList.add('recording');
+        document.getElementById('mic-status').textContent = '🎤 聞いています…';
+        document.getElementById('mic-status').classList.add('rec');
+      };
+      recognition.onresult = e => {
+        let t = '';
+        for (let i = e.resultIndex; i < e.results.length; i++) t += e.results[i][0].transcript;
+        document.getElementById('mood-text').value = t;
+      };
+      recognition.onend = () => {
+        isRecording = false;
+        document.getElementById('mic-btn').classList.remove('recording');
+        document.getElementById('mic-status').textContent = '';
+        document.getElementById('mic-status').classList.remove('rec');
+      };
+      recognition.start();
+    }
+
+    // ── Scroll reveal on home ─────────────────────────────────
+    function triggerReveal() {
+      const items = document.querySelectorAll('#home .reveal');
+      items.forEach(el => { el.classList.remove('visible'); });
+      setTimeout(() => {
+        const obs = new IntersectionObserver((entries) => {
+          entries.forEach((entry, idx) => {
+            if (entry.isIntersecting) {
+              setTimeout(() => { entry.target.classList.add('visible'); }, idx * 120);
+              obs.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.05 });
+        items.forEach(el => obs.observe(el));
+      }, 50);
+    }
+
+    // ── Init ─────────────────────────────────────────────────
+    triggerReveal();
+  </script>
 </body>
 </html>

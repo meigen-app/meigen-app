@@ -1,11 +1,11 @@
 {
-  "name": "今日の名言",
-  "short_name": "名言",
-  "description": "気分に寄り添う名言アプリ",
+  "name": "灯 Tomoshibi",
+  "short_name": "灯",
+  "description": "静かに、あなたに寄り添う言葉",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f9c6ff",
-  "theme_color": "#c26bff",
+  "background_color": "#0F172A",
+  "theme_color": "#0F172A",
   "orientation": "portrait",
   "icons": [
     { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
