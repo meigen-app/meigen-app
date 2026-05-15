@@ -12,1696 +12,1123 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@300;400;500;700&family=Shippori+Mincho:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#0D1117; --bg2:#111820; --bg3:#1A2332;
+      --flame:#F97316; --amber:#F59E0B; --amber2:#FCD34D; --amber3:#FEF3C7;
+      --glow:rgba(249,115,22,.16); --glow2:rgba(245,158,11,.08);
+      --txt:#F1F5F9; --txt2:#CBD5E1; --muted:#64748B; --faint:#2D3F55;
+      --border:rgba(249,115,22,.13); --r:20px;
+      --anim-speed:1;
+    }
+    body.deep-night{
+      --bg:#06090F; --bg2:#080C14; --bg3:#10192A;
+      --border:rgba(249,115,22,.09);
+      --anim-speed:1.4;
+    }
+    html{scroll-behavior:smooth}
+    body{min-height:100vh;background:var(--bg);font-family:'Zen Kaku Gothic New',sans-serif;color:var(--txt);overflow-x:hidden;transition:background 2s}
 
-    :root {
-      --bg:    #0D1117;
-      --bg2:   #111820;
-      --bg3:   #1A2332;
-      --flame:  #F97316;
-      --amber:  #F59E0B;
-      --amber2: #FCD34D;
-      --amber3: #FEF3C7;
-      --ember:  #EF4444;
-      --glow:   rgba(249,115,22,0.18);
-      --glow2:  rgba(245,158,11,0.10);
-      --txt:    #F1F5F9;
-      --txt2:   #CBD5E1;
-      --muted:  #64748B;
-      --faint:  #2D3F55;
-      --border: rgba(249,115,22,0.14);
-      --r: 20px;
+    /* ══ HERO ══ */
+    #hero{position:relative;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+    #hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 70%,rgba(249,115,22,.13) 0%,transparent 70%),radial-gradient(ellipse 40% 40% at 50% 80%,rgba(245,158,11,.10) 0%,transparent 60%);pointer-events:none}
+    .embers{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+    .ember{position:absolute;bottom:30%;border-radius:50%;opacity:0;animation:rise var(--d,4s) var(--delay,0s) ease-in infinite}
+    @keyframes rise{0%{opacity:0;transform:translateY(0) translateX(0) scale(1)}15%{opacity:.8}70%{opacity:.4}100%{opacity:0;transform:translateY(-280px) translateX(var(--dx,20px)) scale(.2)}}
+    .hero-kanji{font-family:'Shippori Mincho',serif;font-size:clamp(7rem,25vw,11rem);font-weight:700;color:var(--amber2);line-height:1;animation:flicker calc(4s*var(--anim-speed)) ease-in-out infinite;position:relative;z-index:1;cursor:default;user-select:none}
+    @keyframes flicker{
+      0%  {text-shadow:0 0 24px rgba(249,115,22,.9),0 0 60px rgba(245,158,11,.5),0 0 120px rgba(249,115,22,.2);transform:scale(1) rotate(-.4deg)}
+      20% {text-shadow:0 0 40px rgba(249,115,22,1),0 0 90px rgba(245,158,11,.7),0 0 160px rgba(249,115,22,.25);transform:scale(1.025) rotate(.4deg)}
+      40% {text-shadow:0 0 28px rgba(245,158,11,.85),0 0 70px rgba(249,115,22,.5),0 0 130px rgba(239,68,68,.15);transform:scale(1.01) rotate(-.2deg)}
+      60% {text-shadow:0 0 36px rgba(239,68,68,.7),0 0 80px rgba(249,115,22,.6),0 0 140px rgba(245,158,11,.2);transform:scale(1.02) rotate(.3deg)}
+      80% {text-shadow:0 0 20px rgba(249,115,22,.8),0 0 55px rgba(245,158,11,.4),0 0 100px rgba(249,115,22,.15);transform:scale(1.005) rotate(-.3deg)}
+      100%{text-shadow:0 0 24px rgba(249,115,22,.9),0 0 60px rgba(245,158,11,.5),0 0 120px rgba(249,115,22,.2);transform:scale(1) rotate(-.4deg)}
     }
+    .hero-roman{font-family:'Zen Kaku Gothic New',sans-serif;font-size:.85rem;font-weight:300;letter-spacing:.5em;color:var(--muted);margin-top:14px;text-transform:uppercase;position:relative;z-index:1;animation:fadeUp 2s ease .5s both}
+    .hero-sub{font-family:'Shippori Mincho',serif;font-size:.95rem;color:rgba(203,213,225,.45);margin-top:16px;letter-spacing:.12em;position:relative;z-index:1;animation:fadeUp 2s ease 1s both}
+    .scroll-hint{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;z-index:1;animation:fadeUp 2s ease 1.6s both;cursor:pointer}
+    .scroll-hint span{font-size:.68rem;letter-spacing:.25em;color:var(--muted);text-transform:uppercase}
+    .scroll-arrow{width:28px;height:28px;border:1px solid rgba(249,115,22,.25);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--flame);font-size:.8rem;animation:bounce 2.5s ease-in-out infinite}
+    @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 
-    html { scroll-behavior: smooth; }
+    /* ══ HOME ══ */
+    #home{position:relative;z-index:1}
+    .home-inner{max-width:540px;margin:0 auto;padding:56px 22px 100px;width:100%}
 
-    body {
-      min-height: 100vh;
-      background: var(--bg);
-      font-family: 'Zen Kaku Gothic New', sans-serif;
-      color: var(--txt);
-      overflow-x: hidden;
-    }
+    /* Night greeting */
+    .night-greeting{font-family:'Shippori Mincho',serif;font-size:.85rem;color:rgba(245,158,11,.55);letter-spacing:.18em;text-align:center;margin-bottom:28px;animation:fadeUp 1.2s ease both}
 
-    /* ══════════════ HERO ══════════════ */
-    #hero {
-      position: relative;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
+    /* Main prompt */
+    .main-prompt{font-family:'Shippori Mincho',serif;font-size:1.6rem;font-weight:500;color:var(--txt);line-height:1.7;letter-spacing:.04em;margin-bottom:10px;animation:fadeUp .8s ease both}
+    .main-subprompt{font-family:'Shippori Mincho',serif;font-size:.9rem;color:var(--muted);letter-spacing:.1em;margin-bottom:28px;line-height:1.8;animation:fadeUp .8s ease .1s both}
 
-    /* Background flame gradient */
-    #hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 60% 50% at 50% 70%, rgba(249,115,22,0.13) 0%, transparent 70%),
-        radial-gradient(ellipse 40% 40% at 50% 80%, rgba(245,158,11,0.10) 0%, transparent 60%);
-      pointer-events: none;
-    }
+    /* Quick chips */
+    .quick-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+    .qchip{border:1px solid var(--border);background:var(--bg2);border-radius:50px;padding:9px 18px;font-size:.88rem;cursor:pointer;transition:all .2s;font-family:'Zen Kaku Gothic New',sans-serif;color:var(--txt2)}
+    .qchip.active{background:rgba(249,115,22,.12);border-color:var(--flame);color:var(--amber2)}
 
-    /* Ember particles */
-    .embers {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      overflow: hidden;
-    }
-    .ember {
-      position: absolute;
-      bottom: 30%;
-      width: 3px;
-      height: 3px;
-      border-radius: 50%;
-      background: var(--amber2);
-      opacity: 0;
-      animation: rise var(--d, 4s) var(--delay, 0s) ease-in infinite;
-    }
-    @keyframes rise {
-      0%   { opacity: 0; transform: translateY(0) translateX(0) scale(1); }
-      15%  { opacity: 0.8; }
-      70%  { opacity: 0.4; }
-      100% { opacity: 0; transform: translateY(-280px) translateX(var(--dx, 20px)) scale(0.2); }
-    }
+    /* Textarea */
+    .ta-wrap{position:relative;margin-bottom:16px}
+    textarea{width:100%;border:1px solid var(--border);border-radius:16px;padding:16px 52px 16px 18px;font-size:.95rem;font-family:'Zen Kaku Gothic New',sans-serif;resize:none;outline:none;background:var(--bg2);color:var(--txt);transition:border-color .25s;line-height:1.8}
+    textarea::placeholder{color:var(--muted)}
+    textarea:focus{border-color:rgba(249,115,22,.4)}
+    .mic-btn{position:absolute;right:12px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;border:none;background:rgba(249,115,22,.1);color:var(--flame);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+    .mic-btn.recording{background:rgba(239,68,68,.18);color:#EF4444;animation:pulse-mic 1s infinite}
+    @keyframes pulse-mic{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,.3)}50%{box-shadow:0 0 0 8px rgba(239,68,68,0)}}
+    .mic-status{font-size:.74rem;color:var(--flame);margin-top:5px;min-height:14px}
 
-    /* The 灯 character */
-    .hero-kanji {
-      font-family: 'Shippori Mincho', serif;
-      font-size: clamp(7rem, 25vw, 11rem);
-      font-weight: 700;
-      color: var(--amber2);
-      line-height: 1;
-      animation: flicker 4s ease-in-out infinite;
-      position: relative;
-      z-index: 1;
-      cursor: default;
-      user-select: none;
-    }
-    @keyframes flicker {
-      0%   { text-shadow: 0 0 24px rgba(249,115,22,0.9), 0 0 60px rgba(245,158,11,0.5), 0 0 120px rgba(249,115,22,0.2); transform: scale(1) rotate(-0.4deg); }
-      20%  { text-shadow: 0 0 40px rgba(249,115,22,1),   0 0 90px rgba(245,158,11,0.7), 0 0 160px rgba(249,115,22,0.25); transform: scale(1.025) rotate(0.4deg); }
-      40%  { text-shadow: 0 0 28px rgba(245,158,11,0.85),0 0 70px rgba(249,115,22,0.5), 0 0 130px rgba(239,68,68,0.15);  transform: scale(1.01) rotate(-0.2deg); }
-      60%  { text-shadow: 0 0 36px rgba(239,68,68,0.7),  0 0 80px rgba(249,115,22,0.6), 0 0 140px rgba(245,158,11,0.2); transform: scale(1.02) rotate(0.3deg); }
-      80%  { text-shadow: 0 0 20px rgba(249,115,22,0.8), 0 0 55px rgba(245,158,11,0.4), 0 0 100px rgba(249,115,22,0.15); transform: scale(1.005) rotate(-0.3deg); }
-      100% { text-shadow: 0 0 24px rgba(249,115,22,0.9), 0 0 60px rgba(245,158,11,0.5), 0 0 120px rgba(249,115,22,0.2); transform: scale(1) rotate(-0.4deg); }
-    }
+    /* Compact settings */
+    .compact-settings{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap}
+    .cset-row{display:flex;border-radius:50px;overflow:hidden;border:1px solid var(--border);background:var(--bg2)}
+    .cset-btn{padding:8px 14px;border:none;background:transparent;font-family:'Zen Kaku Gothic New',sans-serif;font-size:.78rem;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap}
+    .cset-btn.active{background:rgba(249,115,22,.12);color:var(--amber2)}
 
-    .hero-roman {
-      font-family: 'Zen Kaku Gothic New', sans-serif;
-      font-size: 0.85rem;
-      font-weight: 300;
-      letter-spacing: 0.5em;
-      color: var(--muted);
-      margin-top: 14px;
-      text-transform: uppercase;
-      position: relative;
-      z-index: 1;
-      animation: fadeIn 2s ease 0.5s both;
-    }
-    .hero-sub {
-      font-family: 'Shippori Mincho', serif;
-      font-size: 0.95rem;
-      color: rgba(203,213,225,0.5);
-      margin-top: 18px;
-      letter-spacing: 0.12em;
-      position: relative;
-      z-index: 1;
-      animation: fadeIn 2s ease 1s both;
-    }
+    /* Adv toggle */
+    .adv-toggle{font-size:.72rem;color:var(--muted);letter-spacing:.1em;cursor:pointer;margin-bottom:14px;display:inline-flex;align-items:center;gap:4px;user-select:none;transition:color .2s}
+    .adv-toggle:hover{color:var(--amber)}
+    .adv-panel{display:none;margin-bottom:16px}
+    .adv-panel.open{display:block}
+    .slider-block{display:flex;flex-direction:column;gap:18px;background:var(--bg3);border:1px solid var(--border);border-radius:16px;padding:20px}
+    .slider-row label{display:flex;justify-content:space-between;font-size:.84rem;font-weight:500;color:var(--txt2);margin-bottom:8px}
+    .slider-row label span{color:var(--amber);font-weight:700}
+    input[type=range]{-webkit-appearance:none;width:100%;height:4px;border-radius:2px;background:var(--faint);outline:none;cursor:pointer}
+    input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--flame);box-shadow:0 0 10px rgba(249,115,22,.5);cursor:pointer}
 
-    /* Scroll hint */
-    .scroll-hint {
-      position: absolute;
-      bottom: 36px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      z-index: 1;
-      animation: fadeIn 2s ease 1.5s both;
-      cursor: pointer;
-    }
-    .scroll-hint span {
-      font-size: 0.68rem;
-      letter-spacing: 0.25em;
-      color: var(--muted);
-      text-transform: uppercase;
-    }
-    .scroll-arrow {
-      width: 28px;
-      height: 28px;
-      border: 1px solid rgba(249,115,22,0.25);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--flame);
-      font-size: 0.8rem;
-      animation: bounce 2.5s ease-in-out infinite;
-    }
-    @keyframes bounce {
-      0%,100% { transform: translateY(0); }
-      50%      { transform: translateY(6px); }
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(12px); }
-      to   { opacity: 1; transform: none; }
-    }
+    /* Primary button */
+    .btn-primary{width:100%;padding:17px;border-radius:16px;border:none;background:linear-gradient(135deg,#F97316 0%,#FBBF24 100%);color:#0D1117;font-family:'Zen Kaku Gothic New',sans-serif;font-size:.98rem;font-weight:700;cursor:pointer;letter-spacing:.07em;transition:opacity .2s,transform .15s;box-shadow:0 4px 24px rgba(249,115,22,.35)}
+    .btn-primary:hover{opacity:.9}
+    .btn-primary:active{transform:scale(.98)}
+    .btn-primary:disabled{opacity:.4;cursor:not-allowed}
+    .btn-ghost{width:100%;padding:14px;border-radius:14px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Zen Kaku Gothic New',sans-serif;font-size:.9rem;cursor:pointer;transition:all .2s}
+    .btn-ghost:hover{border-color:var(--flame);color:var(--flame)}
 
-    /* ══════════════ HOME (grid section) ══════════════ */
-    #home { position: relative; z-index: 1; }
-
-    .grid-section {
-      padding: 56px 20px 100px;
-      max-width: 540px;
-      margin: 0 auto;
-      width: 100%;
-    }
-
-    .section-label {
-      font-size: 0.7rem;
-      letter-spacing: 0.28em;
-      color: var(--muted);
-      text-transform: uppercase;
-      margin-bottom: 20px;
-      padding-left: 2px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .section-label::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
-
-    .grid-3 {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-bottom: 12px;
-    }
-
-    .feat-card {
-      background: var(--bg3);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 22px 12px 18px;
-      cursor: pointer;
-      text-align: center;
-      transition: border-color 0.3s, transform 0.18s, box-shadow 0.3s;
-      user-select: none;
-      position: relative;
-      overflow: hidden;
-    }
-    .feat-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at 50% 0%, rgba(249,115,22,0.12) 0%, transparent 65%);
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-    .feat-card:active  { transform: scale(0.95); }
-    .feat-card:hover   { border-color: rgba(249,115,22,0.35); box-shadow: 0 4px 24px rgba(249,115,22,0.08); }
-    .feat-card:hover::before { opacity: 1; }
-
-    .feat-icon  { font-size: 1.8rem; margin-bottom: 10px; display: block; }
-    .feat-name  {
-      font-size: 0.8rem;
-      font-weight: 500;
-      color: var(--txt2);
-      letter-spacing: 0.04em;
-      line-height: 1.5;
-    }
-
-    /* Primary (言葉を探す) card */
-    .feat-card.primary {
-      background: linear-gradient(160deg, rgba(249,115,22,0.12) 0%, var(--bg3) 100%);
-      border-color: rgba(249,115,22,0.3);
-      box-shadow: 0 0 30px rgba(249,115,22,0.06) inset;
-    }
-    .feat-card.primary .feat-name  { color: var(--amber2); font-size: 0.85rem; }
-    .feat-card.primary .feat-icon  { animation: icon-pulse 3s ease-in-out infinite; }
-    @keyframes icon-pulse {
-      0%,100% { filter: drop-shadow(0 0 4px rgba(249,115,22,0.5)); }
-      50%      { filter: drop-shadow(0 0 10px rgba(249,115,22,0.9)); }
-    }
-
-    /* ── Scroll reveal ── */
-    .reveal {
-      opacity: 0;
-      transform: translateY(28px);
-      transition: opacity 0.75s ease, transform 0.75s ease;
-    }
-    .reveal.visible { opacity: 1; transform: none; }
-
-    /* ══════════════ PANEL ══════════════ */
-    #panel {
-      display: none;
-      min-height: 100vh;
-      position: relative;
-      z-index: 1;
-    }
-    .panel-header {
-      display: flex;
-      align-items: center;
-      padding: 52px 20px 22px;
-      gap: 14px;
-      max-width: 560px;
-      margin: 0 auto;
-      width: 100%;
-    }
-    .back-btn {
-      width: 38px; height: 38px;
-      border-radius: 50%;
-      border: 1px solid var(--border);
-      background: var(--bg3);
-      color: var(--muted);
-      font-size: 1.05rem;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-      transition: border-color 0.2s, color 0.2s;
-    }
-    .back-btn:hover { border-color: var(--flame); color: var(--flame); }
-
-    .panel-title {
-      font-family: 'Shippori Mincho', serif;
-      font-size: 1.15rem;
-      font-weight: 500;
-      color: var(--txt2);
-      letter-spacing: 0.08em;
-    }
-
-    .tab-panel { display: none; }
-    .tab-panel.active { display: block; }
-    .panel-body {
-      max-width: 560px;
-      margin: 0 auto;
-      padding: 0 20px 100px;
-    }
-
-    /* ── Cards ── */
-    .tomo-card {
-      background: var(--bg3);
-      border: 1px solid var(--border);
-      border-radius: var(--r);
-      padding: 22px 20px;
-      margin-bottom: 12px;
-    }
-    .tomo-card-label {
-      font-size: 0.67rem;
-      letter-spacing: 0.22em;
-      color: var(--muted);
-      text-transform: uppercase;
-      margin-bottom: 14px;
-    }
-
-    /* ── Wizard ── */
-    .wizard-step { display: none; }
-    .wizard-step.active { display: block; }
-    .wizard-progress {
-      display: flex;
-      gap: 6px;
-      margin-bottom: 24px;
-    }
-    .wp-dot {
-      height: 3px; flex: 1; border-radius: 2px;
-      background: var(--faint);
-      transition: background 0.4s;
-    }
-    .wp-dot.done   { background: var(--flame); }
-    .wp-dot.active { background: var(--amber2); }
-
-    /* ── Genre ── */
-    .genre-row { display: flex; gap: 8px; margin-bottom: 0; }
-    .genre-btn {
-      flex: 1;
-      padding: 16px 8px;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      background: var(--bg2);
-      font-family: 'Zen Kaku Gothic New', sans-serif;
-      font-size: 0.82rem;
-      font-weight: 500;
-      color: var(--muted);
-      cursor: pointer;
-      transition: all 0.25s;
-      text-align: center;
-      line-height: 1.6;
-    }
-    .genre-btn .gi { font-size: 1.4rem; display: block; margin-bottom: 5px; }
-    .genre-btn.active {
-      background: rgba(249,115,22,0.1);
-      border-color: var(--flame);
-      color: var(--amber2);
-    }
-
-    /* ── Mode toggle ── */
-    .mode-row {
-      display: flex;
-      border-radius: 50px;
-      overflow: hidden;
-      border: 1px solid var(--border);
-      background: var(--bg2);
-    }
-    .mode-btn {
-      flex: 1; padding: 11px 4px;
-      border: none; background: transparent;
-      font-family: 'Zen Kaku Gothic New', sans-serif;
-      font-size: 0.78rem; font-weight: 500;
-      color: var(--muted); cursor: pointer;
-      transition: all 0.25s; white-space: nowrap;
-    }
-    .mode-btn.active { background: rgba(249,115,22,0.12); color: var(--amber2); }
-
-    /* ── Emotions ── */
-    .emotions-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
-    .emo-btn {
-      border: 1px solid var(--border);
-      background: var(--bg2);
-      border-radius: 50px;
-      padding: 8px 18px;
-      font-size: 0.85rem;
-      cursor: pointer;
-      transition: all 0.2s;
-      font-family: 'Zen Kaku Gothic New', sans-serif;
-      color: var(--txt2);
-    }
-    .emo-btn.active {
-      background: rgba(249,115,22,0.12);
-      border-color: var(--flame);
-      color: var(--amber2);
-    }
-
-    /* ── Sliders ── */
-    .slider-block { display: flex; flex-direction: column; gap: 20px; }
-    .slider-row label {
-      display: flex; justify-content: space-between;
-      font-size: 0.88rem; font-weight: 500; color: var(--txt2); margin-bottom: 9px;
-    }
-    .slider-row label span { color: var(--amber); font-weight: 700; }
-    input[type=range] {
-      -webkit-appearance: none; width: 100%; height: 4px;
-      border-radius: 2px; background: var(--faint);
-      outline: none; cursor: pointer;
-    }
-    input[type=range]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 20px; height: 20px; border-radius: 50%;
-      background: var(--flame);
-      box-shadow: 0 0 10px rgba(249,115,22,0.55);
-      cursor: pointer;
-    }
-
-    /* ── Textarea ── */
-    .ta-wrap { position: relative; }
-    textarea {
-      width: 100%;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 14px 52px 14px 16px;
-      font-size: 0.95rem;
-      font-family: 'Zen Kaku Gothic New', sans-serif;
-      resize: none; outline: none;
-      background: var(--bg2);
-      color: var(--txt);
-      transition: border-color 0.25s;
-      line-height: 1.75;
-    }
-    textarea::placeholder { color: var(--muted); }
-    textarea:focus { border-color: rgba(249,115,22,0.4); }
-    .mic-btn {
-      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
-      width: 36px; height: 36px; border-radius: 50%; border: none;
-      background: rgba(249,115,22,0.12); color: var(--flame);
-      font-size: 1rem; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: all 0.2s;
-    }
-    .mic-btn.recording { background: rgba(239,68,68,0.18); color: #EF4444; animation: pulse-mic 1s infinite; }
-    @keyframes pulse-mic { 0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,.3)}50%{box-shadow:0 0 0 8px rgba(239,68,68,0)} }
-    .mic-status { font-size: 0.74rem; color: var(--flame); margin-top: 6px; min-height: 16px; }
-    .mic-status.rec { color: #EF4444; }
-
-    /* ── Buttons ── */
-    .btn-primary {
-      width: 100%; padding: 16px;
-      border-radius: 14px; border: none;
-      background: linear-gradient(135deg, #F97316 0%, #FBBF24 100%);
-      color: #0D1117;
-      font-family: 'Zen Kaku Gothic New', sans-serif;
-      font-size: 0.95rem; font-weight: 700;
-      cursor: pointer; letter-spacing: 0.07em;
-      transition: opacity 0.2s, transform 0.15s;
-      box-shadow: 0 4px 22px rgba(249,115,22,0.35);
-    }
-    .btn-primary:hover  { opacity: 0.9; }
-    .btn-primary:active { transform: scale(0.98); }
-    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
-
-    .btn-ghost {
-      width: 100%; padding: 14px;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      background: transparent;
-      color: var(--muted);
-      font-family: 'Zen Kaku Gothic New', sans-serif;
-      font-size: 0.88rem;
-      cursor: pointer; transition: all 0.2s;
-    }
-    .btn-ghost:hover { border-color: var(--flame); color: var(--flame); }
-
-    .btn-row { display: flex; gap: 10px; margin-top: 14px; }
-    .btn-row .btn-ghost  { flex: 1; }
-    .btn-row .btn-primary { flex: 2; }
-
-    /* ── Loading ── */
-    .loading-state { display: none; text-align: center; padding: 48px 24px; }
-    .loading-state.visible { display: block; }
-    .loading-flame {
-      font-size: 2.4rem;
-      animation: flame-float 2.5s ease-in-out infinite;
-      margin-bottom: 18px;
-    }
-    @keyframes flame-float {
-      0%,100%{opacity:0.7;transform:scale(1) rotate(-3deg)}
-      33%{opacity:1;transform:scale(1.1) rotate(2deg)}
-      66%{opacity:0.85;transform:scale(1.05) rotate(-1deg)}
-    }
-    .loading-text {
-      font-family: 'Shippori Mincho', serif;
-      font-size: 0.95rem;
-      color: var(--muted);
-      letter-spacing: 0.12em;
-      line-height: 2.1;
-    }
-
-    /* ── Quote feed ── */
-    .another-btn {
-      width: 100%; padding: 15px;
-      border-radius: 14px;
-      border: 1px solid rgba(249,115,22,0.25);
-      background: rgba(249,115,22,0.06);
-      color: var(--amber2);
-      font-family: 'Zen Kaku Gothic New', sans-serif;
-      font-size: 0.88rem; font-weight: 500;
-      cursor: pointer; letter-spacing: 0.08em;
-      transition: all 0.2s;
-      margin-top: 8px; margin-bottom: 28px;
-    }
-    .another-btn:hover { background: rgba(249,115,22,0.12); border-color: var(--flame); }
-
-    .quote-card {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 38px 28px 28px;
-      margin-bottom: 16px;
-      position: relative;
-      overflow: hidden;
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.9s ease, transform 0.9s ease;
-    }
-    .quote-card.in { opacity: 1; transform: none; }
-    .quote-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0; height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(249,115,22,0.4), transparent);
-    }
-
-    .quote-card-badge {
-      display: inline-flex; align-items: center; gap: 5px;
-      font-size: 0.65rem; letter-spacing: 0.2em; color: var(--flame);
-      text-transform: uppercase;
-      background: rgba(249,115,22,0.08);
-      border: 1px solid rgba(249,115,22,0.18);
-      border-radius: 50px; padding: 5px 13px;
-      margin-bottom: 22px;
-    }
-    .quote-original {
-      font-family: 'Shippori Mincho', serif;
-      font-size: 1.2rem; font-weight: 500;
-      color: var(--txt);
-      line-height: 1.9; letter-spacing: 0.04em;
-      margin-bottom: 16px;
-    }
-    .quote-translation {
-      font-family: 'Shippori Mincho', serif;
-      font-size: 0.92rem; color: var(--txt2);
-      line-height: 1.9; letter-spacing: 0.03em;
-      margin-bottom: 22px;
-      padding-left: 14px;
-      border-left: 2px solid rgba(249,115,22,0.3);
-    }
-    .quote-author-line {
-      display: flex; align-items: center; justify-content: flex-end; gap: 10px;
-    }
-    .quote-author-dot { width: 22px; height: 1px; background: rgba(249,115,22,0.45); }
-    .quote-author-name { font-size: 0.82rem; color: var(--amber2); letter-spacing: 0.08em; }
-    .quote-reason {
-      margin-top: 22px; padding-top: 20px;
-      border-top: 1px solid var(--border);
-      font-size: 0.84rem; color: var(--muted);
-      line-height: 1.85; letter-spacing: 0.03em;
-    }
-
-    /* Prescription */
-    .rx-card {
-      margin-top: 16px;
-      background: linear-gradient(160deg, rgba(249,115,22,0.07) 0%, var(--bg2) 100%);
-      border: 1px solid rgba(249,115,22,0.2);
-      border-radius: 16px; padding: 18px;
-    }
-    .rx-title { font-size: 0.63rem; letter-spacing: 0.25em; color: var(--flame); text-transform: uppercase; margin-bottom: 12px; }
-    .rx-row { display: flex; gap: 8px; margin-bottom: 8px; font-size: 0.82rem; }
-    .rx-label { color: var(--muted); flex-shrink: 0; width: 44px; }
-    .rx-val { color: var(--txt2); }
-
-    /* Save fav */
-    .save-fav-btn {
-      position: absolute; top: 16px; right: 16px;
-      width: 34px; height: 34px; border-radius: 50%;
-      border: 1px solid var(--border); background: transparent;
-      color: var(--muted); font-size: 0.95rem; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: all 0.2s;
-    }
-    .save-fav-btn:hover, .save-fav-btn.saved {
-      border-color: var(--flame); color: var(--amber);
-      background: rgba(249,115,22,0.1);
-    }
-
-    /* ── Result cards ── */
-    .result-block { display: none; margin-top: 16px; }
-    .result-block.visible { display: block; }
-    .result-card {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: 22px; padding: 28px 24px;
-      margin-bottom: 12px;
-    }
-    .result-title {
-      font-size: 0.67rem; letter-spacing: 0.22em;
-      color: var(--flame); text-transform: uppercase; margin-bottom: 14px;
-    }
-    .result-body {
-      font-family: 'Shippori Mincho', serif;
-      font-size: 1rem; color: var(--txt);
-      line-height: 1.95; letter-spacing: 0.04em;
-    }
-    .result-sub { font-size: 0.82rem; color: var(--muted); line-height: 1.8; margin-top: 12px; }
+    /* Loading */
+    .loading-state{display:none;text-align:center;padding:44px 24px}
+    .loading-state.visible{display:block}
+    .loading-flame{font-size:2.6rem;animation:flame-float calc(2.5s*var(--anim-speed)) ease-in-out infinite;margin-bottom:18px}
+    @keyframes flame-float{0%,100%{opacity:.7;transform:scale(1) rotate(-3deg)}33%{opacity:1;transform:scale(1.1) rotate(2deg)}66%{opacity:.85;transform:scale(1.05) rotate(-1deg)}}
+    .loading-text{font-family:'Shippori Mincho',serif;font-size:1rem;color:var(--muted);letter-spacing:.14em;line-height:2.2}
 
     /* Error */
-    .error-msg {
-      display: none;
-      background: rgba(239,68,68,0.08);
-      border: 1px solid rgba(239,68,68,0.2);
-      border-radius: 12px; padding: 14px 16px;
-      font-size: 0.84rem; color: #FCA5A5; line-height: 1.7; margin-top: 12px;
-    }
-    .error-msg.visible { display: block; }
+    .error-msg{display:none;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:12px;padding:14px 16px;font-size:.84rem;color:#FCA5A5;line-height:1.7;margin-top:12px}
+    .error-msg.visible{display:block}
 
-    /* ── Silence ── */
-    .silence-choices { display: flex; flex-direction: column; gap: 10px; }
-    .silence-choice {
-      padding: 20px 22px;
-      border: 1px solid var(--border);
-      border-radius: 16px; background: var(--bg2);
-      cursor: pointer;
-      font-family: 'Shippori Mincho', serif;
-      font-size: 0.92rem; color: var(--txt2);
-      letter-spacing: 0.06em; transition: all 0.25s; line-height: 1.6;
-    }
-    .silence-choice:hover { border-color: rgba(249,115,22,0.35); color: var(--amber2); }
+    /* Quote results on home */
+    .home-results{display:none;margin-top:8px}
+    .home-results.visible{display:block}
+    .another-btn{width:100%;padding:15px;border-radius:14px;border:1px solid rgba(249,115,22,.22);background:rgba(249,115,22,.05);color:var(--amber2);font-family:'Zen Kaku Gothic New',sans-serif;font-size:.88rem;font-weight:500;cursor:pointer;letter-spacing:.08em;transition:all .2s;margin-bottom:20px}
+    .another-btn:hover{background:rgba(249,115,22,.11);border-color:var(--flame)}
 
-    /* ── Favorites ── */
-    .fav-list { display: flex; flex-direction: column; gap: 12px; }
-    .fav-item { background: var(--bg2); border: 1px solid var(--border); border-radius: 18px; padding: 22px; }
-    .fav-quote { font-family: 'Shippori Mincho', serif; font-size: 0.96rem; color: var(--txt); line-height: 1.85; margin-bottom: 12px; }
-    .fav-meta { font-size: 0.75rem; color: var(--muted); display: flex; justify-content: space-between; align-items: center; }
-    .fav-del { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 0.9rem; transition: color 0.2s; padding: 4px; }
-    .fav-del:hover { color: #EF4444; }
-    .fav-empty { text-align: center; padding: 48px 24px; color: var(--muted); font-size: 0.88rem; line-height: 2; }
-    .fav-empty .fav-icon { font-size: 2.2rem; margin-bottom: 14px; opacity: 0.4; display: block; }
+    /* Quote card */
+    .quote-card{background:var(--bg2);border:1px solid var(--border);border-radius:24px;padding:32px 26px 24px;margin-bottom:16px;position:relative;overflow:hidden;opacity:0;transform:translateY(28px);transition:opacity .9s ease,transform .9s ease}
+    .quote-card.in{opacity:1;transform:none}
+    .quote-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(249,115,22,.4),transparent)}
+    .qc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;gap:8px}
+    .qc-meta{display:flex;flex-direction:column;gap:5px}
+    .qc-timestamp{font-size:.66rem;letter-spacing:.12em;color:var(--muted)}
+    .qc-badge{display:inline-flex;align-items:center;gap:4px;font-size:.65rem;letter-spacing:.18em;color:var(--flame);text-transform:uppercase;background:rgba(249,115,22,.08);border:1px solid rgba(249,115,22,.16);border-radius:50px;padding:4px 12px;width:fit-content}
+    .qc-actions{display:flex;gap:6px;flex-shrink:0}
+    .qc-action-btn{width:32px;height:32px;border-radius:50%;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:.85rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+    .qc-action-btn:hover,.qc-action-btn.saved{border-color:var(--flame);color:var(--amber);background:rgba(249,115,22,.08)}
+    .quote-to{font-family:'Shippori Mincho',serif;font-size:.8rem;color:var(--muted);letter-spacing:.12em;margin-bottom:14px}
+    .quote-original{font-family:'Shippori Mincho',serif;font-size:1.22rem;font-weight:500;color:var(--txt);line-height:1.9;letter-spacing:.04em;margin-bottom:14px}
+    .quote-translation{font-family:'Shippori Mincho',serif;font-size:.9rem;color:var(--txt2);line-height:1.9;margin-bottom:20px;padding-left:14px;border-left:2px solid rgba(249,115,22,.28)}
+    .quote-author-line{display:flex;align-items:center;justify-content:flex-end;gap:10px}
+    .quote-author-dot{width:20px;height:1px;background:rgba(249,115,22,.4)}
+    .quote-author-name{font-size:.82rem;color:var(--amber2);letter-spacing:.08em}
+    .quote-understanding{margin-top:20px;padding-top:18px;border-top:1px solid var(--border)}
+    .qu-label{font-size:.65rem;letter-spacing:.22em;color:var(--flame);text-transform:uppercase;margin-bottom:10px}
+    .qu-text{font-family:'Shippori Mincho',serif;font-size:.88rem;color:var(--muted);line-height:1.9;letter-spacing:.03em}
+    .rx-card{margin-top:14px;background:linear-gradient(160deg,rgba(249,115,22,.07) 0%,var(--bg2) 100%);border:1px solid rgba(249,115,22,.18);border-radius:14px;padding:16px}
+    .rx-title{font-size:.62rem;letter-spacing:.22em;color:var(--flame);text-transform:uppercase;margin-bottom:10px}
+    .rx-row{display:flex;gap:8px;margin-bottom:8px;font-size:.82rem}
+    .rx-label{color:var(--muted);flex-shrink:0;width:44px}
+    .rx-val{color:var(--txt2)}
 
-    /* ── Divider ── */
-    .divider { height: 1px; background: var(--border); margin: 20px 0; }
+    /* Other features section */
+    .other-section{border-top:1px solid var(--border);margin-top:20px;padding-top:28px}
+    .other-toggle{display:flex;align-items:center;justify-content:space-between;width:100%;background:none;border:none;color:var(--muted);font-family:'Zen Kaku Gothic New',sans-serif;font-size:.82rem;letter-spacing:.12em;cursor:pointer;padding:0;transition:color .2s}
+    .other-toggle:hover{color:var(--amber)}
+    .other-toggle-arrow{transition:transform .3s;font-size:.8rem}
+    .other-toggle-arrow.open{transform:rotate(180deg)}
+    .other-grid{display:none;margin-top:20px}
+    .other-grid.open{display:block}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:10px}
+    .feat-card{background:var(--bg3);border:1px solid var(--border);border-radius:16px;padding:20px 10px 16px;cursor:pointer;text-align:center;transition:border-color .3s,transform .18s;user-select:none;position:relative;overflow:hidden}
+    .feat-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(249,115,22,.1) 0%,transparent 65%);opacity:0;transition:opacity .3s}
+    .feat-card:active{transform:scale(.95)}
+    .feat-card:hover{border-color:rgba(249,115,22,.32)}
+    .feat-card:hover::before{opacity:1}
+    .feat-icon{font-size:1.7rem;margin-bottom:9px;display:block}
+    .feat-name{font-size:.78rem;font-weight:500;color:var(--txt2);letter-spacing:.04em;line-height:1.5}
 
-    /* ── Inline quote ── */
-    .inline-quote { margin-top: 18px; padding: 16px; border-left: 2px solid rgba(249,115,22,0.35); background: var(--bg); border-radius: 0 12px 12px 0; }
-    .inline-quote p { font-family:'Shippori Mincho',serif; font-size:0.9rem; color:var(--txt2); line-height:1.85; }
-    .inline-quote small { font-size:0.74rem; color:var(--amber2); margin-top:6px; display:block; }
+    /* Scroll reveal */
+    .reveal{opacity:0;transform:translateY(24px);transition:opacity .75s ease,transform .75s ease}
+    .reveal.visible{opacity:1;transform:none}
 
-    /* ── Simple input area ── */
-    .simple-input-area { display: flex; flex-direction: column; gap: 12px; }
+    /* ══ SHARE OVERLAY ══ */
+    #share-overlay{display:none;position:fixed;inset:0;background:rgba(6,9,15,.92);z-index:1000;align-items:center;justify-content:center;flex-direction:column;padding:24px;backdrop-filter:blur(8px)}
+    #share-overlay.visible{display:flex}
+    .share-card{width:100%;max-width:360px;background:linear-gradient(160deg,#0D1A2A 0%,#06090F 60%,#0F1A1A 100%);border:1px solid rgba(249,115,22,.2);border-radius:28px;padding:44px 32px 36px;text-align:center;position:relative;overflow:hidden;box-shadow:0 0 80px rgba(249,115,22,.08)}
+    .share-card::before{content:'';position:absolute;top:-40px;left:50%;transform:translateX(-50%);width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(249,115,22,.1) 0%,transparent 70%);pointer-events:none}
+    .sc-flame{font-size:1.6rem;margin-bottom:18px;animation:flicker 4s ease-in-out infinite}
+    .sc-label{font-size:.64rem;letter-spacing:.3em;color:var(--muted);text-transform:uppercase;margin-bottom:6px}
+    .sc-date{font-size:.78rem;color:rgba(245,158,11,.6);letter-spacing:.1em;margin-bottom:32px}
+    .sc-quote{font-family:'Shippori Mincho',serif;font-size:1.05rem;color:var(--txt);line-height:1.95;letter-spacing:.04em;margin-bottom:24px;min-height:80px}
+    .sc-author{font-size:.78rem;color:var(--amber2);letter-spacing:.1em;margin-bottom:32px}
+    .sc-brand{font-family:'Shippori Mincho',serif;font-size:.95rem;color:rgba(245,158,11,.4);letter-spacing:.4em}
+    .share-hint{font-size:.78rem;color:var(--muted);letter-spacing:.1em;margin-top:16px;line-height:1.8;text-align:center}
+    .share-close{margin-top:20px;background:none;border:1px solid var(--border);border-radius:50px;color:var(--muted);font-family:'Zen Kaku Gothic New',sans-serif;font-size:.82rem;padding:10px 28px;cursor:pointer;transition:all .2s}
+    .share-close:hover{border-color:var(--flame);color:var(--flame)}
 
-    /* ── Weather ── */
-    .weather-bg { border-radius: 20px; padding: 30px 26px; margin-bottom: 14px; }
-    .weather-icon { font-size: 3.2rem; margin-bottom: 10px; }
-    .weather-name { font-family:'Shippori Mincho',serif; font-size:1.5rem; color:#fff; margin-bottom:8px; }
-    .weather-desc { font-size:0.86rem; color:rgba(255,255,255,0.72); line-height:1.75; }
-    .weather-forecast { margin-top:14px; font-size:0.8rem; color:rgba(255,255,255,0.55); line-height:1.75; }
+    /* ══ PANEL ══ */
+    #panel{display:none;min-height:100vh;position:relative;z-index:1}
+    .panel-header{display:flex;align-items:center;padding:52px 20px 20px;gap:14px;max-width:560px;margin:0 auto;width:100%}
+    .back-btn{width:38px;height:38px;border-radius:50%;border:1px solid var(--border);background:var(--bg3);color:var(--muted);font-size:1.05rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:border-color .2s,color .2s}
+    .back-btn:hover{border-color:var(--flame);color:var(--flame)}
+    .panel-title{font-family:'Shippori Mincho',serif;font-size:1.15rem;font-weight:500;color:var(--txt2);letter-spacing:.08em}
+    .tab-panel{display:none}
+    .tab-panel.active{display:block}
+    .panel-body{max-width:560px;margin:0 auto;padding:0 20px 100px}
+    .tomo-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:22px 20px;margin-bottom:12px}
+    .tomo-card-label{font-size:.67rem;letter-spacing:.22em;color:var(--muted);text-transform:uppercase;margin-bottom:14px}
+    .simple-input-area{display:flex;flex-direction:column;gap:12px}
+    .result-block{display:none;margin-top:16px}
+    .result-block.visible{display:block}
+    .result-card{background:var(--bg2);border:1px solid var(--border);border-radius:22px;padding:26px 22px;margin-bottom:12px}
+    .result-title{font-size:.67rem;letter-spacing:.22em;color:var(--flame);text-transform:uppercase;margin-bottom:14px}
+    .result-body{font-family:'Shippori Mincho',serif;font-size:.98rem;color:var(--txt);line-height:1.95;letter-spacing:.04em}
+    .result-sub{font-size:.82rem;color:var(--muted);line-height:1.8;margin-top:12px}
+    .divider{height:1px;background:var(--border);margin:18px 0}
+    .inline-quote{margin-top:16px;padding:14px;border-left:2px solid rgba(249,115,22,.3);background:var(--bg);border-radius:0 12px 12px 0}
+    .inline-quote p{font-family:'Shippori Mincho',serif;font-size:.88rem;color:var(--txt2);line-height:1.85}
+    .inline-quote small{font-size:.72rem;color:var(--amber2);margin-top:6px;display:block}
+    .silence-choices{display:flex;flex-direction:column;gap:10px}
+    .silence-choice{padding:20px 22px;border:1px solid var(--border);border-radius:16px;background:var(--bg2);cursor:pointer;font-family:'Shippori Mincho',serif;font-size:.94rem;color:var(--txt2);letter-spacing:.06em;transition:all .25s;line-height:1.6}
+    .silence-choice:hover{border-color:rgba(249,115,22,.3);color:var(--amber2)}
+    .fav-list{display:flex;flex-direction:column;gap:12px}
+    .fav-item{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:22px}
+    .fav-quote{font-family:'Shippori Mincho',serif;font-size:.94rem;color:var(--txt);line-height:1.85;margin-bottom:12px}
+    .fav-meta{font-size:.75rem;color:var(--muted);display:flex;justify-content:space-between;align-items:center}
+    .fav-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:.9rem;transition:color .2s;padding:4px}
+    .fav-del:hover{color:#EF4444}
+    .fav-empty{text-align:center;padding:48px 24px;color:var(--muted);font-size:.88rem;line-height:2}
+    .fav-empty .fav-icon{font-size:2rem;margin-bottom:14px;opacity:.4;display:block}
 
-    /* ── Future ── */
-    .future-letter { font-family:'Shippori Mincho',serif; font-size:0.96rem; color:var(--txt); line-height:2.05; white-space:pre-line; }
-    .future-from { font-size:0.8rem; color:var(--amber2); text-align:right; margin-top:16px; }
+    /* Log panel */
+    .log-list{display:flex;flex-direction:column;gap:10px}
+    .log-item{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:18px 20px}
+    .log-date{font-size:.68rem;letter-spacing:.1em;color:var(--muted);margin-bottom:8px}
+    .log-emotions{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
+    .log-chip{font-size:.72rem;color:var(--amber2);background:rgba(249,115,22,.08);border:1px solid rgba(249,115,22,.15);border-radius:50px;padding:3px 10px}
+    .log-quote{font-family:'Shippori Mincho',serif;font-size:.84rem;color:var(--txt2);line-height:1.8}
+    .log-empty{text-align:center;padding:48px 24px;color:var(--muted);font-size:.88rem;line-height:2}
 
-    /* ── Letter ── */
-    .letter-to { font-size:0.74rem; letter-spacing:0.2em; color:var(--flame); text-transform:uppercase; margin-bottom:14px; }
-    .letter-body { font-family:'Shippori Mincho',serif; font-size:0.96rem; color:var(--txt); line-height:2.05; }
-    .letter-ps { margin-top:16px; padding-top:14px; border-top:1px dashed var(--border); font-size:0.82rem; color:var(--muted); line-height:1.8; }
-    .letter-from { font-size:0.8rem; color:var(--amber2); text-align:right; margin-top:12px; }
-
-    /* ── Emotion translate ── */
-    .emo-core-badge { display:inline-block; background:rgba(249,115,22,0.1); border:1px solid rgba(249,115,22,0.3); color:var(--amber2); border-radius:50px; padding:5px 16px; font-size:0.78rem; margin-bottom:14px; }
-    .emo-translation { font-family:'Shippori Mincho',serif; font-size:0.96rem; color:var(--txt); line-height:2; }
-    .emo-gentle { font-size:0.84rem; color:var(--txt2); line-height:1.85; margin-top:14px; padding:16px; background:var(--bg); border-radius:12px; }
-
-    /* ── Narration ── */
-    .narr-chapter { font-family:'Shippori Mincho',serif; font-size:0.74rem; letter-spacing:0.2em; color:var(--flame); text-transform:uppercase; margin-bottom:12px; }
-    .narr-text { font-family:'Shippori Mincho',serif; font-size:1rem; color:var(--txt); line-height:2; letter-spacing:0.04em; }
-    .narr-next { font-size:0.8rem; color:var(--muted); margin-top:14px; padding-top:14px; border-top:1px solid var(--border); }
-
-    /* ── Temperature ── */
-    .temp-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
-    .temp-cell { background:var(--bg); border-radius:12px; padding:13px 15px; }
-    .temp-key { font-size:0.66rem; letter-spacing:0.15em; color:var(--muted); text-transform:uppercase; margin-bottom:4px; }
-    .temp-val { font-size:1.05rem; color:var(--amber2); font-weight:600; }
-
-    /* ── Lyrics ── */
-    .lyrics-text { font-family:'Shippori Mincho',serif; font-size:0.94rem; color:var(--txt); line-height:2.15; letter-spacing:0.06em; white-space:pre-line; }
-    .lyrics-meta { font-size:0.74rem; color:var(--muted); margin-top:14px; padding-top:14px; border-top:1px solid var(--border); }
-
-    /* ── Universe ── */
-    .uni-stars { position:relative; width:100%; height:220px; background:var(--bg); border-radius:16px; margin-bottom:16px; overflow:hidden; }
-    .star-dot { position:absolute; border-radius:50%; animation:twinkle 3s ease-in-out infinite; }
-    @keyframes twinkle { 0%,100%{opacity:.25}50%{opacity:1} }
-
-    /* ── Fade-up ── */
-    @keyframes fadeUp {
-      from { opacity:0; transform:translateY(16px); }
-      to   { opacity:1; transform:none; }
-    }
-    .fade-in { animation: fadeUp 0.9s ease forwards; }
+    /* Panel-specific styles */
+    .weather-bg{border-radius:20px;padding:28px 24px;margin-bottom:14px}
+    .weather-icon{font-size:3rem;margin-bottom:10px}
+    .weather-name{font-family:'Shippori Mincho',serif;font-size:1.45rem;color:#fff;margin-bottom:8px}
+    .weather-desc{font-size:.85rem;color:rgba(255,255,255,.7);line-height:1.75}
+    .weather-forecast{margin-top:14px;font-size:.8rem;color:rgba(255,255,255,.55);line-height:1.75}
+    .future-letter{font-family:'Shippori Mincho',serif;font-size:.96rem;color:var(--txt);line-height:2.05;white-space:pre-line}
+    .future-from{font-size:.8rem;color:var(--amber2);text-align:right;margin-top:16px}
+    .letter-to{font-size:.74rem;letter-spacing:.2em;color:var(--flame);text-transform:uppercase;margin-bottom:14px}
+    .letter-body{font-family:'Shippori Mincho',serif;font-size:.96rem;color:var(--txt);line-height:2.05}
+    .letter-ps{margin-top:16px;padding-top:14px;border-top:1px dashed var(--border);font-size:.82rem;color:var(--muted);line-height:1.8}
+    .letter-from{font-size:.8rem;color:var(--amber2);text-align:right;margin-top:12px}
+    .emo-core-badge{display:inline-block;background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.28);color:var(--amber2);border-radius:50px;padding:5px 16px;font-size:.78rem;margin-bottom:14px}
+    .emo-translation{font-family:'Shippori Mincho',serif;font-size:.96rem;color:var(--txt);line-height:2}
+    .emo-gentle{font-size:.84rem;color:var(--txt2);line-height:1.85;margin-top:14px;padding:16px;background:var(--bg);border-radius:12px}
+    .narr-chapter{font-family:'Shippori Mincho',serif;font-size:.74rem;letter-spacing:.2em;color:var(--flame);text-transform:uppercase;margin-bottom:12px}
+    .narr-text{font-family:'Shippori Mincho',serif;font-size:1rem;color:var(--txt);line-height:2;letter-spacing:.04em}
+    .narr-next{font-size:.8rem;color:var(--muted);margin-top:14px;padding-top:14px;border-top:1px solid var(--border)}
+    .temp-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+    .temp-cell{background:var(--bg);border-radius:12px;padding:13px 15px}
+    .temp-key{font-size:.66rem;letter-spacing:.15em;color:var(--muted);text-transform:uppercase;margin-bottom:4px}
+    .temp-val{font-size:1.05rem;color:var(--amber2);font-weight:600}
+    .lyrics-text{font-family:'Shippori Mincho',serif;font-size:.94rem;color:var(--txt);line-height:2.15;letter-spacing:.06em;white-space:pre-line}
+    .lyrics-meta{font-size:.74rem;color:var(--muted);margin-top:14px;padding-top:14px;border-top:1px solid var(--border)}
+    .uni-stars{position:relative;width:100%;height:220px;background:var(--bg);border-radius:16px;margin-bottom:16px;overflow:hidden}
+    .star-dot{position:absolute;border-radius:50%;animation:twinkle 3s ease-in-out infinite}
+    @keyframes twinkle{0%,100%{opacity:.25}50%{opacity:1}}
+    @keyframes fadeUpResult{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+    .fade-in{animation:fadeUpResult .9s ease forwards}
+    .btn-row{display:flex;gap:10px;margin-top:14px}
+    .btn-row .btn-ghost{flex:1}
+    .btn-row .btn-primary{flex:2}
   </style>
 </head>
 <body>
 
-  <!-- ══════════════════════════════════════ HERO ══════════════ -->
-  <div id="hero">
-    <!-- Ember particles -->
-    <div class="embers" id="embers"></div>
-
-    <div class="hero-kanji">灯</div>
-    <div class="hero-roman">Tomoshibi</div>
-    <div class="hero-sub">静かに、あなたに寄り添う言葉</div>
-
-    <div class="scroll-hint" onclick="document.getElementById('home').scrollIntoView({behavior:'smooth'})">
-      <span>スクロール</span>
-      <div class="scroll-arrow">↓</div>
-    </div>
+<!-- ══════════ HERO ══════════ -->
+<div id="hero">
+  <div class="embers" id="embers"></div>
+  <div class="hero-kanji">灯</div>
+  <div class="hero-roman">Tomoshibi</div>
+  <div class="hero-sub">静かに、あなたに寄り添う言葉</div>
+  <div class="scroll-hint" onclick="document.getElementById('home').scrollIntoView({behavior:'smooth'})">
+    <span>スクロール</span>
+    <div class="scroll-arrow">↓</div>
   </div>
+</div>
 
-  <!-- ══════════════════════════════════════ HOME ══════════════ -->
-  <div id="home">
-    <div class="grid-section">
-      <div class="section-label reveal">何をお探しですか</div>
+<!-- ══════════ HOME ══════════ -->
+<div id="home">
+  <div class="home-inner">
 
-      <div class="grid-3 reveal">
-        <div class="feat-card primary" onclick="openTab('quote')">
-          <span class="feat-icon">🕯️</span>
-          <span class="feat-name">言葉を<br>探す</span>
-        </div>
-        <div class="feat-card" onclick="openTab('future')">
-          <span class="feat-icon">✉️</span>
-          <span class="feat-name">未来の<br>自分へ</span>
-        </div>
-        <div class="feat-card" onclick="openTab('emotion')">
-          <span class="feat-icon">🌀</span>
-          <span class="feat-name">感情を<br>翻訳</span>
-        </div>
+    <!-- Time-based greeting -->
+    <div class="night-greeting" id="night-greeting" style="display:none"></div>
+
+    <!-- Main prompt -->
+    <p class="main-prompt reveal" id="main-prompt">今の気持ちを、<br>少しだけ置いていってください</p>
+    <p class="main-subprompt reveal">言葉になっていなくても大丈夫です</p>
+
+    <!-- Quick emotion chips -->
+    <div class="quick-chips reveal" id="quick-chips">
+      <button class="qchip" onclick="toggleQchip('疲れた',this)">疲れた</button>
+      <button class="qchip" onclick="toggleQchip('眠れない',this)">眠れない</button>
+      <button class="qchip" onclick="toggleQchip('なんか苦しい',this)">なんか苦しい</button>
+      <button class="qchip" onclick="toggleQchip('悲しい',this)">悲しい</button>
+      <button class="qchip" onclick="toggleQchip('孤独',this)">孤独</button>
+      <button class="qchip" onclick="toggleQchip('頑張れない',this)">頑張れない</button>
+      <button class="qchip" onclick="toggleQchip('不安',this)">不安</button>
+      <button class="qchip" onclick="toggleQchip('虚しい',this)">虚しい</button>
+      <button class="qchip" onclick="toggleQchip('何もしたくない',this)">何もしたくない</button>
+      <button class="qchip" onclick="toggleQchip('傷ついた',this)">傷ついた</button>
+    </div>
+
+    <!-- Textarea -->
+    <div class="ta-wrap reveal">
+      <textarea id="home-mood" rows="3" placeholder="もう少し詳しく話してくれてもいい…"></textarea>
+      <button class="mic-btn" id="mic-btn" onclick="toggleMic()">🎤</button>
+    </div>
+    <div class="mic-status" id="mic-status"></div>
+
+    <!-- Compact settings -->
+    <div class="compact-settings reveal">
+      <div class="cset-row" id="genre-row">
+        <button class="cset-btn active" onclick="setGenre('mix',this)">✨ おまかせ</button>
+        <button class="cset-btn" onclick="setGenre('great',this)">🌍 偉人</button>
+        <button class="cset-btn" onclick="setGenre('anime',this)">⚔️ アニメ</button>
       </div>
-
-      <div class="grid-3 reveal">
-        <div class="feat-card" onclick="openTab('weather')">
-          <span class="feat-icon">🌤</span>
-          <span class="feat-name">心の<br>天気</span>
-        </div>
-        <div class="feat-card" onclick="openTab('diary')">
-          <span class="feat-icon">📓</span>
-          <span class="feat-name">誰かの<br>日記</span>
-        </div>
-        <div class="feat-card" onclick="openTab('narration')">
-          <span class="feat-icon">🎬</span>
-          <span class="feat-name">人生<br>ナレーション</span>
-        </div>
+      <div class="cset-row" id="mode-row">
+        <button class="cset-btn active" onclick="setMode('normal',this)">通常</button>
+        <button class="cset-btn" onclick="setMode('night',this)">深夜</button>
+        <button class="cset-btn" onclick="setMode('prescription',this)">処方箋</button>
+        <button class="cset-btn" onclick="setMode('original',this)">AIオリジナル</button>
       </div>
+    </div>
 
-      <div class="grid-3 reveal">
-        <div class="feat-card" onclick="openTab('letter')">
-          <span class="feat-icon">💌</span>
-          <span class="feat-name">言えなかった<br>言葉</span>
-        </div>
-        <div class="feat-card" onclick="openTab('lyrics')">
-          <span class="feat-icon">🎵</span>
-          <span class="feat-name">感情の<br>歌詞</span>
-        </div>
-        <div class="feat-card" onclick="openTab('temperature')">
-          <span class="feat-icon">🌡️</span>
-          <span class="feat-name">感情<br>気象</span>
-        </div>
+    <!-- Advanced sliders toggle -->
+    <span class="adv-toggle reveal" onclick="toggleAdv()">詳細設定 <span id="adv-arrow">＋</span></span>
+    <div class="adv-panel" id="adv-panel">
+      <div class="slider-block">
+        <div class="slider-row"><label>元気度 <span id="v-energy">5</span></label><input type="range" min="1" max="10" value="5" id="sl-energy" oninput="document.getElementById('v-energy').textContent=this.value"></div>
+        <div class="slider-row"><label>ストレス度 <span id="v-stress">5</span></label><input type="range" min="1" max="10" value="5" id="sl-stress" oninput="document.getElementById('v-stress').textContent=this.value"></div>
+        <div class="slider-row"><label>やる気度 <span id="v-motiv">5</span></label><input type="range" min="1" max="10" value="5" id="sl-motiv" oninput="document.getElementById('v-motiv').textContent=this.value"></div>
       </div>
+    </div>
 
-      <div class="grid-3 reveal">
-        <div class="feat-card" onclick="openTab('universe')">
-          <span class="feat-icon">🌌</span>
-          <span class="feat-name">感情の<br>星座</span>
+    <!-- Loading -->
+    <div class="loading-state" id="home-loading">
+      <div class="loading-flame">🕯️</div>
+      <div class="loading-text" id="home-loading-text">あなたの言葉を、<br>静かに読んでいます…</div>
+    </div>
+    <div class="error-msg" id="home-error"></div>
+
+    <!-- Generate -->
+    <button class="btn-primary reveal" id="home-gen-btn" onclick="homeGenerate()" style="margin-top:6px">言葉を灯す</button>
+
+    <!-- Results -->
+    <div class="home-results" id="home-results">
+      <div id="home-quotes-list"></div>
+      <button class="another-btn" onclick="homeGenerate()">＋ もう一つ、言葉を灯す</button>
+    </div>
+
+    <!-- Other features -->
+    <div class="other-section reveal">
+      <button class="other-toggle" onclick="toggleOther()">
+        <span>他の表現で試してみる</span>
+        <span class="other-toggle-arrow" id="other-arrow">↓</span>
+      </button>
+      <div class="other-grid" id="other-grid">
+        <div style="height:16px"></div>
+        <div class="grid-3">
+          <div class="feat-card" onclick="openTab('future')"><span class="feat-icon">✉️</span><span class="feat-name">未来の<br>自分へ</span></div>
+          <div class="feat-card" onclick="openTab('emotion')"><span class="feat-icon">🌀</span><span class="feat-name">感情を<br>翻訳</span></div>
+          <div class="feat-card" onclick="openTab('weather')"><span class="feat-icon">🌤</span><span class="feat-name">心の<br>天気</span></div>
         </div>
-        <div class="feat-card" onclick="openTab('silence')">
-          <span class="feat-icon">🌙</span>
-          <span class="feat-name">何も<br>言えない</span>
+        <div class="grid-3">
+          <div class="feat-card" onclick="openTab('diary')"><span class="feat-icon">📓</span><span class="feat-name">誰かの<br>日記</span></div>
+          <div class="feat-card" onclick="openTab('narration')"><span class="feat-icon">🎬</span><span class="feat-name">人生<br>ナレーション</span></div>
+          <div class="feat-card" onclick="openTab('letter')"><span class="feat-icon">💌</span><span class="feat-name">言えなかった<br>言葉</span></div>
         </div>
-        <div class="feat-card" onclick="openTab('fav')">
-          <span class="feat-icon">🔖</span>
-          <span class="feat-name">保存した<br>言葉</span>
+        <div class="grid-3">
+          <div class="feat-card" onclick="openTab('lyrics')"><span class="feat-icon">🎵</span><span class="feat-name">感情の<br>歌詞</span></div>
+          <div class="feat-card" onclick="openTab('temperature')"><span class="feat-icon">🌡️</span><span class="feat-name">感情<br>気象</span></div>
+          <div class="feat-card" onclick="openTab('universe')"><span class="feat-icon">🌌</span><span class="feat-name">感情の<br>星座</span></div>
+        </div>
+        <div class="grid-3">
+          <div class="feat-card" onclick="openTab('silence')"><span class="feat-icon">🌙</span><span class="feat-name">何も<br>言えない</span></div>
+          <div class="feat-card" onclick="openTab('fav')"><span class="feat-icon">🔖</span><span class="feat-name">保存した<br>言葉</span></div>
+          <div class="feat-card" onclick="openTab('log')"><span class="feat-icon">📊</span><span class="feat-name">感情<br>ログ</span></div>
         </div>
       </div>
     </div>
+
   </div>
+</div>
 
-  <!-- ══════════════════════════════════════ PANEL ══════════════ -->
-  <div id="panel">
-    <div class="panel-header">
-      <button class="back-btn" onclick="goHome()">←</button>
-      <span class="panel-title" id="panel-title"></span>
+<!-- ══════════ SHARE OVERLAY ══════════ -->
+<div id="share-overlay">
+  <div class="share-card">
+    <div class="sc-flame">🕯️</div>
+    <div class="sc-label">あなたへの言葉</div>
+    <div class="sc-date" id="sc-date"></div>
+    <div class="sc-quote" id="sc-quote"></div>
+    <div class="sc-author" id="sc-author"></div>
+    <div class="sc-brand">灯　Tomoshibi</div>
+  </div>
+  <div class="share-hint">スクリーンショットで保存・シェアできます</div>
+  <button class="share-close" onclick="closeShare()">閉じる</button>
+</div>
+
+<!-- ══════════ PANEL ══════════ -->
+<div id="panel">
+  <div class="panel-header">
+    <button class="back-btn" onclick="goHome()">←</button>
+    <span class="panel-title" id="panel-title"></span>
+  </div>
+  <div class="panel-body">
+
+    <!-- FUTURE -->
+    <div class="tab-panel" id="tab-future">
+      <div class="simple-input-area" id="future-input-area">
+        <div class="tomo-card">
+          <div class="tomo-card-label">あなたの年齢（任意）</div>
+          <input type="number" id="future-age" placeholder="例：24" min="10" max="99"
+            style="width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:13px 16px;font-family:inherit;font-size:.95rem;color:var(--txt);outline:none;transition:border-color .25s"
+            onfocus="this.style.borderColor='rgba(249,115,22,.4)'" onblur="this.style.borderColor=''">
+        </div>
+        <div class="tomo-card">
+          <div class="tomo-card-label">今の悩みを、少しだけ話してください</div>
+          <textarea id="future-worries" rows="3" placeholder="言葉になっていなくても大丈夫です…"></textarea>
+        </div>
+        <div class="tomo-card">
+          <div class="tomo-card-label">目標・夢（任意）</div>
+          <textarea id="future-goals" rows="2" placeholder="例：好きなことで生きたい…"></textarea>
+        </div>
+        <div class="loading-state" id="future-loading"><div class="loading-flame">✉️</div><div class="loading-text">3年後の自分が<br>言葉を選んでいます…</div></div>
+        <div class="error-msg" id="future-error"></div>
+        <button class="btn-primary" onclick="genFuture()">手紙を受け取る</button>
+      </div>
+      <div class="result-block" id="future-result">
+        <div class="result-card fade-in">
+          <div class="result-title" id="fr-from"></div>
+          <div class="future-letter" id="fr-message"></div>
+          <div class="future-from" id="fr-sign"></div>
+          <div class="divider"></div>
+          <div class="result-sub" id="fr-hint"></div>
+          <div class="inline-quote" id="fr-quote-wrap" style="display:none"><p id="fr-quote-text"></p><small id="fr-quote-author"></small></div>
+        </div>
+        <button class="btn-ghost" style="margin-top:8px" onclick="resetPanel('future')">もう一度</button>
+      </div>
     </div>
 
-    <div class="panel-body">
-
-      <!-- ── QUOTE WIZARD ── -->
-      <div class="tab-panel" id="tab-quote">
-        <div class="wizard-progress" id="wiz-progress">
-          <div class="wp-dot active" id="wp-1"></div>
-          <div class="wp-dot" id="wp-2"></div>
-          <div class="wp-dot" id="wp-3"></div>
+    <!-- EMOTION -->
+    <div class="tab-panel" id="tab-emotion">
+      <div class="simple-input-area" id="emotion-input-area">
+        <div class="tomo-card">
+          <div class="tomo-card-label">今の気持ちを、少しだけ置いていってください</div>
+          <textarea id="emotion-text" rows="3" placeholder="言葉になっていなくても大丈夫です…"></textarea>
         </div>
-
-        <!-- Step 1 -->
-        <div class="wizard-step active" id="ws-1">
-          <div class="tomo-card">
-            <div class="tomo-card-label">ジャンル</div>
-            <div class="genre-row">
-              <button class="genre-btn active" onclick="setGenre('mix',this)">
-                <span class="gi">✨</span>おまかせ
-              </button>
-              <button class="genre-btn" onclick="setGenre('great',this)">
-                <span class="gi">🌍</span>偉人
-              </button>
-              <button class="genre-btn" onclick="setGenre('anime',this)">
-                <span class="gi">⚔️</span>アニメ
-              </button>
-            </div>
-          </div>
-          <div class="tomo-card">
-            <div class="tomo-card-label">言葉のモード</div>
-            <div class="mode-row">
-              <button class="mode-btn active" onclick="setMode('normal',this)">通常</button>
-              <button class="mode-btn" onclick="setMode('night',this)">深夜</button>
-              <button class="mode-btn" onclick="setMode('prescription',this)">処方箋</button>
-              <button class="mode-btn" onclick="setMode('original',this)">AIオリジナル</button>
-            </div>
-          </div>
-          <button class="btn-primary" style="margin-top:14px" onclick="wizardNext()">次へ →</button>
-        </div>
-
-        <!-- Step 2 -->
-        <div class="wizard-step" id="ws-2">
-          <div class="tomo-card">
-            <div class="tomo-card-label">今の感情タグ（複数可）</div>
-            <div class="emotions-wrap" id="emotions-wrap"></div>
-          </div>
-          <div class="tomo-card">
-            <div class="tomo-card-label">今の状態</div>
-            <div class="slider-block">
-              <div class="slider-row">
-                <label>元気度 <span id="v-energy">5</span></label>
-                <input type="range" min="1" max="10" value="5" id="sl-energy" oninput="document.getElementById('v-energy').textContent=this.value">
-              </div>
-              <div class="slider-row">
-                <label>ストレス度 <span id="v-stress">5</span></label>
-                <input type="range" min="1" max="10" value="5" id="sl-stress" oninput="document.getElementById('v-stress').textContent=this.value">
-              </div>
-              <div class="slider-row">
-                <label>やる気度 <span id="v-motiv">5</span></label>
-                <input type="range" min="1" max="10" value="5" id="sl-motiv" oninput="document.getElementById('v-motiv').textContent=this.value">
-              </div>
-            </div>
-          </div>
-          <div class="btn-row">
-            <button class="btn-ghost" onclick="wizardPrev()">← 戻る</button>
-            <button class="btn-primary" onclick="wizardNext()">次へ →</button>
-          </div>
-        </div>
-
-        <!-- Step 3 -->
-        <div class="wizard-step" id="ws-3">
-          <div class="tomo-card">
-            <div class="tomo-card-label">今日の状況を一言で（任意）</div>
-            <div class="ta-wrap">
-              <textarea id="mood-text" rows="3" placeholder="例：仕事で失敗した、眠れない夜が続いている…"></textarea>
-              <button class="mic-btn" id="mic-btn" onclick="toggleMic()">🎤</button>
-            </div>
-            <div class="mic-status" id="mic-status"></div>
-          </div>
-          <div class="loading-state" id="quote-loading">
-            <div class="loading-flame">🕯️</div>
-            <div class="loading-text">あなたの言葉を、<br>静かに読んでいます…</div>
-          </div>
-          <div class="error-msg" id="quote-error"></div>
-          <div class="btn-row" id="ws3-btns">
-            <button class="btn-ghost" onclick="wizardPrev()">← 戻る</button>
-            <button class="btn-primary" onclick="generateQuote()">言葉を灯す</button>
-          </div>
-        </div>
-
-        <!-- Feed -->
-        <div id="quotes-feed" style="display:none">
-          <button class="another-btn" onclick="generateQuote()">＋ もう一つ、言葉を灯す</button>
-          <div id="quotes-list"></div>
-        </div>
+        <div class="loading-state" id="emotion-loading"><div class="loading-flame">🌀</div><div class="loading-text">感情の奥を<br>静かに読み解いています…</div></div>
+        <div class="error-msg" id="emotion-error"></div>
+        <button class="btn-primary" onclick="genEmotion()">感情を翻訳する</button>
       </div>
-
-      <!-- ── FUTURE SELF ── -->
-      <div class="tab-panel" id="tab-future">
-        <div class="simple-input-area" id="future-input-area">
-          <div class="tomo-card">
-            <div class="tomo-card-label">あなたの年齢（任意）</div>
-            <input type="number" id="future-age" placeholder="例：24" min="10" max="99"
-              style="width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:13px 16px;font-family:inherit;font-size:0.95rem;color:var(--txt);outline:none;transition:border-color .25s"
-              onfocus="this.style.borderColor='rgba(249,115,22,0.4)'" onblur="this.style.borderColor=''">
-          </div>
-          <div class="tomo-card">
-            <div class="tomo-card-label">今の悩み</div>
-            <textarea id="future-worries" rows="3" placeholder="例：進路が決まらない、人間関係が疲れる…"></textarea>
-          </div>
-          <div class="tomo-card">
-            <div class="tomo-card-label">目標・夢（任意）</div>
-            <textarea id="future-goals" rows="2" placeholder="例：好きなことで生きたい…"></textarea>
-          </div>
-          <div class="loading-state" id="future-loading">
-            <div class="loading-flame">✉️</div>
-            <div class="loading-text">3年後の自分が<br>言葉を選んでいます…</div>
-          </div>
-          <div class="error-msg" id="future-error"></div>
-          <button class="btn-primary" onclick="genFuture()">手紙を受け取る</button>
+      <div class="result-block" id="emotion-result">
+        <div class="result-card fade-in">
+          <div class="result-title">あなたの感情</div>
+          <div class="emo-core-badge" id="er-core"></div>
+          <div class="emo-translation" id="er-translation"></div>
+          <div class="emo-gentle" id="er-gentle"></div>
+          <div class="inline-quote" id="er-quote-wrap" style="display:none"><p id="er-quote-text"></p><small id="er-quote-author"></small></div>
         </div>
-        <div class="result-block" id="future-result">
-          <div class="result-card fade-in">
-            <div class="result-title" id="fr-from"></div>
-            <div class="future-letter" id="fr-message"></div>
-            <div class="future-from" id="fr-sign"></div>
-            <div class="divider"></div>
-            <div class="result-sub" id="fr-hint"></div>
-            <div class="inline-quote" id="fr-quote-wrap" style="display:none">
-              <p id="fr-quote-text"></p>
-              <small id="fr-quote-author"></small>
-            </div>
-          </div>
-          <button class="btn-ghost" style="margin-top:8px" onclick="resetPanel('future')">もう一度</button>
-        </div>
+        <button class="btn-ghost" style="margin-top:8px" onclick="resetPanel('emotion')">もう一度</button>
       </div>
+    </div>
 
-      <!-- ── EMOTION TRANSLATE ── -->
-      <div class="tab-panel" id="tab-emotion">
-        <div class="simple-input-area" id="emotion-input-area">
-          <div class="tomo-card">
-            <div class="tomo-card-label">今の気持ちを一言で</div>
-            <textarea id="emotion-text" rows="3" placeholder="例：なんとなくしんどい、やる気が出ない…"></textarea>
-          </div>
-          <div class="loading-state" id="emotion-loading">
-            <div class="loading-flame">🌀</div>
-            <div class="loading-text">感情の奥を<br>静かに読み解いています…</div>
-          </div>
-          <div class="error-msg" id="emotion-error"></div>
-          <button class="btn-primary" onclick="genEmotion()">感情を翻訳する</button>
+    <!-- WEATHER -->
+    <div class="tab-panel" id="tab-weather">
+      <div class="simple-input-area" id="weather-input-area">
+        <div class="tomo-card">
+          <div class="tomo-card-label">今の気持ちを、少しだけ置いていってください</div>
+          <textarea id="weather-text" rows="3" placeholder="言葉になっていなくても大丈夫です…"></textarea>
         </div>
-        <div class="result-block" id="emotion-result">
-          <div class="result-card fade-in">
-            <div class="result-title">感情の翻訳</div>
-            <div class="emo-core-badge" id="er-core"></div>
-            <div class="emo-translation" id="er-translation"></div>
-            <div class="emo-gentle" id="er-gentle"></div>
-            <div class="inline-quote" id="er-quote-wrap" style="display:none">
-              <p id="er-quote-text"></p><small id="er-quote-author"></small>
-            </div>
-          </div>
-          <button class="btn-ghost" style="margin-top:8px" onclick="resetPanel('emotion')">もう一度</button>
-        </div>
+        <div class="loading-state" id="weather-loading"><div class="loading-flame">🌤</div><div class="loading-text">心の天気を<br>観測しています…</div></div>
+        <div class="error-msg" id="weather-error"></div>
+        <button class="btn-primary" onclick="genWeather()">天気を見る</button>
       </div>
-
-      <!-- ── WEATHER ── -->
-      <div class="tab-panel" id="tab-weather">
-        <div class="simple-input-area" id="weather-input-area">
-          <div class="tomo-card">
-            <div class="tomo-card-label">今の気持ちを一言で</div>
-            <textarea id="weather-text" rows="3" placeholder="例：なんだかモヤモヤする…"></textarea>
-          </div>
-          <div class="loading-state" id="weather-loading">
-            <div class="loading-flame">🌤</div>
-            <div class="loading-text">心の天気を<br>観測しています…</div>
-          </div>
-          <div class="error-msg" id="weather-error"></div>
-          <button class="btn-primary" onclick="genWeather()">天気を見る</button>
+      <div class="result-block" id="weather-result">
+        <div class="weather-bg fade-in" id="wr-bg">
+          <div class="weather-icon" id="wr-icon"></div>
+          <div class="weather-name" id="wr-name"></div>
+          <div class="weather-desc" id="wr-desc"></div>
+          <div class="weather-forecast" id="wr-forecast"></div>
         </div>
-        <div class="result-block" id="weather-result">
-          <div class="weather-bg fade-in" id="wr-bg">
-            <div class="weather-icon" id="wr-icon"></div>
-            <div class="weather-name" id="wr-name"></div>
-            <div class="weather-desc" id="wr-desc"></div>
-            <div class="weather-forecast" id="wr-forecast"></div>
-          </div>
-          <div class="inline-quote" id="wr-quote-wrap" style="display:none">
-            <p id="wr-quote-text"></p><small id="wr-quote-author"></small>
-          </div>
-          <button class="btn-ghost" style="margin-top:12px" onclick="resetPanel('weather')">もう一度</button>
-        </div>
+        <div class="inline-quote" id="wr-quote-wrap" style="display:none"><p id="wr-quote-text"></p><small id="wr-quote-author"></small></div>
+        <button class="btn-ghost" style="margin-top:12px" onclick="resetPanel('weather')">もう一度</button>
       </div>
+    </div>
 
-      <!-- ── DIARY ── -->
-      <div class="tab-panel" id="tab-diary">
-        <div class="simple-input-area" id="diary-input-area">
-          <div class="tomo-card">
-            <div class="tomo-card-label">今の感情を一言で</div>
-            <textarea id="diary-text" rows="3" placeholder="例：誰にも言えない寂しさがある…"></textarea>
-          </div>
-          <div class="loading-state" id="diary-loading">
-            <div class="loading-flame">📓</div>
-            <div class="loading-text">書かれなかった日記を<br>探しています…</div>
-          </div>
-          <div class="error-msg" id="diary-error"></div>
-          <button class="btn-primary" onclick="genDiary()">日記を開く</button>
+    <!-- DIARY -->
+    <div class="tab-panel" id="tab-diary">
+      <div class="simple-input-area" id="diary-input-area">
+        <div class="tomo-card">
+          <div class="tomo-card-label">今の感情を、少しだけ置いていってください</div>
+          <textarea id="diary-text" rows="3" placeholder="言葉になっていなくても大丈夫です…"></textarea>
         </div>
-        <div class="result-block" id="diary-result">
-          <div class="result-card fade-in">
-            <div class="result-title" id="dr-header"></div>
-            <div class="result-body" id="dr-entry"></div>
-            <div class="result-sub" style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border)" id="dr-closing"></div>
-          </div>
-          <button class="btn-ghost" style="margin-top:8px" onclick="resetPanel('diary')">別のページ</button>
-        </div>
+        <div class="loading-state" id="diary-loading"><div class="loading-flame">📓</div><div class="loading-text">書かれなかった日記を<br>探しています…</div></div>
+        <div class="error-msg" id="diary-error"></div>
+        <button class="btn-primary" onclick="genDiary()">日記を開く</button>
       </div>
-
-      <!-- ── NARRATION ── -->
-      <div class="tab-panel" id="tab-narration">
-        <div class="simple-input-area" id="narration-input-area">
-          <div class="tomo-card">
-            <div class="tomo-card-label">今日あったこと</div>
-            <textarea id="narr-event" rows="3" placeholder="例：朝から何もうまくいかなかった…"></textarea>
-          </div>
-          <div class="tomo-card">
-            <div class="tomo-card-label">今の感情（任意）</div>
-            <textarea id="narr-emotion" rows="2" placeholder="例：疲れ、少し投げやりな気持ち…"></textarea>
-          </div>
-          <div class="loading-state" id="narration-loading">
-            <div class="loading-flame">🎬</div>
-            <div class="loading-text">あなたの今日を<br>映画として語っています…</div>
-          </div>
-          <div class="error-msg" id="narration-error"></div>
-          <button class="btn-primary" onclick="genNarration()">ナレーションを聞く</button>
+      <div class="result-block" id="diary-result">
+        <div class="result-card fade-in">
+          <div class="result-title" id="dr-header"></div>
+          <div class="result-body" id="dr-entry"></div>
+          <div class="result-sub" style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border)" id="dr-closing"></div>
         </div>
-        <div class="result-block" id="narration-result">
-          <div class="result-card fade-in">
-            <div class="narr-chapter" id="nr-chapter"></div>
-            <div class="narr-text" id="nr-narration"></div>
-            <div class="narr-next" id="nr-next"></div>
-          </div>
-          <div class="result-sub" style="text-align:right;padding-right:8px" id="nr-theme"></div>
-          <button class="btn-ghost" style="margin-top:12px" onclick="resetPanel('narration')">もう一度</button>
-        </div>
+        <button class="btn-ghost" style="margin-top:8px" onclick="resetPanel('diary')">別のページ</button>
       </div>
+    </div>
 
-      <!-- ── LETTER ── -->
-      <div class="tab-panel" id="tab-letter">
-        <div class="simple-input-area" id="letter-input-area">
-          <div class="tomo-card">
-            <div class="tomo-card-label">今の感情を一言で</div>
-            <textarea id="letter-text" rows="3" placeholder="例：ずっと我慢してきた、伝えられなかったことがある…"></textarea>
-          </div>
-          <div class="loading-state" id="letter-loading">
-            <div class="loading-flame">💌</div>
-            <div class="loading-text">言えなかった言葉を<br>探しています…</div>
-          </div>
-          <div class="error-msg" id="letter-error"></div>
-          <button class="btn-primary" onclick="genLetter()">手紙を開く</button>
+    <!-- NARRATION -->
+    <div class="tab-panel" id="tab-narration">
+      <div class="simple-input-area" id="narration-input-area">
+        <div class="tomo-card">
+          <div class="tomo-card-label">今日あったことを、少しだけ話してください</div>
+          <textarea id="narr-event" rows="3" placeholder="言葉になっていなくても大丈夫です…"></textarea>
         </div>
-        <div class="result-block" id="letter-result">
-          <div class="result-card fade-in">
-            <div class="letter-to" id="lr-to"></div>
-            <div class="letter-body" id="lr-body"></div>
-            <div class="letter-ps" id="lr-ps"></div>
-            <div class="letter-from" id="lr-from"></div>
-          </div>
-          <button class="btn-ghost" style="margin-top:8px" onclick="resetPanel('letter')">別の手紙</button>
+        <div class="tomo-card">
+          <div class="tomo-card-label">今の感情（任意）</div>
+          <textarea id="narr-emotion" rows="2" placeholder="例：疲れ、投げやりな気持ち…"></textarea>
         </div>
+        <div class="loading-state" id="narration-loading"><div class="loading-flame">🎬</div><div class="loading-text">あなたの今日を<br>映画として語っています…</div></div>
+        <div class="error-msg" id="narration-error"></div>
+        <button class="btn-primary" onclick="genNarration()">ナレーションを聞く</button>
       </div>
-
-      <!-- ── LYRICS ── -->
-      <div class="tab-panel" id="tab-lyrics">
-        <div class="simple-input-area" id="lyrics-input-area">
-          <div class="tomo-card">
-            <div class="tomo-card-label">今の感情を一言で</div>
-            <textarea id="lyrics-text" rows="3" placeholder="例：会えない人のことを考えてしまう…"></textarea>
-          </div>
-          <div class="loading-state" id="lyrics-loading">
-            <div class="loading-flame">🎵</div>
-            <div class="loading-text">感情から<br>歌を生み出しています…</div>
-          </div>
-          <div class="error-msg" id="lyrics-error"></div>
-          <button class="btn-primary" onclick="genLyrics()">曲を作る</button>
+      <div class="result-block" id="narration-result">
+        <div class="result-card fade-in">
+          <div class="narr-chapter" id="nr-chapter"></div>
+          <div class="narr-text" id="nr-narration"></div>
+          <div class="narr-next" id="nr-next"></div>
         </div>
-        <div class="result-block" id="lyrics-result">
-          <div class="result-card fade-in">
-            <div class="result-title" id="lyr-genre"></div>
-            <div style="font-family:'Shippori Mincho',serif;font-size:1.4rem;color:var(--amber2);margin-bottom:6px" id="lyr-title"></div>
-            <div style="font-size:0.78rem;color:var(--muted);margin-bottom:22px" id="lyr-artist"></div>
-            <div class="lyrics-text" id="lyr-lyrics"></div>
-            <div class="lyrics-meta" id="lyr-concept"></div>
-          </div>
-          <button class="btn-ghost" style="margin-top:8px" onclick="resetPanel('lyrics')">別の曲</button>
-        </div>
+        <div class="result-sub" style="text-align:right;padding-right:8px" id="nr-theme"></div>
+        <button class="btn-ghost" style="margin-top:12px" onclick="resetPanel('narration')">もう一度</button>
       </div>
+    </div>
 
-      <!-- ── TEMPERATURE ── -->
-      <div class="tab-panel" id="tab-temperature">
-        <div class="simple-input-area" id="temperature-input-area">
-          <div class="tomo-card">
-            <div class="tomo-card-label">今の感情を一言で</div>
-            <textarea id="temp-text" rows="3" placeholder="例：なんとなく冷えている感じ…"></textarea>
-          </div>
-          <div class="loading-state" id="temperature-loading">
-            <div class="loading-flame">🌡️</div>
-            <div class="loading-text">感情を気象データに<br>変換しています…</div>
-          </div>
-          <div class="error-msg" id="temperature-error"></div>
-          <button class="btn-primary" onclick="genTemp()">観測する</button>
+    <!-- LETTER -->
+    <div class="tab-panel" id="tab-letter">
+      <div class="simple-input-area" id="letter-input-area">
+        <div class="tomo-card">
+          <div class="tomo-card-label">今の感情を、少しだけ置いていってください</div>
+          <textarea id="letter-text" rows="3" placeholder="言葉になっていなくても大丈夫です…"></textarea>
         </div>
-        <div class="result-block" id="temperature-result">
-          <div class="result-card fade-in">
-            <div class="result-title">感情気象データ</div>
-            <div class="temp-grid">
-              <div class="temp-cell"><div class="temp-key">気温</div><div class="temp-val" id="tr-temp"></div></div>
-              <div class="temp-cell"><div class="temp-key">体感</div><div class="temp-val" id="tr-feels"></div></div>
-              <div class="temp-cell"><div class="temp-key">湿度</div><div class="temp-val" id="tr-humidity"></div></div>
-              <div class="temp-cell"><div class="temp-key">気圧</div><div class="temp-val" id="tr-pressure"></div></div>
-            </div>
-            <div class="result-sub" id="tr-condition"></div>
-            <div class="result-sub" id="tr-wind" style="margin-top:6px"></div>
-            <div class="divider"></div>
-            <div class="result-body" style="font-size:0.88rem" id="tr-obs"></div>
-            <div class="result-sub" style="margin-top:10px;color:var(--amber2)" id="tr-forecast"></div>
-          </div>
-          <button class="btn-ghost" style="margin-top:8px" onclick="resetPanel('temperature')">再観測</button>
-        </div>
+        <div class="loading-state" id="letter-loading"><div class="loading-flame">💌</div><div class="loading-text">言えなかった言葉を<br>探しています…</div></div>
+        <div class="error-msg" id="letter-error"></div>
+        <button class="btn-primary" onclick="genLetter()">手紙を開く</button>
       </div>
-
-      <!-- ── UNIVERSE ── -->
-      <div class="tab-panel" id="tab-universe">
-        <div class="simple-input-area" id="universe-input-area">
-          <div class="tomo-card">
-            <div class="tomo-card-label">今の感情を一言で</div>
-            <textarea id="uni-text" rows="3" placeholder="例：浮いている感じ、どこか遠くにいる…"></textarea>
-          </div>
-          <div class="loading-state" id="universe-loading">
-            <div class="loading-flame">🌌</div>
-            <div class="loading-text">あなただけの<br>星座を描いています…</div>
-          </div>
-          <div class="error-msg" id="universe-error"></div>
-          <button class="btn-primary" onclick="genUniverse()">星座を見る</button>
+      <div class="result-block" id="letter-result">
+        <div class="result-card fade-in">
+          <div class="letter-to" id="lr-to"></div>
+          <div class="letter-body" id="lr-body"></div>
+          <div class="letter-ps" id="lr-ps"></div>
+          <div class="letter-from" id="lr-from"></div>
         </div>
-        <div class="result-block" id="universe-result">
-          <div class="result-card fade-in">
-            <div class="result-title">あなたの星座</div>
-            <div style="font-family:'Shippori Mincho',serif;font-size:1.25rem;color:var(--amber2);margin-bottom:16px" id="ur-name"></div>
-            <div class="uni-stars" id="ur-stars"></div>
-            <div class="result-body" style="font-size:0.9rem" id="ur-story"></div>
-            <div style="margin-top:14px;padding:16px;background:var(--bg);border-radius:12px;font-size:0.84rem;color:var(--txt2);line-height:1.85" id="ur-msg"></div>
-          </div>
-          <button class="btn-ghost" style="margin-top:8px" onclick="resetPanel('universe')">別の星座</button>
-        </div>
+        <button class="btn-ghost" style="margin-top:8px" onclick="resetPanel('letter')">別の手紙</button>
       </div>
+    </div>
 
-      <!-- ── SILENCE ── -->
-      <div class="tab-panel" id="tab-silence">
-        <div style="margin-bottom:24px;font-family:'Shippori Mincho',serif;font-size:1rem;color:var(--muted);line-height:2.1;letter-spacing:0.08em">
-          言葉にしなくていい。<br>今、どんな感じですか？
+    <!-- LYRICS -->
+    <div class="tab-panel" id="tab-lyrics">
+      <div class="simple-input-area" id="lyrics-input-area">
+        <div class="tomo-card">
+          <div class="tomo-card-label">今の感情を、少しだけ置いていってください</div>
+          <textarea id="lyrics-text" rows="3" placeholder="言葉になっていなくても大丈夫です…"></textarea>
         </div>
-        <div class="silence-choices" id="silence-choices">
-          <div class="silence-choice" onclick="genSilence('silent')">ただ、ここにいる</div>
-          <div class="silence-choice" onclick="genSilence('hesitant')">何か書こうとして、やめた</div>
-          <div class="silence-choice" onclick="genSilence('watching')">ただ画面を見ている</div>
-        </div>
-        <div class="loading-state" id="silence-loading">
-          <div class="loading-flame">🌙</div>
-          <div class="loading-text">ただ、そこにいます</div>
-        </div>
-        <div class="result-block" id="silence-result">
-          <div class="result-card fade-in">
-            <div class="result-body" style="font-size:1.05rem;line-height:2.1" id="sr-message"></div>
-            <div class="divider"></div>
-            <div style="font-family:'Shippori Mincho',serif;font-size:1.5rem;color:var(--amber2);text-align:center;padding:14px 0" id="sr-breath"></div>
-            <div class="result-sub" style="text-align:center" id="sr-presence"></div>
-          </div>
-          <button class="btn-ghost" style="margin-top:8px" onclick="resetSilence()">もう一度</button>
-        </div>
+        <div class="loading-state" id="lyrics-loading"><div class="loading-flame">🎵</div><div class="loading-text">感情から<br>歌を生み出しています…</div></div>
+        <div class="error-msg" id="lyrics-error"></div>
+        <button class="btn-primary" onclick="genLyrics()">曲を作る</button>
       </div>
-
-      <!-- ── FAVORITES ── -->
-      <div class="tab-panel" id="tab-fav">
-        <div id="fav-list-wrap"></div>
+      <div class="result-block" id="lyrics-result">
+        <div class="result-card fade-in">
+          <div class="result-title" id="lyr-genre"></div>
+          <div style="font-family:'Shippori Mincho',serif;font-size:1.35rem;color:var(--amber2);margin-bottom:6px" id="lyr-title"></div>
+          <div style="font-size:.78rem;color:var(--muted);margin-bottom:22px" id="lyr-artist"></div>
+          <div class="lyrics-text" id="lyr-lyrics"></div>
+          <div class="lyrics-meta" id="lyr-concept"></div>
+        </div>
+        <button class="btn-ghost" style="margin-top:8px" onclick="resetPanel('lyrics')">別の曲</button>
       </div>
+    </div>
 
-    </div><!-- /panel-body -->
-  </div><!-- /panel -->
-
-  <script>
-    // ── State ────────────────────────────────────────────────
-    let selectedGenre   = 'mix';
-    let selectedMode    = 'normal';
-    let selectedEmotions = [];
-    let wizardStep      = 1;
-    let recentQuotes    = [];
-    let favorites       = JSON.parse(localStorage.getItem('tomoshibi-favs') || '[]');
-
-    const PANEL_TITLES = {
-      quote:'言葉を探す', future:'未来の自分から', emotion:'感情を翻訳する',
-      weather:'心の天気', diary:'誰かの日記', narration:'人生ナレーション',
-      letter:'言えなかった言葉', lyrics:'感情の歌詞', temperature:'感情気象',
-      universe:'感情の星座', silence:'何も言えない夜に', fav:'保存した言葉',
-    };
-
-    const EMOTIONS = [
-      '不安','焦り','怒り','悲しい','泣きたい','孤独','寂しい','傷ついた',
-      '空虚','心が重い','眠れない','頑張れない','疲れた','虚しい','憂鬱',
-      '懐かしい','後悔','嫉妬','恥ずかしい','申し訳ない',
-      '嬉しい','ワクワク','感謝','穏やか','すっきり','やる気','希望',
-      'ときめき','達成感','愛おしい'
-    ];
-
-    // ── Build emotion buttons ─────────────────────────────
-    (function(){
-      const wrap = document.getElementById('emotions-wrap');
-      EMOTIONS.forEach(e => {
-        const b = document.createElement('button');
-        b.className = 'emo-btn';
-        b.textContent = e;
-        b.onclick = () => {
-          b.classList.toggle('active');
-          selectedEmotions = b.classList.contains('active')
-            ? [...selectedEmotions, e]
-            : selectedEmotions.filter(x => x !== e);
-        };
-        wrap.appendChild(b);
-      });
-    })();
-
-    // ── Ember particles ──────────────────────────────────
-    (function(){
-      const container = document.getElementById('embers');
-      for (let i = 0; i < 18; i++) {
-        const e = document.createElement('div');
-        e.className = 'ember';
-        const left = 35 + Math.random() * 30;
-        const dur  = 3.5 + Math.random() * 3;
-        const delay = Math.random() * 5;
-        const dx   = (Math.random() - 0.5) * 80;
-        const size = 2 + Math.random() * 3;
-        e.style.cssText = `left:${left}%;--d:${dur}s;--delay:${delay}s;--dx:${dx}px;
-          width:${size}px;height:${size}px;
-          background:${Math.random()>.5?'#FCD34D':'#F97316'};`;
-        container.appendChild(e);
-      }
-    })();
-
-    // ── Navigation ───────────────────────────────────────
-    function openTab(tab) {
-      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-      document.getElementById('tab-' + tab).classList.add('active');
-      document.getElementById('panel-title').textContent = PANEL_TITLES[tab] || '';
-      document.getElementById('hero').style.display  = 'none';
-      document.getElementById('home').style.display  = 'none';
-      document.getElementById('panel').style.display = 'block';
-      window.scrollTo({ top: 0, behavior: 'instant' });
-      if (tab === 'quote') { wizardStep = 1; wizardGoTo(1); }
-      if (tab === 'fav')   renderFavs();
-    }
-
-    function goHome() {
-      document.getElementById('panel').style.display = 'none';
-      document.getElementById('hero').style.display  = 'block';
-      document.getElementById('home').style.display  = 'block';
-      window.scrollTo({ top: 0, behavior: 'instant' });
-      triggerReveal();
-    }
-
-    // ── Wizard ──────────────────────────────────────────
-    function wizardGoTo(n) {
-      wizardStep = n;
-      document.querySelectorAll('.wizard-step').forEach((s, i) => {
-        s.classList.toggle('active', i + 1 === n);
-      });
-      for (let i = 1; i <= 3; i++) {
-        const d = document.getElementById('wp-' + i);
-        if (i < n)      { d.classList.add('done');   d.classList.remove('active'); }
-        else if (i===n) { d.classList.add('active'); d.classList.remove('done');   }
-        else            { d.classList.remove('done','active'); }
-      }
-    }
-    function wizardNext() { if (wizardStep < 3) wizardGoTo(wizardStep + 1); }
-    function wizardPrev() { if (wizardStep > 1) wizardGoTo(wizardStep - 1); }
-
-    function setGenre(g, btn) {
-      selectedGenre = g;
-      document.querySelectorAll('.genre-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-    }
-    function setMode(m, btn) {
-      selectedMode = m;
-      document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-    }
-
-    // ── API helper ───────────────────────────────────────
-    async function apiPost(url, body) {
-      let res;
-      try {
-        res = await fetch(url, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
-      } catch(e) { throw new Error('ネットワークエラーが発生しました。接続を確認してください。'); }
-      let data;
-      try { data = await res.json(); } catch(e) {
-        if (res.status >= 500) throw new Error('サーバーが起動中です。無料プランのため初回起動に50秒ほどかかります。少し待ってからもう一度お試しください 🙏');
-        throw new Error('サーバーからの応答を読み取れませんでした。');
-      }
-      if (!data.success) throw new Error(data.error);
-      return data;
-    }
-
-    // ── Quote ────────────────────────────────────────────
-    async function generateQuote() {
-      const loadEl  = document.getElementById('quote-loading');
-      const errEl   = document.getElementById('quote-error');
-      const ws3btns = document.getElementById('ws3-btns');
-      const feedEl  = document.getElementById('quotes-feed');
-
-      loadEl.classList.add('visible');
-      errEl.classList.remove('visible');
-      ws3btns.style.display = 'none';
-      feedEl.style.display  = 'none';
-
-      try {
-        const data = await apiPost('/api/quote', {
-          mood:          document.getElementById('mood-text').value,
-          energy:        document.getElementById('sl-energy').value,
-          stress:        document.getElementById('sl-stress').value,
-          motivation:    document.getElementById('sl-motiv').value,
-          emotions:      selectedEmotions,
-          recentQuotes,
-          genre:         selectedMode === 'original' ? 'mix' : selectedGenre,
-          isNightMode:   selectedMode === 'night',
-          prescriptionMode: selectedMode === 'prescription',
-          originalMode:  selectedMode === 'original',
-        });
-
-        loadEl.classList.remove('visible');
-        feedEl.style.display = 'block';
-        document.querySelectorAll('.wizard-step').forEach(s => s.classList.remove('active'));
-        document.getElementById('wiz-progress').style.display = 'none';
-
-        const q = data.quote;
-        if (q.original) recentQuotes.push(q.original.slice(0, 60));
-        if (recentQuotes.length > 8) recentQuotes.shift();
-        appendQuoteCard(q);
-      } catch(e) {
-        loadEl.classList.remove('visible');
-        ws3btns.style.display = 'flex';
-        errEl.textContent = e.message;
-        errEl.classList.add('visible');
-      }
-    }
-
-    function appendQuoteCard(q) {
-      const list = document.getElementById('quotes-list');
-      const id   = 'qc-' + Date.now();
-      const isSaved = favorites.some(f => f.original === q.original);
-      const badge = q.sourceType==='anime' ? '⚔️ アニメ'
-                  : q.sourceType==='original' ? '✨ AIオリジナル' : '🌍 偉人';
-
-      let rxHtml = '';
-      if (q.prescription) {
-        rxHtml = `<div class="rx-card">
-          <div class="rx-title">処方箋</div>
-          <div class="rx-row"><span class="rx-label">症状</span><span class="rx-val">${q.prescription.symptom}</span></div>
-          <div class="rx-row"><span class="rx-label">用法</span><span class="rx-val">${q.prescription.usage}</span></div>
-          <div class="rx-row"><span class="rx-label">効果</span><span class="rx-val">${q.prescription.effect}</span></div>
-          <div class="rx-row"><span class="rx-label">注意</span><span class="rx-val">${q.prescription.caution}</span></div>
-        </div>`;
-      }
-
-      const card = document.createElement('div');
-      card.className = 'quote-card';
-      card.id = id;
-      card.innerHTML = `
-        <button class="save-fav-btn${isSaved?' saved':''}" onclick="toggleFav('${id}',this)" title="保存">🔖</button>
-        <div class="quote-card-badge">${badge}</div>
-        <div class="quote-original">${q.original}</div>
-        ${q.translation ? `<div class="quote-translation">${q.translation}</div>` : ''}
-        <div class="quote-author-line">
-          <div class="quote-author-dot"></div>
-          <div class="quote-author-name">${q.authorJp || q.author}</div>
+    <!-- TEMPERATURE -->
+    <div class="tab-panel" id="tab-temperature">
+      <div class="simple-input-area" id="temperature-input-area">
+        <div class="tomo-card">
+          <div class="tomo-card-label">今の感情を、少しだけ置いていってください</div>
+          <textarea id="temp-text" rows="3" placeholder="言葉になっていなくても大丈夫です…"></textarea>
         </div>
-        ${q.reason ? `<div class="quote-reason">${q.reason}</div>` : ''}
-        ${rxHtml}
-      `;
-      card._quoteData = q;
-      list.appendChild(card);
-      requestAnimationFrame(() => requestAnimationFrame(() => card.classList.add('in')));
-      setTimeout(() => card.scrollIntoView({ behavior:'smooth', block:'start' }), 100);
-    }
-
-    function toggleFav(cardId, btn) {
-      const card = document.getElementById(cardId);
-      const q    = card._quoteData;
-      const idx  = favorites.findIndex(f => f.original === q.original);
-      if (idx >= 0) {
-        favorites.splice(idx, 1);
-        btn.classList.remove('saved');
-      } else {
-        favorites.push({ original:q.original, translation:q.translation, authorJp:q.authorJp||q.author, savedAt:new Date().toISOString() });
-        btn.classList.add('saved');
-      }
-      localStorage.setItem('tomoshibi-favs', JSON.stringify(favorites));
-    }
-
-    // ── Panel helpers ────────────────────────────────────
-    function showLoading(key, show) {
-      document.getElementById(key+'-loading').classList.toggle('visible', show);
-    }
-    function showError(key, msg) {
-      const el = document.getElementById(key+'-error');
-      el.textContent = msg;
-      el.classList.toggle('visible', !!msg);
-    }
-    function showResult(key, show) {
-      document.getElementById(key+'-result').classList.toggle('visible', show);
-      if (show) {
-        const a = document.getElementById(key+'-input-area');
-        if (a) a.style.display = 'none';
-      }
-    }
-    function resetPanel(key) {
-      const r = document.getElementById(key+'-result');
-      if (r) r.classList.remove('visible');
-      const a = document.getElementById(key+'-input-area');
-      if (a) a.style.display = '';
-      showError(key, '');
-    }
-    function resetSilence() {
-      document.getElementById('silence-result').classList.remove('visible');
-      document.getElementById('silence-choices').style.display = '';
-    }
-
-    // ── Future ──────────────────────────────────────────
-    async function genFuture() {
-      showLoading('future',true); showError('future',''); showResult('future',false);
-      try {
-        const d = await apiPost('/api/future-self', {
-          age:    document.getElementById('future-age').value,
-          worries:document.getElementById('future-worries').value,
-          goals:  document.getElementById('future-goals').value,
-        });
-        const r = d.result;
-        document.getElementById('fr-from').textContent = r.from || '3年後のあなたより';
-        document.getElementById('fr-message').textContent = r.message;
-        document.getElementById('fr-sign').textContent = '— ' + (r.from || '3年後より');
-        document.getElementById('fr-hint').textContent = r.hint;
-        if (r.quote) {
-          document.getElementById('fr-quote-text').textContent = r.quote;
-          document.getElementById('fr-quote-author').textContent = '座右の銘';
-          document.getElementById('fr-quote-wrap').style.display = '';
-        }
-        showLoading('future',false); showResult('future',true);
-      } catch(e) { showLoading('future',false); showError('future',e.message); }
-    }
-
-    // ── Emotion ─────────────────────────────────────────
-    async function genEmotion() {
-      showLoading('emotion',true); showError('emotion',''); showResult('emotion',false);
-      try {
-        const d = await apiPost('/api/translate-emotion', { emotion:document.getElementById('emotion-text').value });
-        const r = d.result;
-        document.getElementById('er-core').textContent = r.core;
-        document.getElementById('er-translation').textContent = r.translation;
-        document.getElementById('er-gentle').textContent = r.gentle;
-        if (r.quote) {
-          document.getElementById('er-quote-text').textContent = r.quote.translation ? `${r.quote.original}　—　${r.quote.translation}` : r.quote.original;
-          document.getElementById('er-quote-author').textContent = r.quote.authorJp || r.quote.author;
-          document.getElementById('er-quote-wrap').style.display = '';
-        }
-        showLoading('emotion',false); showResult('emotion',true);
-      } catch(e) { showLoading('emotion',false); showError('emotion',e.message); }
-    }
-
-    // ── Weather ─────────────────────────────────────────
-    async function genWeather() {
-      showLoading('weather',true); showError('weather',''); showResult('weather',false);
-      try {
-        const d = await apiPost('/api/weather-emotion', { emotion:document.getElementById('weather-text').value });
-        const r = d.result;
-        const bg = document.getElementById('wr-bg');
-        bg.style.background = `linear-gradient(160deg, ${r.gradient})`;
-        document.getElementById('wr-icon').textContent = r.icon;
-        document.getElementById('wr-name').textContent = r.weather;
-        document.getElementById('wr-desc').textContent = r.description;
-        document.getElementById('wr-forecast').textContent = r.forecast;
-        if (r.quote) {
-          document.getElementById('wr-quote-text').textContent = r.quote.translation ? `${r.quote.original}　—　${r.quote.translation}` : r.quote.original;
-          document.getElementById('wr-quote-author').textContent = r.quote.authorJp || r.quote.author;
-          document.getElementById('wr-quote-wrap').style.display = '';
-        }
-        showLoading('weather',false); showResult('weather',true);
-      } catch(e) { showLoading('weather',false); showError('weather',e.message); }
-    }
-
-    // ── Diary ────────────────────────────────────────────
-    async function genDiary() {
-      showLoading('diary',true); showError('diary',''); showResult('diary',false);
-      try {
-        const d = await apiPost('/api/diary', { emotion:document.getElementById('diary-text').value });
-        const r = d.result;
-        document.getElementById('dr-header').textContent = `${r.date}　${r.weather}　${r.city}`;
-        document.getElementById('dr-entry').textContent = r.entry;
-        document.getElementById('dr-closing').textContent = r.closing;
-        showLoading('diary',false); showResult('diary',true);
-      } catch(e) { showLoading('diary',false); showError('diary',e.message); }
-    }
-
-    // ── Narration ────────────────────────────────────────
-    async function genNarration() {
-      showLoading('narration',true); showError('narration',''); showResult('narration',false);
-      try {
-        const d = await apiPost('/api/narration', {
-          event:   document.getElementById('narr-event').value,
-          emotion: document.getElementById('narr-emotion').value,
-        });
-        const r = d.result;
-        document.getElementById('nr-chapter').textContent = r.chapter;
-        document.getElementById('nr-narration').textContent = r.narration;
-        document.getElementById('nr-next').textContent = '次章：' + r.next;
-        document.getElementById('nr-theme').textContent = 'テーマ：' + r.theme;
-        showLoading('narration',false); showResult('narration',true);
-      } catch(e) { showLoading('narration',false); showError('narration',e.message); }
-    }
-
-    // ── Letter ───────────────────────────────────────────
-    async function genLetter() {
-      showLoading('letter',true); showError('letter',''); showResult('letter',false);
-      try {
-        const d = await apiPost('/api/letter', { emotion:document.getElementById('letter-text').value });
-        const r = d.result;
-        document.getElementById('lr-to').textContent   = r.to;
-        document.getElementById('lr-body').textContent = r.letter;
-        document.getElementById('lr-ps').textContent   = '追伸：' + r.ps;
-        document.getElementById('lr-from').textContent = r.from;
-        showLoading('letter',false); showResult('letter',true);
-      } catch(e) { showLoading('letter',false); showError('letter',e.message); }
-    }
-
-    // ── Lyrics ───────────────────────────────────────────
-    async function genLyrics() {
-      showLoading('lyrics',true); showError('lyrics',''); showResult('lyrics',false);
-      try {
-        const d = await apiPost('/api/lyrics', { emotion:document.getElementById('lyrics-text').value });
-        const r = d.result;
-        document.getElementById('lyr-genre').textContent  = r.genre + '　' + r.tempo;
-        document.getElementById('lyr-title').textContent  = r.title;
-        document.getElementById('lyr-artist').textContent = r.artist;
-        document.getElementById('lyr-lyrics').textContent = r.lyrics;
-        document.getElementById('lyr-concept').textContent= r.concept;
-        showLoading('lyrics',false); showResult('lyrics',true);
-      } catch(e) { showLoading('lyrics',false); showError('lyrics',e.message); }
-    }
-
-    // ── Temperature ──────────────────────────────────────
-    async function genTemp() {
-      showLoading('temperature',true); showError('temperature',''); showResult('temperature',false);
-      try {
-        const d = await apiPost('/api/temperature', { emotion:document.getElementById('temp-text').value });
-        const r = d.result;
-        document.getElementById('tr-temp').textContent     = r.temperature;
-        document.getElementById('tr-feels').textContent    = r.feelsLike;
-        document.getElementById('tr-humidity').textContent = r.humidity;
-        document.getElementById('tr-pressure').textContent = r.pressure;
-        document.getElementById('tr-condition').textContent= r.condition;
-        document.getElementById('tr-wind').textContent     = '風：' + r.wind + '　視界：' + r.visibility;
-        document.getElementById('tr-obs').textContent      = r.observation;
-        document.getElementById('tr-forecast').textContent = '明日：' + r.forecast;
-        showLoading('temperature',false); showResult('temperature',true);
-      } catch(e) { showLoading('temperature',false); showError('temperature',e.message); }
-    }
-
-    // ── Universe ─────────────────────────────────────────
-    async function genUniverse() {
-      showLoading('universe',true); showError('universe',''); showResult('universe',false);
-      try {
-        const d = await apiPost('/api/universe', { emotion:document.getElementById('uni-text').value });
-        const r = d.result;
-        document.getElementById('ur-name').textContent  = r.constellation;
-        document.getElementById('ur-story').textContent = r.story;
-        document.getElementById('ur-msg').textContent   = r.message;
-        const canvas = document.getElementById('ur-stars');
-        canvas.innerHTML = '';
-        if (r.bgColor) canvas.style.background = r.bgColor;
-        (r.stars || []).forEach(s => {
-          const dot = document.createElement('div');
-          dot.className = 'star-dot';
-          const sz = (s.size || 2) * 3;
-          dot.style.cssText = `width:${sz}px;height:${sz}px;background:${s.color||'#FCD34D'};
-            left:${Math.random()*85+5}%;top:${Math.random()*75+5}%;
-            animation-delay:${Math.random()*2}s;
-            box-shadow:0 0 ${sz*2}px ${s.color||'#FCD34D'}`;
-          const label = document.createElement('span');
-          label.style.cssText = 'position:absolute;top:110%;left:50%;transform:translateX(-50%);font-size:9px;color:rgba(255,255,255,0.45);white-space:nowrap;';
-          label.textContent = s.name;
-          dot.appendChild(label);
-          canvas.appendChild(dot);
-        });
-        showLoading('universe',false); showResult('universe',true);
-      } catch(e) { showLoading('universe',false); showError('universe',e.message); }
-    }
-
-    // ── Silence ──────────────────────────────────────────
-    async function genSilence(pattern) {
-      document.getElementById('silence-choices').style.display = 'none';
-      showLoading('silence', true);
-      try {
-        const d = await apiPost('/api/silence', { pattern });
-        const r = d.result;
-        document.getElementById('sr-message').textContent  = r.message;
-        document.getElementById('sr-breath').textContent   = r.breath;
-        document.getElementById('sr-presence').textContent = r.presence;
-        showLoading('silence', false);
-        document.getElementById('silence-result').classList.add('visible');
-      } catch(e) {
-        showLoading('silence', false);
-        document.getElementById('silence-choices').style.display = '';
-      }
-    }
-
-    // ── Favorites ────────────────────────────────────────
-    function renderFavs() {
-      const wrap = document.getElementById('fav-list-wrap');
-      if (!favorites.length) {
-        wrap.innerHTML = `<div class="fav-empty"><span class="fav-icon">🔖</span>保存した言葉はありません。<br>名言カードの 🔖 から保存できます。</div>`;
-        return;
-      }
-      wrap.innerHTML = `<div class="fav-list">${favorites.map((f,i) => `
-        <div class="fav-item">
-          <div class="fav-quote">${f.original}${f.translation?'<br><span style="font-size:.82rem;color:var(--muted)">'+f.translation+'</span>':''}</div>
-          <div class="fav-meta">
-            <span style="color:var(--amber2)">${f.authorJp}</span>
-            <button class="fav-del" onclick="delFav(${i})">×</button>
+        <div class="loading-state" id="temperature-loading"><div class="loading-flame">🌡️</div><div class="loading-text">感情を気象データに<br>変換しています…</div></div>
+        <div class="error-msg" id="temperature-error"></div>
+        <button class="btn-primary" onclick="genTemp()">観測する</button>
+      </div>
+      <div class="result-block" id="temperature-result">
+        <div class="result-card fade-in">
+          <div class="result-title">感情気象データ</div>
+          <div class="temp-grid">
+            <div class="temp-cell"><div class="temp-key">気温</div><div class="temp-val" id="tr-temp"></div></div>
+            <div class="temp-cell"><div class="temp-key">体感</div><div class="temp-val" id="tr-feels"></div></div>
+            <div class="temp-cell"><div class="temp-key">湿度</div><div class="temp-val" id="tr-humidity"></div></div>
+            <div class="temp-cell"><div class="temp-key">気圧</div><div class="temp-val" id="tr-pressure"></div></div>
           </div>
+          <div class="result-sub" id="tr-condition"></div>
+          <div class="result-sub" id="tr-wind" style="margin-top:6px"></div>
+          <div class="divider"></div>
+          <div class="result-body" style="font-size:.88rem" id="tr-obs"></div>
+          <div class="result-sub" style="margin-top:10px;color:var(--amber2)" id="tr-forecast"></div>
         </div>
-      `).join('')}</div>`;
-    }
-    function delFav(i) {
-      favorites.splice(i, 1);
-      localStorage.setItem('tomoshibi-favs', JSON.stringify(favorites));
-      renderFavs();
-    }
+        <button class="btn-ghost" style="margin-top:8px" onclick="resetPanel('temperature')">再観測</button>
+      </div>
+    </div>
 
-    // ── Mic ──────────────────────────────────────────────
-    let recognition, isRecording = false;
-    function toggleMic() {
-      if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
-        document.getElementById('mic-status').textContent = '音声認識はこのブラウザ非対応です';
-        return;
-      }
-      if (isRecording) { recognition && recognition.stop(); return; }
-      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-      recognition = new SR();
-      recognition.lang = 'ja-JP';
-      recognition.interimResults = true;
-      recognition.onstart = () => {
-        isRecording = true;
-        document.getElementById('mic-btn').classList.add('recording');
-        document.getElementById('mic-status').textContent = '🎤 聞いています…';
-        document.getElementById('mic-status').classList.add('rec');
-      };
-      recognition.onresult = e => {
-        let t = '';
-        for (let i = e.resultIndex; i < e.results.length; i++) t += e.results[i][0].transcript;
-        document.getElementById('mood-text').value = t;
-      };
-      recognition.onend = () => {
-        isRecording = false;
-        document.getElementById('mic-btn').classList.remove('recording');
-        document.getElementById('mic-status').textContent = '';
-        document.getElementById('mic-status').classList.remove('rec');
-      };
-      recognition.start();
-    }
+    <!-- UNIVERSE -->
+    <div class="tab-panel" id="tab-universe">
+      <div class="simple-input-area" id="universe-input-area">
+        <div class="tomo-card">
+          <div class="tomo-card-label">今の感情を、少しだけ置いていってください</div>
+          <textarea id="uni-text" rows="3" placeholder="言葉になっていなくても大丈夫です…"></textarea>
+        </div>
+        <div class="loading-state" id="universe-loading"><div class="loading-flame">🌌</div><div class="loading-text">あなただけの<br>星座を描いています…</div></div>
+        <div class="error-msg" id="universe-error"></div>
+        <button class="btn-primary" onclick="genUniverse()">星座を見る</button>
+      </div>
+      <div class="result-block" id="universe-result">
+        <div class="result-card fade-in">
+          <div class="result-title">あなたの星座</div>
+          <div style="font-family:'Shippori Mincho',serif;font-size:1.25rem;color:var(--amber2);margin-bottom:16px" id="ur-name"></div>
+          <div class="uni-stars" id="ur-stars"></div>
+          <div class="result-body" style="font-size:.9rem" id="ur-story"></div>
+          <div style="margin-top:14px;padding:16px;background:var(--bg);border-radius:12px;font-size:.84rem;color:var(--txt2);line-height:1.85" id="ur-msg"></div>
+        </div>
+        <button class="btn-ghost" style="margin-top:8px" onclick="resetPanel('universe')">別の星座</button>
+      </div>
+    </div>
 
-    // ── Scroll reveal ────────────────────────────────────
-    function triggerReveal() {
-      const items = document.querySelectorAll('#home .reveal');
-      items.forEach(el => el.classList.remove('visible'));
-      setTimeout(() => {
-        const obs = new IntersectionObserver((entries) => {
-          entries.forEach((entry, idx) => {
-            if (entry.isIntersecting) {
-              setTimeout(() => entry.target.classList.add('visible'), idx * 130);
-              obs.unobserve(entry.target);
-            }
-          });
-        }, { threshold: 0.05 });
-        items.forEach(el => obs.observe(el));
-      }, 60);
-    }
+    <!-- SILENCE -->
+    <div class="tab-panel" id="tab-silence">
+      <div style="margin-bottom:24px;font-family:'Shippori Mincho',serif;font-size:1rem;color:var(--muted);line-height:2.2;letter-spacing:.08em">
+        言葉にしなくていい。<br>ただ、ここにいてください。
+      </div>
+      <div class="silence-choices" id="silence-choices">
+        <div class="silence-choice" onclick="genSilence('silent')">ただ、ここにいる</div>
+        <div class="silence-choice" onclick="genSilence('hesitant')">何か書こうとして、やめた</div>
+        <div class="silence-choice" onclick="genSilence('watching')">ただ画面を見ている</div>
+      </div>
+      <div class="loading-state" id="silence-loading"><div class="loading-flame">🌙</div><div class="loading-text">ただ、そこにいます</div></div>
+      <div class="result-block" id="silence-result">
+        <div class="result-card fade-in">
+          <div class="result-body" style="font-size:1.05rem;line-height:2.15" id="sr-message"></div>
+          <div class="divider"></div>
+          <div style="font-family:'Shippori Mincho',serif;font-size:1.5rem;color:var(--amber2);text-align:center;padding:14px 0" id="sr-breath"></div>
+          <div class="result-sub" style="text-align:center" id="sr-presence"></div>
+        </div>
+        <button class="btn-ghost" style="margin-top:8px" onclick="resetSilence()">もう一度</button>
+      </div>
+    </div>
 
-    // ── Init ─────────────────────────────────────────────
+    <!-- FAVORITES -->
+    <div class="tab-panel" id="tab-fav">
+      <div id="fav-list-wrap"></div>
+    </div>
+
+    <!-- LOG -->
+    <div class="tab-panel" id="tab-log">
+      <div id="log-list-wrap"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // ── State ─────────────────────────────────────────────
+  let selectedGenre    = 'mix';
+  let selectedMode     = 'normal';
+  let quickEmotions    = [];
+  let recentQuotes     = [];
+  let favorites        = JSON.parse(localStorage.getItem('tomoshibi-favs') || '[]');
+  let emotionLog       = JSON.parse(localStorage.getItem('tomoshibi-log') || '[]');
+
+  const PANEL_TITLES = {
+    future:'未来の自分から', emotion:'感情を翻訳する', weather:'心の天気',
+    diary:'誰かの日記', narration:'人生ナレーション', letter:'言えなかった言葉',
+    lyrics:'感情の歌詞', temperature:'感情気象', universe:'感情の星座',
+    silence:'何も言えない夜に', fav:'保存した言葉', log:'感情ログ',
+  };
+
+  // ── Night mode ────────────────────────────────────────
+  function applyTimeMode() {
+    const h = new Date().getHours();
+    const isNight = h >= 22 || h < 4;
+    document.body.classList.toggle('deep-night', isNight);
+    const greet = document.getElementById('night-greeting');
+    const prompt = document.getElementById('main-prompt');
+    const loadingText = document.getElementById('home-loading-text');
+    if (isNight) {
+      greet.textContent = '眠れない夜ですね。ここにいますよ。';
+      greet.style.display = '';
+      if (prompt) prompt.innerHTML = 'この夜に、<br>言葉を灯してみませんか';
+      if (loadingText) loadingText.innerHTML = 'あなたの夜を、<br>静かに読んでいます…';
+    } else {
+      greet.style.display = 'none';
+    }
+  }
+  applyTimeMode();
+
+  // ── Embers ────────────────────────────────────────────
+  (function(){
+    const c = document.getElementById('embers');
+    for (let i = 0; i < 18; i++) {
+      const e = document.createElement('div');
+      e.className = 'ember';
+      const left = 35 + Math.random()*30, dur = 3.5+Math.random()*3, delay = Math.random()*5;
+      const dx = (Math.random()-.5)*80, sz = 2+Math.random()*3;
+      e.style.cssText = `left:${left}%;--d:${dur}s;--delay:${delay}s;--dx:${dx}px;width:${sz}px;height:${sz}px;background:${Math.random()>.5?'#FCD34D':'#F97316'}`;
+      c.appendChild(e);
+    }
+  })();
+
+  // ── Quick chips ───────────────────────────────────────
+  function toggleQchip(emotion, btn) {
+    btn.classList.toggle('active');
+    quickEmotions = btn.classList.contains('active')
+      ? [...quickEmotions, emotion]
+      : quickEmotions.filter(x => x !== emotion);
+    if (btn.classList.contains('active') && !document.getElementById('home-mood').value) {
+      document.getElementById('home-mood').placeholder = `「${emotion}」の気持ちについて、もう少し…`;
+    }
+  }
+
+  // ── Advanced sliders ──────────────────────────────────
+  function toggleAdv() {
+    const panel = document.getElementById('adv-panel');
+    const arrow = document.getElementById('adv-arrow');
+    panel.classList.toggle('open');
+    arrow.textContent = panel.classList.contains('open') ? '−' : '＋';
+  }
+
+  // ── Other features toggle ─────────────────────────────
+  function toggleOther() {
+    const grid = document.getElementById('other-grid');
+    const arrow = document.getElementById('other-arrow');
+    grid.classList.toggle('open');
+    arrow.classList.toggle('open');
+  }
+
+  // ── Genre / Mode ──────────────────────────────────────
+  function setGenre(g, btn) {
+    selectedGenre = g;
+    document.querySelectorAll('#genre-row .cset-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+  function setMode(m, btn) {
+    selectedMode = m;
+    document.querySelectorAll('#mode-row .cset-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  // ── Navigation ────────────────────────────────────────
+  function openTab(tab) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('tab-'+tab).classList.add('active');
+    document.getElementById('panel-title').textContent = PANEL_TITLES[tab] || '';
+    document.getElementById('hero').style.display  = 'none';
+    document.getElementById('home').style.display  = 'none';
+    document.getElementById('panel').style.display = 'block';
+    window.scrollTo({top:0,behavior:'instant'});
+    if (tab === 'fav') renderFavs();
+    if (tab === 'log') renderLog();
+  }
+  function goHome() {
+    document.getElementById('panel').style.display = 'none';
+    document.getElementById('hero').style.display  = 'block';
+    document.getElementById('home').style.display  = 'block';
+    window.scrollTo({top:0,behavior:'instant'});
     triggerReveal();
-  </script>
+  }
+
+  // ── API helper ────────────────────────────────────────
+  async function apiPost(url, body) {
+    let res;
+    try { res = await fetch(url, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}); }
+    catch(e) { throw new Error('ネットワークエラーが発生しました。接続を確認してください。'); }
+    let data;
+    try { data = await res.json(); } catch(e) {
+      if (res.status >= 500) throw new Error('サーバーが起動中です。無料プランのため初回起動に50秒ほどかかります。少し待ってからもう一度お試しください 🙏');
+      throw new Error('サーバーからの応答を読み取れませんでした。');
+    }
+    if (!data.success) throw new Error(data.error);
+    return data;
+  }
+
+  // ── Home generate ─────────────────────────────────────
+  async function homeGenerate() {
+    const loadEl = document.getElementById('home-loading');
+    const errEl  = document.getElementById('home-error');
+    const genBtn = document.getElementById('home-gen-btn');
+    const results = document.getElementById('home-results');
+
+    loadEl.classList.add('visible');
+    errEl.classList.remove('visible');
+    genBtn.disabled = true;
+
+    try {
+      const data = await apiPost('/api/quote', {
+        mood:          document.getElementById('home-mood').value,
+        energy:        document.getElementById('sl-energy').value,
+        stress:        document.getElementById('sl-stress').value,
+        motivation:    document.getElementById('sl-motiv').value,
+        emotions:      quickEmotions,
+        recentQuotes,
+        genre:         selectedMode === 'original' ? 'mix' : selectedGenre,
+        isNightMode:   selectedMode === 'night' || new Date().getHours() >= 22 || new Date().getHours() < 4,
+        prescriptionMode: selectedMode === 'prescription',
+        originalMode:  selectedMode === 'original',
+      });
+
+      loadEl.classList.remove('visible');
+      genBtn.disabled = false;
+      results.classList.add('visible');
+
+      const q = data.quote;
+      if (q.original) recentQuotes.push(q.original.slice(0, 60));
+      if (recentQuotes.length > 8) recentQuotes.shift();
+
+      // Save to log
+      saveToLog(quickEmotions, document.getElementById('home-mood').value, q);
+
+      appendHomeQuote(q);
+    } catch(e) {
+      loadEl.classList.remove('visible');
+      genBtn.disabled = false;
+      errEl.textContent = e.message;
+      errEl.classList.add('visible');
+    }
+  }
+
+  function fmtTimestamp() {
+    const d = new Date();
+    const y = d.getFullYear(), mo = String(d.getMonth()+1).padStart(2,'0'), day = String(d.getDate()).padStart(2,'0');
+    const h = String(d.getHours()).padStart(2,'0'), m = String(d.getMinutes()).padStart(2,'0');
+    return `${y}.${mo}.${day}　${h}:${m}`;
+  }
+
+  function appendHomeQuote(q) {
+    const list = document.getElementById('home-quotes-list');
+    const id   = 'qc-' + Date.now();
+    const isSaved = favorites.some(f => f.original === q.original);
+    const badge = q.sourceType==='anime' ? '⚔️ アニメ' : q.sourceType==='original' ? '✨ AIオリジナル' : '🌍 偉人';
+    const ts = fmtTimestamp();
+
+    let rxHtml = '';
+    if (q.prescription) {
+      rxHtml = `<div class="rx-card"><div class="rx-title">処方箋</div>
+        <div class="rx-row"><span class="rx-label">症状</span><span class="rx-val">${q.prescription.symptom}</span></div>
+        <div class="rx-row"><span class="rx-label">用法</span><span class="rx-val">${q.prescription.usage}</span></div>
+        <div class="rx-row"><span class="rx-label">効果</span><span class="rx-val">${q.prescription.effect}</span></div>
+        <div class="rx-row"><span class="rx-label">注意</span><span class="rx-val">${q.prescription.caution}</span></div></div>`;
+    }
+
+    const card = document.createElement('div');
+    card.className = 'quote-card';
+    card.id = id;
+    card.innerHTML = `
+      <div class="qc-top">
+        <div class="qc-meta">
+          <span class="qc-timestamp">あなたへの言葉　${ts}</span>
+          <span class="qc-badge">${badge}</span>
+        </div>
+        <div class="qc-actions">
+          <button class="qc-action-btn${isSaved?' saved':''}" title="保存" onclick="toggleFav('${id}',this)">🔖</button>
+          <button class="qc-action-btn" title="シェア" onclick="openShare('${id}')">↗</button>
+        </div>
+      </div>
+      <div class="quote-original">${q.original}</div>
+      ${q.translation ? `<div class="quote-translation">${q.translation}</div>` : ''}
+      <div class="quote-author-line">
+        <div class="quote-author-dot"></div>
+        <div class="quote-author-name">${q.authorJp || q.author}</div>
+      </div>
+      ${q.reason ? `<div class="quote-understanding"><div class="qu-label">今のあなたへ</div><div class="qu-text">${q.reason}</div></div>` : ''}
+      ${rxHtml}
+    `;
+    card._quoteData = q;
+    card._timestamp = ts;
+    list.prepend(card);
+    requestAnimationFrame(() => requestAnimationFrame(() => card.classList.add('in')));
+    setTimeout(() => card.scrollIntoView({behavior:'smooth',block:'start'}), 100);
+  }
+
+  // ── Share overlay ─────────────────────────────────────
+  function openShare(cardId) {
+    const card = document.getElementById(cardId);
+    const q = card._quoteData;
+    const ts = card._timestamp || fmtTimestamp();
+    document.getElementById('sc-date').textContent = ts;
+    document.getElementById('sc-quote').textContent = q.original;
+    document.getElementById('sc-author').textContent = '— ' + (q.authorJp || q.author);
+    document.getElementById('share-overlay').classList.add('visible');
+  }
+  function closeShare() {
+    document.getElementById('share-overlay').classList.remove('visible');
+  }
+
+  // ── Favorites ─────────────────────────────────────────
+  function toggleFav(cardId, btn) {
+    const card = document.getElementById(cardId);
+    const q = card._quoteData;
+    const idx = favorites.findIndex(f => f.original === q.original);
+    if (idx >= 0) { favorites.splice(idx,1); btn.classList.remove('saved'); }
+    else { favorites.push({original:q.original,translation:q.translation,authorJp:q.authorJp||q.author,savedAt:new Date().toISOString()}); btn.classList.add('saved'); }
+    localStorage.setItem('tomoshibi-favs', JSON.stringify(favorites));
+  }
+  function renderFavs() {
+    const wrap = document.getElementById('fav-list-wrap');
+    if (!favorites.length) { wrap.innerHTML = `<div class="fav-empty"><span class="fav-icon">🔖</span>まだ保存した言葉はありません。<br>名言カードの 🔖 から保存できます。</div>`; return; }
+    wrap.innerHTML = `<div class="fav-list">${favorites.map((f,i) => `
+      <div class="fav-item">
+        <div class="fav-quote">${f.original}${f.translation?'<br><span style="font-size:.82rem;color:var(--muted)">'+f.translation+'</span>':''}</div>
+        <div class="fav-meta"><span style="color:var(--amber2)">${f.authorJp}</span><button class="fav-del" onclick="delFav(${i})">×</button></div>
+      </div>`).join('')}</div>`;
+  }
+  function delFav(i) { favorites.splice(i,1); localStorage.setItem('tomoshibi-favs',JSON.stringify(favorites)); renderFavs(); }
+
+  // ── Emotion log ───────────────────────────────────────
+  function saveToLog(emotions, mood, q) {
+    const entry = {
+      date: new Date().toISOString(),
+      emotions: [...emotions],
+      mood: mood.slice(0,40),
+      quote: q.original.slice(0,60),
+      author: q.authorJp || q.author,
+    };
+    emotionLog.unshift(entry);
+    if (emotionLog.length > 30) emotionLog.pop();
+    localStorage.setItem('tomoshibi-log', JSON.stringify(emotionLog));
+  }
+  function renderLog() {
+    const wrap = document.getElementById('log-list-wrap');
+    if (!emotionLog.length) { wrap.innerHTML = `<div class="log-empty">まだ記録がありません。<br>言葉を灯すたびに自動で記録されます。</div>`; return; }
+    const fmt = iso => { const d = new Date(iso); return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`; };
+    wrap.innerHTML = `<div class="log-list">${emotionLog.map(e => `
+      <div class="log-item">
+        <div class="log-date">${fmt(e.date)}</div>
+        ${e.emotions.length ? `<div class="log-emotions">${e.emotions.map(em=>`<span class="log-chip">${em}</span>`).join('')}</div>` : ''}
+        <div class="log-quote">「${e.quote}…」<br><span style="font-size:.72rem;color:var(--amber2)">— ${e.author}</span></div>
+      </div>`).join('')}</div>`;
+  }
+
+  // ── Panel helpers ─────────────────────────────────────
+  function showLoading(key, show) { document.getElementById(key+'-loading').classList.toggle('visible', show); }
+  function showError(key, msg) { const el=document.getElementById(key+'-error'); el.textContent=msg; el.classList.toggle('visible',!!msg); }
+  function showResult(key, show) {
+    document.getElementById(key+'-result').classList.toggle('visible',show);
+    if (show) { const a=document.getElementById(key+'-input-area'); if(a) a.style.display='none'; }
+  }
+  function resetPanel(key) {
+    const r=document.getElementById(key+'-result'); if(r) r.classList.remove('visible');
+    const a=document.getElementById(key+'-input-area'); if(a) a.style.display='';
+    showError(key,'');
+  }
+  function resetSilence() {
+    document.getElementById('silence-result').classList.remove('visible');
+    document.getElementById('silence-choices').style.display='';
+  }
+
+  // ── Panel API calls ───────────────────────────────────
+  async function genFuture() {
+    showLoading('future',true); showError('future',''); showResult('future',false);
+    try {
+      const d = await apiPost('/api/future-self', {age:document.getElementById('future-age').value,worries:document.getElementById('future-worries').value,goals:document.getElementById('future-goals').value});
+      const r = d.result;
+      document.getElementById('fr-from').textContent = r.from||'3年後のあなたより';
+      document.getElementById('fr-message').textContent = r.message;
+      document.getElementById('fr-sign').textContent = '— '+(r.from||'3年後より');
+      document.getElementById('fr-hint').textContent = r.hint;
+      if(r.quote){document.getElementById('fr-quote-text').textContent=r.quote;document.getElementById('fr-quote-author').textContent='座右の銘';document.getElementById('fr-quote-wrap').style.display='';}
+      showLoading('future',false); showResult('future',true);
+    } catch(e){showLoading('future',false);showError('future',e.message);}
+  }
+  async function genEmotion() {
+    showLoading('emotion',true); showError('emotion',''); showResult('emotion',false);
+    try {
+      const d = await apiPost('/api/translate-emotion',{emotion:document.getElementById('emotion-text').value});
+      const r = d.result;
+      document.getElementById('er-core').textContent=r.core;
+      document.getElementById('er-translation').textContent=r.translation;
+      document.getElementById('er-gentle').textContent=r.gentle;
+      if(r.quote){document.getElementById('er-quote-text').textContent=r.quote.translation?`${r.quote.original}　—　${r.quote.translation}`:r.quote.original;document.getElementById('er-quote-author').textContent=r.quote.authorJp||r.quote.author;document.getElementById('er-quote-wrap').style.display='';}
+      showLoading('emotion',false); showResult('emotion',true);
+    } catch(e){showLoading('emotion',false);showError('emotion',e.message);}
+  }
+  async function genWeather() {
+    showLoading('weather',true); showError('weather',''); showResult('weather',false);
+    try {
+      const d = await apiPost('/api/weather-emotion',{emotion:document.getElementById('weather-text').value});
+      const r = d.result;
+      document.getElementById('wr-bg').style.background=`linear-gradient(160deg,${r.gradient})`;
+      document.getElementById('wr-icon').textContent=r.icon;
+      document.getElementById('wr-name').textContent=r.weather;
+      document.getElementById('wr-desc').textContent=r.description;
+      document.getElementById('wr-forecast').textContent=r.forecast;
+      if(r.quote){document.getElementById('wr-quote-text').textContent=r.quote.translation?`${r.quote.original}　—　${r.quote.translation}`:r.quote.original;document.getElementById('wr-quote-author').textContent=r.quote.authorJp||r.quote.author;document.getElementById('wr-quote-wrap').style.display='';}
+      showLoading('weather',false); showResult('weather',true);
+    } catch(e){showLoading('weather',false);showError('weather',e.message);}
+  }
+  async function genDiary() {
+    showLoading('diary',true); showError('diary',''); showResult('diary',false);
+    try {
+      const d = await apiPost('/api/diary',{emotion:document.getElementById('diary-text').value});
+      const r = d.result;
+      document.getElementById('dr-header').textContent=`${r.date}　${r.weather}　${r.city}`;
+      document.getElementById('dr-entry').textContent=r.entry;
+      document.getElementById('dr-closing').textContent=r.closing;
+      showLoading('diary',false); showResult('diary',true);
+    } catch(e){showLoading('diary',false);showError('diary',e.message);}
+  }
+  async function genNarration() {
+    showLoading('narration',true); showError('narration',''); showResult('narration',false);
+    try {
+      const d = await apiPost('/api/narration',{event:document.getElementById('narr-event').value,emotion:document.getElementById('narr-emotion').value});
+      const r = d.result;
+      document.getElementById('nr-chapter').textContent=r.chapter;
+      document.getElementById('nr-narration').textContent=r.narration;
+      document.getElementById('nr-next').textContent='次章：'+r.next;
+      document.getElementById('nr-theme').textContent='テーマ：'+r.theme;
+      showLoading('narration',false); showResult('narration',true);
+    } catch(e){showLoading('narration',false);showError('narration',e.message);}
+  }
+  async function genLetter() {
+    showLoading('letter',true); showError('letter',''); showResult('letter',false);
+    try {
+      const d = await apiPost('/api/letter',{emotion:document.getElementById('letter-text').value});
+      const r = d.result;
+      document.getElementById('lr-to').textContent=r.to;
+      document.getElementById('lr-body').textContent=r.letter;
+      document.getElementById('lr-ps').textContent='追伸：'+r.ps;
+      document.getElementById('lr-from').textContent=r.from;
+      showLoading('letter',false); showResult('letter',true);
+    } catch(e){showLoading('letter',false);showError('letter',e.message);}
+  }
+  async function genLyrics() {
+    showLoading('lyrics',true); showError('lyrics',''); showResult('lyrics',false);
+    try {
+      const d = await apiPost('/api/lyrics',{emotion:document.getElementById('lyrics-text').value});
+      const r = d.result;
+      document.getElementById('lyr-genre').textContent=r.genre+'　'+r.tempo;
+      document.getElementById('lyr-title').textContent=r.title;
+      document.getElementById('lyr-artist').textContent=r.artist;
+      document.getElementById('lyr-lyrics').textContent=r.lyrics;
+      document.getElementById('lyr-concept').textContent=r.concept;
+      showLoading('lyrics',false); showResult('lyrics',true);
+    } catch(e){showLoading('lyrics',false);showError('lyrics',e.message);}
+  }
+  async function genTemp() {
+    showLoading('temperature',true); showError('temperature',''); showResult('temperature',false);
+    try {
+      const d = await apiPost('/api/temperature',{emotion:document.getElementById('temp-text').value});
+      const r = d.result;
+      document.getElementById('tr-temp').textContent=r.temperature;
+      document.getElementById('tr-feels').textContent=r.feelsLike;
+      document.getElementById('tr-humidity').textContent=r.humidity;
+      document.getElementById('tr-pressure').textContent=r.pressure;
+      document.getElementById('tr-condition').textContent=r.condition;
+      document.getElementById('tr-wind').textContent='風：'+r.wind+'　視界：'+r.visibility;
+      document.getElementById('tr-obs').textContent=r.observation;
+      document.getElementById('tr-forecast').textContent='明日：'+r.forecast;
+      showLoading('temperature',false); showResult('temperature',true);
+    } catch(e){showLoading('temperature',false);showError('temperature',e.message);}
+  }
+  async function genUniverse() {
+    showLoading('universe',true); showError('universe',''); showResult('universe',false);
+    try {
+      const d = await apiPost('/api/universe',{emotion:document.getElementById('uni-text').value});
+      const r = d.result;
+      document.getElementById('ur-name').textContent=r.constellation;
+      document.getElementById('ur-story').textContent=r.story;
+      document.getElementById('ur-msg').textContent=r.message;
+      const canvas=document.getElementById('ur-stars');
+      canvas.innerHTML='';
+      if(r.bgColor) canvas.style.background=r.bgColor;
+      (r.stars||[]).forEach(s=>{
+        const dot=document.createElement('div'); dot.className='star-dot';
+        const sz=(s.size||2)*3;
+        dot.style.cssText=`width:${sz}px;height:${sz}px;background:${s.color||'#FCD34D'};left:${Math.random()*85+5}%;top:${Math.random()*75+5}%;animation-delay:${Math.random()*2}s;box-shadow:0 0 ${sz*2}px ${s.color||'#FCD34D'}`;
+        const lb=document.createElement('span');
+        lb.style.cssText='position:absolute;top:110%;left:50%;transform:translateX(-50%);font-size:9px;color:rgba(255,255,255,.4);white-space:nowrap;';
+        lb.textContent=s.name; dot.appendChild(lb); canvas.appendChild(dot);
+      });
+      showLoading('universe',false); showResult('universe',true);
+    } catch(e){showLoading('universe',false);showError('universe',e.message);}
+  }
+  async function genSilence(pattern) {
+    document.getElementById('silence-choices').style.display='none';
+    showLoading('silence',true);
+    try {
+      const d = await apiPost('/api/silence',{pattern});
+      const r = d.result;
+      document.getElementById('sr-message').textContent=r.message;
+      document.getElementById('sr-breath').textContent=r.breath;
+      document.getElementById('sr-presence').textContent=r.presence;
+      showLoading('silence',false);
+      document.getElementById('silence-result').classList.add('visible');
+    } catch(e){showLoading('silence',false);document.getElementById('silence-choices').style.display='';}
+  }
+
+  // ── Mic ───────────────────────────────────────────────
+  let recognition, isRecording = false;
+  function toggleMic() {
+    if (!('webkitSpeechRecognition' in window||'SpeechRecognition' in window)){document.getElementById('mic-status').textContent='音声認識はこのブラウザ非対応です';return;}
+    if (isRecording){recognition&&recognition.stop();return;}
+    const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+    recognition=new SR(); recognition.lang='ja-JP'; recognition.interimResults=true;
+    recognition.onstart=()=>{isRecording=true;document.getElementById('mic-btn').classList.add('recording');document.getElementById('mic-status').textContent='🎤 聞いています…'};
+    recognition.onresult=e=>{let t='';for(let i=e.resultIndex;i<e.results.length;i++)t+=e.results[i][0].transcript;document.getElementById('home-mood').value=t;};
+    recognition.onend=()=>{isRecording=false;document.getElementById('mic-btn').classList.remove('recording');document.getElementById('mic-status').textContent='';};
+    recognition.start();
+  }
+
+  // ── Scroll reveal ─────────────────────────────────────
+  function triggerReveal() {
+    const items = document.querySelectorAll('#home .reveal');
+    items.forEach(el => el.classList.remove('visible'));
+    setTimeout(() => {
+      const obs = new IntersectionObserver(entries => {
+        entries.forEach((entry, idx) => {
+          if (entry.isIntersecting) {
+            setTimeout(() => entry.target.classList.add('visible'), idx * 110);
+            obs.unobserve(entry.target);
+          }
+        });
+      }, {threshold:.05});
+      items.forEach(el => obs.observe(el));
+    }, 60);
+  }
+
+  // ── Init ──────────────────────────────────────────────
+  triggerReveal();
+</script>
 </body>
 </html>
