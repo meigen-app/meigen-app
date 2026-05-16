@@ -318,9 +318,26 @@
     .btn-row{display:flex;gap:10px;margin-top:14px}
     .btn-row .btn-ghost{flex:1}
     .btn-row .btn-primary{flex:2}
+
+    /* ── Sound toggle ───────────────────────────────── */
+    #sound-toggle{
+      position:fixed;top:18px;right:18px;z-index:1000;
+      width:42px;height:42px;border-radius:50%;
+      border:1px solid var(--border);
+      background:rgba(13,17,23,.72);
+      backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+      cursor:pointer;display:flex;align-items:center;justify-content:center;
+      font-size:1.05rem;transition:all .3s;color:var(--amber2);
+      box-shadow:0 2px 12px rgba(0,0,0,.4);
+    }
+    #sound-toggle:hover{background:var(--glow);border-color:var(--flame);transform:scale(1.08)}
+    #sound-toggle.muted{color:var(--muted);opacity:.5}
   </style>
 </head>
 <body>
+
+<!-- サウンドトグル -->
+<button id="sound-toggle" onclick="audio.toggle()" title="サウンドをオフ" aria-label="サウンド切り替え">🔊</button>
 
 <!-- ══════════ HERO ══════════ -->
 <div id="hero">
@@ -772,6 +789,208 @@
   // ── State ─────────────────────────────────────────────
   let selectedGenre    = 'mix';
   let selectedMode     = 'normal';
+  // ══════════════════════════════════════════════════════
+  // 🔊 燈 AudioManager — Web Audio API（ファイル不要）
+  // ══════════════════════════════════════════════════════
+  class TomoshibiAudio {
+    constructor() {
+      this._ctx = null;
+      this._master = null;
+      this._bgmSource = null;
+      this._bgmLfo = null;
+      this._bgmGain = null;
+      this._bgmRunning = false;
+      this.enabled = localStorage.getItem('tomoshibi-sound') !== 'off';
+    }
+
+    // AudioContext は最初のユーザー操作後に初期化
+    get ctx() {
+      if (!this._ctx) {
+        this._ctx = new (window.AudioContext || window.webkitAudioContext)();
+        this._master = this._ctx.createGain();
+        this._master.gain.value = 0.65;
+        this._master.connect(this._ctx.destination);
+      }
+      if (this._ctx.state === 'suspended') this._ctx.resume();
+      return this._ctx;
+    }
+
+    // ─── ピンクノイズバッファ（焚き火BGM用）─────────────
+    _makeFire() {
+      const ctx = this.ctx;
+      const buf = ctx.createBuffer(2, ctx.sampleRate * 8, ctx.sampleRate);
+      for (let ch = 0; ch < 2; ch++) {
+        const d = buf.getChannelData(ch);
+        let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
+        for (let i = 0; i < d.length; i++) {
+          const w = Math.random() * 2 - 1;
+          b0 = 0.99886*b0 + w*0.0555179; b1 = 0.99332*b1 + w*0.0750759;
+          b2 = 0.96900*b2 + w*0.1538520; b3 = 0.86650*b3 + w*0.3104856;
+          b4 = 0.55000*b4 + w*0.5329522; b5 = -0.7616*b5 - w*0.0168980;
+          d[i] = (b0+b1+b2+b3+b4+b5+b6+w*0.5362) * 0.11;
+          b6 = w * 0.115926;
+        }
+      }
+      return buf;
+    }
+
+    // ─── BGM 開始（焚き火のゆらめき）────────────────────
+    startBGM(isNight = false) {
+      if (!this.enabled || this._bgmRunning) return;
+      const ctx = this.ctx;
+
+      const noise = ctx.createBufferSource();
+      noise.buffer = this._makeFire();
+      noise.loop = true;
+
+      // ローパスで炎らしいサウンドに
+      const lpf = ctx.createBiquadFilter();
+      lpf.type = 'lowpass';
+      lpf.frequency.value = isNight ? 220 : 340;
+      lpf.Q.value = 0.25;
+
+      const hpf = ctx.createBiquadFilter();
+      hpf.type = 'highpass';
+      hpf.frequency.value = 60;
+
+      // ゆっくりした揺らぎ（炎が揺れる感じ）
+      const lfo = ctx.createOscillator();
+      lfo.frequency.value = 0.22;
+      const lfoGain = ctx.createGain();
+      lfoGain.gain.value = 0.055;
+
+      this._bgmGain = ctx.createGain();
+      this._bgmGain.gain.value = 0;
+
+      noise.connect(lpf); lpf.connect(hpf); hpf.connect(this._bgmGain);
+      this._bgmGain.connect(this._master);
+      lfo.connect(lfoGain); lfoGain.connect(this._bgmGain.gain);
+
+      noise.start(); lfo.start();
+
+      // ゆっくりフェードイン（4秒）
+      const vol = isNight ? 0.14 : 0.20;
+      this._bgmGain.gain.linearRampToValueAtTime(vol, ctx.currentTime + 4);
+
+      this._bgmSource = noise;
+      this._bgmLfo = lfo;
+      this._bgmRunning = true;
+    }
+
+    stopBGM() {
+      if (!this._bgmRunning || !this._bgmGain) return;
+      const t = this.ctx.currentTime;
+      this._bgmGain.gain.linearRampToValueAtTime(0, t + 2);
+      const [s, l] = [this._bgmSource, this._bgmLfo];
+      setTimeout(() => { try{s.stop()}catch(e){} try{l.stop()}catch(e){} }, 2300);
+      this._bgmRunning = false;
+    }
+
+    // ─── SE: 鐘/シンギングボウル（名言表示）─────────────
+    playReveal() {
+      if (!this.enabled) return;
+      const ctx = this.ctx, t = ctx.currentTime;
+      [432, 864, 1296].forEach((f, i) => {
+        const osc = ctx.createOscillator(), gain = ctx.createGain();
+        osc.type = 'sine'; osc.frequency.value = f;
+        const delay = i * 0.003;
+        gain.gain.setValueAtTime(0, t+delay);
+        gain.gain.linearRampToValueAtTime([0.11,0.04,0.014][i], t+delay+0.006);
+        gain.gain.exponentialRampToValueAtTime(0.001, t+delay+3.8);
+        osc.connect(gain); gain.connect(this._master);
+        osc.start(t+delay); osc.stop(t+delay+4.2);
+      });
+    }
+
+    // ─── SE: 蝋燭の点火（感情チップ選択）────────────────
+    playChip() {
+      if (!this.enabled) return;
+      const ctx = this.ctx, t = ctx.currentTime;
+      const osc = ctx.createOscillator(), gain = ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(480, t);
+      osc.frequency.exponentialRampToValueAtTime(200, t+0.09);
+      gain.gain.setValueAtTime(0.065, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t+0.11);
+      osc.connect(gain); gain.connect(this._master);
+      osc.start(t); osc.stop(t+0.13);
+    }
+
+    // ─── SE: 温かいアルペジオ（お気に入り）──────────────
+    playHeart(saving = true) {
+      if (!this.enabled) return;
+      const ctx = this.ctx, t = ctx.currentTime;
+      const notes = saving ? [523.25, 659.25, 783.99] : [783.99, 659.25, 523.25];
+      notes.forEach((f, i) => {
+        const osc = ctx.createOscillator(), gain = ctx.createGain();
+        osc.type = 'sine'; osc.frequency.value = f;
+        const d = i * 0.075;
+        gain.gain.setValueAtTime(0, t+d);
+        gain.gain.linearRampToValueAtTime(0.065, t+d+0.01);
+        gain.gain.exponentialRampToValueAtTime(0.001, t+d+0.65);
+        osc.connect(gain); gain.connect(this._master);
+        osc.start(t+d); osc.stop(t+d+0.8);
+      });
+    }
+
+    // ─── SE: 点火の息吹（生成ボタン）────────────────────
+    playIgnite() {
+      if (!this.enabled) return;
+      const ctx = this.ctx, t = ctx.currentTime;
+      // ノイズバースト（マッチを擦る感覚）
+      const buf = ctx.createBuffer(1, ctx.sampleRate*0.28, ctx.sampleRate);
+      const d = buf.getChannelData(0);
+      for (let i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*(1-i/d.length);
+      const src = ctx.createBufferSource(); src.buffer = buf;
+      const bpf = ctx.createBiquadFilter(); bpf.type='bandpass'; bpf.frequency.value=1100; bpf.Q.value=0.9;
+      const g = ctx.createGain(); g.gain.setValueAtTime(0.12,t); g.gain.exponentialRampToValueAtTime(0.001,t+0.28);
+      src.connect(bpf); bpf.connect(g); g.connect(this._master); src.start(t);
+      // 下に漂う上昇トーン
+      const osc = ctx.createOscillator(), og = ctx.createGain();
+      osc.type='sine'; osc.frequency.setValueAtTime(180,t); osc.frequency.linearRampToValueAtTime(360,t+0.4);
+      og.gain.setValueAtTime(0,t); og.gain.linearRampToValueAtTime(0.038,t+0.06); og.gain.exponentialRampToValueAtTime(0.001,t+0.5);
+      osc.connect(og); og.connect(this._master); osc.start(t); osc.stop(t+0.6);
+    }
+
+    // ─── SE: 深夜への移行（ナイトモード）────────────────
+    playNight() {
+      if (!this.enabled) return;
+      const ctx = this.ctx, t = ctx.currentTime;
+      [80, 120, 160].forEach((f, i) => {
+        const osc = ctx.createOscillator(), gain = ctx.createGain();
+        osc.type = 'sine'; osc.frequency.setValueAtTime(f*1.04,t); osc.frequency.linearRampToValueAtTime(f,t+1.5);
+        gain.gain.setValueAtTime(0,t); gain.gain.linearRampToValueAtTime(0.05/(i+1),t+0.4); gain.gain.linearRampToValueAtTime(0.001,t+2.8);
+        osc.connect(gain); gain.connect(this._master); osc.start(t); osc.stop(t+3);
+      });
+    }
+
+    // ─── トグル ──────────────────────────────────────────
+    toggle() {
+      this.enabled = !this.enabled;
+      localStorage.setItem('tomoshibi-sound', this.enabled ? 'on' : 'off');
+      if (this.enabled) { this.startBGM(document.body.classList.contains('deep-night')); }
+      else { this.stopBGM(); }
+      this._updateBtn();
+    }
+
+    _updateBtn() {
+      const btn = document.getElementById('sound-toggle');
+      if (!btn) return;
+      btn.textContent = this.enabled ? '🔊' : '🔇';
+      btn.classList.toggle('muted', !this.enabled);
+      btn.title = this.enabled ? 'サウンドをオフ' : 'サウンドをオン';
+    }
+  }
+  const audio = new TomoshibiAudio();
+
+  // 最初のユーザー操作でBGM開始（ブラウザ制限対応）
+  document.addEventListener('pointerdown', function _firstTouch() {
+    if (audio.enabled && !audio._bgmRunning) {
+      audio.startBGM(document.body.classList.contains('deep-night'));
+    }
+    document.removeEventListener('pointerdown', _firstTouch);
+  }, { once: true });
+
   let quickEmotions    = [];
   let recentQuotes     = [];
   let favorites        = JSON.parse(localStorage.getItem('tomoshibi-favs') || '[]');
@@ -789,7 +1008,9 @@
   function applyTimeMode() {
     const h = new Date().getHours();
     const isNight = h >= 22 || h < 4;
+    const wasNight = document.body.classList.contains('deep-night');
     document.body.classList.toggle('deep-night', isNight);
+    if (isNight && !wasNight) audio.playNight();
     const greet = document.getElementById('night-greeting');
     const prompt = document.getElementById('main-prompt');
     const loadingText = document.getElementById('home-loading-text');
@@ -819,6 +1040,7 @@
 
   // ── Quick chips ───────────────────────────────────────
   function toggleQchip(emotion, btn) {
+    audio.playChip();
     btn.classList.toggle('active');
     quickEmotions = btn.classList.contains('active')
       ? [...quickEmotions, emotion]
@@ -898,6 +1120,7 @@
 
   // ── Home generate ─────────────────────────────────────
   async function homeGenerate() {
+    audio.playIgnite();
     const loadEl = document.getElementById('home-loading');
     const errEl  = document.getElementById('home-error');
     const genBtn = document.getElementById('home-gen-btn');
@@ -958,6 +1181,7 @@
   }
 
   function appendHomeQuote(q) {
+    audio.playReveal();
     const list = document.getElementById('home-quotes-list');
     const id   = 'qc-' + Date.now();
     const isSaved = favorites.some(f => f.original === q.original);
@@ -1174,8 +1398,14 @@
     const card = document.getElementById(cardId);
     const q = card._quoteData;
     const idx = favorites.findIndex(f => f.original === q.original);
-    if (idx >= 0) { favorites.splice(idx,1); btn.classList.remove('saved'); }
-    else { favorites.push({original:q.original,translation:q.translation,authorJp:q.authorJp||q.author,savedAt:new Date().toISOString()}); btn.classList.add('saved'); }
+    if (idx >= 0) {
+      favorites.splice(idx,1); btn.classList.remove('saved');
+      audio.playHeart(false);
+    } else {
+      favorites.push({original:q.original,translation:q.translation,authorJp:q.authorJp||q.author,savedAt:new Date().toISOString()});
+      btn.classList.add('saved');
+      audio.playHeart(true);
+    }
     localStorage.setItem('tomoshibi-favs', JSON.stringify(favorites));
   }
   function renderFavs() {
