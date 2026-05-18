@@ -790,7 +790,7 @@
   let selectedGenre    = 'mix';
   let selectedMode     = 'normal';
   // ══════════════════════════════════════════════════════
-  // 🔊 燈 AudioManager — Web Audio API（ファイル不要）
+  // 🔊 燈 AudioManager — 雨音 × 日本の夜サウンドセット
   // ══════════════════════════════════════════════════════
   class TomoshibiAudio {
     constructor() {
@@ -803,7 +803,6 @@
       this.enabled = localStorage.getItem('tomoshibi-sound') !== 'off';
     }
 
-    // AudioContext は最初のユーザー操作後に初期化
     get ctx() {
       if (!this._ctx) {
         this._ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -815,64 +814,61 @@
       return this._ctx;
     }
 
-    // ─── ピンクノイズバッファ（焚き火BGM用）─────────────
-    _makeFire() {
+    // ─── ホワイトノイズバッファ（雨BGM用）───────────────
+    _makeWhiteNoise(sec = 10) {
       const ctx = this.ctx;
-      const buf = ctx.createBuffer(2, ctx.sampleRate * 8, ctx.sampleRate);
+      const buf = ctx.createBuffer(2, ctx.sampleRate * sec, ctx.sampleRate);
       for (let ch = 0; ch < 2; ch++) {
         const d = buf.getChannelData(ch);
-        let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
-        for (let i = 0; i < d.length; i++) {
-          const w = Math.random() * 2 - 1;
-          b0 = 0.99886*b0 + w*0.0555179; b1 = 0.99332*b1 + w*0.0750759;
-          b2 = 0.96900*b2 + w*0.1538520; b3 = 0.86650*b3 + w*0.3104856;
-          b4 = 0.55000*b4 + w*0.5329522; b5 = -0.7616*b5 - w*0.0168980;
-          d[i] = (b0+b1+b2+b3+b4+b5+b6+w*0.5362) * 0.11;
-          b6 = w * 0.115926;
-        }
+        for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
       }
       return buf;
     }
 
-    // ─── BGM 開始（焚き火のゆらめき）────────────────────
+    // ─── BGM: 雨音（窓の外の静かな雨）──────────────────
     startBGM(isNight = false) {
       if (!this.enabled || this._bgmRunning) return;
       const ctx = this.ctx;
 
-      const noise = ctx.createBufferSource();
-      noise.buffer = this._makeFire();
-      noise.loop = true;
-
-      // ローパスで炎らしいサウンドに
-      const lpf = ctx.createBiquadFilter();
-      lpf.type = 'lowpass';
-      lpf.frequency.value = isNight ? 220 : 340;
-      lpf.Q.value = 0.25;
-
+      // 【Layer 1】 雨の高周波ノイズ（窓ガラスを流れる雨）
+      const src1 = ctx.createBufferSource();
+      src1.buffer = this._makeWhiteNoise(10);
+      src1.loop = true;
       const hpf = ctx.createBiquadFilter();
-      hpf.type = 'highpass';
-      hpf.frequency.value = 60;
+      hpf.type = 'highpass'; hpf.frequency.value = isNight ? 2200 : 1800;
+      const lpf = ctx.createBiquadFilter();
+      lpf.type = 'lowpass'; lpf.frequency.value = isNight ? 5500 : 7500;
 
-      // ゆっくりした揺らぎ（炎が揺れる感じ）
+      // 【Layer 2】 雨粒の中域（落ちる雫の質感）
+      const src2 = ctx.createBufferSource();
+      src2.buffer = this._makeWhiteNoise(10);
+      src2.loop = true;
+      const bpf = ctx.createBiquadFilter();
+      bpf.type = 'bandpass'; bpf.frequency.value = 450; bpf.Q.value = 0.4;
+      const midGain = ctx.createGain();
+      midGain.gain.value = 0.3;
+
+      // ゆっくりした揺らぎ（雨の強弱）
       const lfo = ctx.createOscillator();
-      lfo.frequency.value = 0.22;
+      lfo.frequency.value = 0.12;
       const lfoGain = ctx.createGain();
-      lfoGain.gain.value = 0.055;
+      lfoGain.gain.value = 0.04;
 
       this._bgmGain = ctx.createGain();
       this._bgmGain.gain.value = 0;
 
-      noise.connect(lpf); lpf.connect(hpf); hpf.connect(this._bgmGain);
+      src1.connect(hpf); hpf.connect(lpf); lpf.connect(this._bgmGain);
+      src2.connect(bpf); bpf.connect(midGain); midGain.connect(this._bgmGain);
       this._bgmGain.connect(this._master);
       lfo.connect(lfoGain); lfoGain.connect(this._bgmGain.gain);
 
-      noise.start(); lfo.start();
+      src1.start(); src2.start(); lfo.start();
 
-      // ゆっくりフェードイン（4秒）
-      const vol = isNight ? 0.14 : 0.20;
-      this._bgmGain.gain.linearRampToValueAtTime(vol, ctx.currentTime + 4);
+      const vol = isNight ? 0.16 : 0.22;
+      this._bgmGain.gain.linearRampToValueAtTime(vol, ctx.currentTime + 5);
 
-      this._bgmSource = noise;
+      this._bgmSource = src1;
+      this._bgmSource2 = src2;
       this._bgmLfo = lfo;
       this._bgmRunning = true;
     }
@@ -880,88 +876,143 @@
     stopBGM() {
       if (!this._bgmRunning || !this._bgmGain) return;
       const t = this.ctx.currentTime;
-      this._bgmGain.gain.linearRampToValueAtTime(0, t + 2);
-      const [s, l] = [this._bgmSource, this._bgmLfo];
-      setTimeout(() => { try{s.stop()}catch(e){} try{l.stop()}catch(e){} }, 2300);
+      this._bgmGain.gain.linearRampToValueAtTime(0, t + 3);
+      const [s1, s2, l] = [this._bgmSource, this._bgmSource2, this._bgmLfo];
+      setTimeout(() => {
+        try{s1.stop()}catch(e){} try{s2?.stop()}catch(e){} try{l.stop()}catch(e){}
+      }, 3300);
       this._bgmRunning = false;
     }
 
-    // ─── SE: 鐘/シンギングボウル（名言表示）─────────────
+    // ─── SE: 風鈴（名言が灯る瞬間）─────────────────────
+    // 日本の音階（ヨナ抜き）に近い4音が順に鳴る
     playReveal() {
       if (!this.enabled) return;
       const ctx = this.ctx, t = ctx.currentTime;
-      [432, 864, 1296].forEach((f, i) => {
+      const chimes = [
+        { f: 784,  delay: 0,    amp: 0.09 },  // G5
+        { f: 1047, delay: 0.14, amp: 0.07 },  // C6
+        { f: 880,  delay: 0.32, amp: 0.06 },  // A5
+        { f: 1175, delay: 0.54, amp: 0.04 },  // D6
+      ];
+      chimes.forEach(({ f, delay, amp }) => {
         const osc = ctx.createOscillator(), gain = ctx.createGain();
-        osc.type = 'sine'; osc.frequency.value = f;
-        const delay = i * 0.003;
-        gain.gain.setValueAtTime(0, t+delay);
-        gain.gain.linearRampToValueAtTime([0.11,0.04,0.014][i], t+delay+0.006);
-        gain.gain.exponentialRampToValueAtTime(0.001, t+delay+3.8);
+        osc.type = 'sine';
+        // 打鍵直後のわずかな音揺れ（金属質感）
+        osc.frequency.setValueAtTime(f * 1.004, t + delay);
+        osc.frequency.linearRampToValueAtTime(f, t + delay + 0.06);
+        gain.gain.setValueAtTime(0, t + delay);
+        gain.gain.linearRampToValueAtTime(amp, t + delay + 0.003);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + delay + 3.8);
         osc.connect(gain); gain.connect(this._master);
-        osc.start(t+delay); osc.stop(t+delay+4.2);
+        osc.start(t + delay); osc.stop(t + delay + 4.2);
       });
     }
 
-    // ─── SE: 蝋燭の点火（感情チップ選択）────────────────
+    // ─── SE: 水滴（感情チップを選ぶ）───────────────────
     playChip() {
       if (!this.enabled) return;
       const ctx = this.ctx, t = ctx.currentTime;
+      // 高い音から低い音へ落ちる「ぽとり」
       const osc = ctx.createOscillator(), gain = ctx.createGain();
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(480, t);
-      osc.frequency.exponentialRampToValueAtTime(200, t+0.09);
-      gain.gain.setValueAtTime(0.065, t);
-      gain.gain.exponentialRampToValueAtTime(0.001, t+0.11);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(1300, t);
+      osc.frequency.exponentialRampToValueAtTime(280, t + 0.13);
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(0.07, t + 0.002);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.16);
       osc.connect(gain); gain.connect(this._master);
-      osc.start(t); osc.stop(t+0.13);
+      osc.start(t); osc.stop(t + 0.18);
+      // 水面の小さな波紋（余韻）
+      const osc2 = ctx.createOscillator(), gain2 = ctx.createGain();
+      osc2.type = 'sine'; osc2.frequency.value = 420;
+      gain2.gain.setValueAtTime(0.022, t + 0.04);
+      gain2.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+      osc2.connect(gain2); gain2.connect(this._master);
+      osc2.start(t + 0.04); osc2.stop(t + 0.35);
     }
 
-    // ─── SE: 温かいアルペジオ（お気に入り）──────────────
-    playHeart(saving = true) {
-      if (!this.enabled) return;
-      const ctx = this.ctx, t = ctx.currentTime;
-      const notes = saving ? [523.25, 659.25, 783.99] : [783.99, 659.25, 523.25];
-      notes.forEach((f, i) => {
-        const osc = ctx.createOscillator(), gain = ctx.createGain();
-        osc.type = 'sine'; osc.frequency.value = f;
-        const d = i * 0.075;
-        gain.gain.setValueAtTime(0, t+d);
-        gain.gain.linearRampToValueAtTime(0.065, t+d+0.01);
-        gain.gain.exponentialRampToValueAtTime(0.001, t+d+0.65);
-        osc.connect(gain); gain.connect(this._master);
-        osc.start(t+d); osc.stop(t+d+0.8);
-      });
-    }
-
-    // ─── SE: 点火の息吹（生成ボタン）────────────────────
+    // ─── SE: 息を吸う（言葉を紡ぐ前の一呼吸）───────────
     playIgnite() {
       if (!this.enabled) return;
       const ctx = this.ctx, t = ctx.currentTime;
-      // ノイズバースト（マッチを擦る感覚）
-      const buf = ctx.createBuffer(1, ctx.sampleRate*0.28, ctx.sampleRate);
+      // ゆっくり吸い込む息（バンドパスノイズ）
+      const buf = ctx.createBuffer(1, ctx.sampleRate * 0.65, ctx.sampleRate);
       const d = buf.getChannelData(0);
-      for (let i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*(1-i/d.length);
+      for (let i = 0; i < d.length; i++) {
+        d[i] = (Math.random() * 2 - 1) * Math.sin(Math.PI * i / d.length);
+      }
       const src = ctx.createBufferSource(); src.buffer = buf;
-      const bpf = ctx.createBiquadFilter(); bpf.type='bandpass'; bpf.frequency.value=1100; bpf.Q.value=0.9;
-      const g = ctx.createGain(); g.gain.setValueAtTime(0.12,t); g.gain.exponentialRampToValueAtTime(0.001,t+0.28);
-      src.connect(bpf); bpf.connect(g); g.connect(this._master); src.start(t);
-      // 下に漂う上昇トーン
+      const bpf = ctx.createBiquadFilter();
+      bpf.type = 'bandpass'; bpf.frequency.value = 1800; bpf.Q.value = 0.55;
+      const gain = ctx.createGain();
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(0.09, t + 0.28); // 吸い込む
+      gain.gain.linearRampToValueAtTime(0.001, t + 0.65); // 止める
+      src.connect(bpf); bpf.connect(gain); gain.connect(this._master); src.start(t);
+      // 胸の共鳴（低音の体温感）
       const osc = ctx.createOscillator(), og = ctx.createGain();
-      osc.type='sine'; osc.frequency.setValueAtTime(180,t); osc.frequency.linearRampToValueAtTime(360,t+0.4);
-      og.gain.setValueAtTime(0,t); og.gain.linearRampToValueAtTime(0.038,t+0.06); og.gain.exponentialRampToValueAtTime(0.001,t+0.5);
-      osc.connect(og); og.connect(this._master); osc.start(t); osc.stop(t+0.6);
+      osc.type = 'sine'; osc.frequency.value = 130;
+      og.gain.setValueAtTime(0, t); og.gain.linearRampToValueAtTime(0.018, t + 0.2);
+      og.gain.linearRampToValueAtTime(0.001, t + 0.55);
+      osc.connect(og); og.connect(this._master); osc.start(t); osc.stop(t + 0.65);
     }
 
-    // ─── SE: 深夜への移行（ナイトモード）────────────────
+    // ─── SE: 三味線の弦（お気に入り）───────────────────
+    playHeart(saving = true) {
+      if (!this.enabled) return;
+      const ctx = this.ctx, t = ctx.currentTime;
+      const baseFreq = saving ? 293.66 : 391.99; // 保存:D4 / 解除:G4
+      // 弦を弾く瞬間のバズ（さわり）
+      const atkBuf = ctx.createBuffer(1, ctx.sampleRate * 0.045, ctx.sampleRate);
+      const ad = atkBuf.getChannelData(0);
+      for (let i = 0; i < ad.length; i++) ad[i] = (Math.random() * 2 - 1) * (1 - i / ad.length);
+      const atkSrc = ctx.createBufferSource(); atkSrc.buffer = atkBuf;
+      const atkBpf = ctx.createBiquadFilter();
+      atkBpf.type = 'bandpass'; atkBpf.frequency.value = baseFreq * 2.2; atkBpf.Q.value = 2.5;
+      const atkGain = ctx.createGain(); atkGain.gain.value = 0.09;
+      atkSrc.connect(atkBpf); atkBpf.connect(atkGain); atkGain.connect(this._master); atkSrc.start(t);
+      // 弦の共鳴（余韻）
+      [baseFreq, baseFreq * 2].forEach((f, i) => {
+        const osc = ctx.createOscillator(), gain = ctx.createGain();
+        osc.type = 'sine'; osc.frequency.value = f;
+        gain.gain.setValueAtTime(0, t);
+        gain.gain.linearRampToValueAtTime(i === 0 ? 0.075 : 0.028, t + 0.008);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + (i === 0 ? 1.8 : 0.9));
+        osc.connect(gain); gain.connect(this._master);
+        osc.start(t); osc.stop(t + (i === 0 ? 2.0 : 1.1));
+      });
+    }
+
+    // ─── SE: 寺の鐘（深夜モードへ）─────────────────────
     playNight() {
       if (!this.enabled) return;
       const ctx = this.ctx, t = ctx.currentTime;
-      [80, 120, 160].forEach((f, i) => {
+      // 鐘の倍音列（わずかに非調和）
+      [
+        { f: 110,  amp: 0.08, dec: 4.5 },  // 基音（A2）
+        { f: 277,  amp: 0.05, dec: 3.2 },  // 非調和2.5倍
+        { f: 440,  amp: 0.03, dec: 2.4 },
+        { f: 660,  amp: 0.015, dec: 1.8 },
+        { f: 880,  amp: 0.008, dec: 1.2 },
+      ].forEach(({ f, amp, dec }) => {
         const osc = ctx.createOscillator(), gain = ctx.createGain();
-        osc.type = 'sine'; osc.frequency.setValueAtTime(f*1.04,t); osc.frequency.linearRampToValueAtTime(f,t+1.5);
-        gain.gain.setValueAtTime(0,t); gain.gain.linearRampToValueAtTime(0.05/(i+1),t+0.4); gain.gain.linearRampToValueAtTime(0.001,t+2.8);
-        osc.connect(gain); gain.connect(this._master); osc.start(t); osc.stop(t+3);
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(f * 1.012, t);
+        osc.frequency.linearRampToValueAtTime(f, t + 0.06);
+        gain.gain.setValueAtTime(0, t);
+        gain.gain.linearRampToValueAtTime(amp, t + 0.004);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + dec);
+        osc.connect(gain); gain.connect(this._master);
+        osc.start(t); osc.stop(t + dec + 0.1);
       });
+      // 木槌の打撃音（一瞬のノイズ）
+      const strikeBuf = ctx.createBuffer(1, ctx.sampleRate * 0.06, ctx.sampleRate);
+      const sd = strikeBuf.getChannelData(0);
+      for (let i = 0; i < sd.length; i++) sd[i] = (Math.random() * 2 - 1) * (1 - i / sd.length);
+      const strikeSrc = ctx.createBufferSource(); strikeSrc.buffer = strikeBuf;
+      const sg = ctx.createGain(); sg.gain.value = 0.07;
+      strikeSrc.connect(sg); sg.connect(this._master); strikeSrc.start(t);
     }
 
     // ─── トグル ──────────────────────────────────────────
